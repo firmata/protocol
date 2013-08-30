@@ -5,9 +5,9 @@ Firmata is a generic protocol for communicating with microcontrollers from softw
 
 If you are interested, we can help you use this protocol with any software whatsoever. The protocol is quite simple. We will all benefit if we use a common firmware. Then microcontroller boards become really cheap sensorboxes in addition to all the rest of the stuff you can already do with them. Check out the [Examples](http://firmata.org/wiki/Examples) page to see Firmata in action.
 
-## Implementation
+## Firmware
 Firmaware implementations are available on [firmata/arduino](https://github.com/firmata/arduino). See `Master` and `Configurable` branches.
 
-## Firmware
 Official versions can be found on Arduino IDE in File -> Examples -> Firmata.
 
+## Protocol documentation
