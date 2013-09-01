@@ -1,7 +1,7 @@
 protocol
 ========
 
-Documentation of the Firmata protocol.
+Current version: 2.3.6
 
 The intention of this protocol is allow as much of the microcontroller to be controlled as possible from the host computer. This protocol then was designed for the direct communication between a microcontroller and an software object on a host computer. The host software object should then provide an interface that makes sense in that environment.
 
