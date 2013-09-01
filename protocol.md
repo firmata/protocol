@@ -97,7 +97,7 @@ Sysex Message Format
 
 The idea for SysEx is to have a second command space using the first byte after
 the SysEx start byte. The key difference is that data can be of any size, rather
-than just one or tow bytes for standard MIDI messages.
+than just one or two bytes for standard MIDI messages.
 
 Generic SysEx Message
 ```
@@ -109,24 +109,25 @@ N   END_SYSEX (0xF7) (MIDI End of SysEx - EOX)
 
 Following are SysEx commands used in this version of the protocol:
 ```
-RESERVED_COMMAND            0x00-0x0F // The first 16 bytes are reserved for custom commands (provide link to section describing custom commands)
-ANALOG_MAPPING_QUERY             0x69 // ask for mapping of analog to pin numbers
-ANALOG_MAPPING_RESPONSE          0x6A // reply with mapping info
-CAPABILITY_QUERY                 0x6B // ask for supported modes and resolution of all pins
-CAPABILITY_RESPONSE              0x6C // reply with supported modes and resolution
-PIN_STATE_QUERY                  0x6D // ask for a pin's current mode and state (different than value)
-PIN_STATE_RESPONSE               0x6E // reply with a pin's current mode and state (different than value)
-EXTENDED_ANALOG                  0x6F // analog write (PWM, Servo, etc) to any pin
-SERVO_CONFIG                     0x70 // pin number and min and max pulse
-STRING_DATA                      0x71 // a string message with 14-bits per char
-SHIFT_DATA                       0x75 // shiftOut config/data message (reserved - not yet implemented)
-I2C_REQUEST                      0x76 // I2C request messages from a host to an I/O board
-I2C_REPLY                        0x77 // I2C reply messages from an I/O board to a host
-I2C_CONFIG                       0X78 // Enable I2C and provide any configuration settings
-REPORT_FIRMWARE                  0x79 // report name and version of the firmware
-SAMPLEING_INTERVAL               0x7A // the interval at which analog input is sampled (default = 19ms)
-SYSEX_NON_REALTIME               0x7E // MIDI Reserved for non-realtime messages
-SYSEX_REALTIME                   0X7F // MIDI Reserved for realtime messages
+RESERVED               0x00-0x0F // The first 16 bytes are reserved for custom commands 
+                                 // (provide link to section describing custom commands)
+ANALOG_MAPPING_QUERY        0x69 // ask for mapping of analog to pin numbers
+ANALOG_MAPPING_RESPONSE     0x6A // reply with mapping info
+CAPABILITY_QUERY            0x6B // ask for supported modes and resolution of all pins
+CAPABILITY_RESPONSE         0x6C // reply with supported modes and resolution
+PIN_STATE_QUERY             0x6D // ask for a pin's current mode and state (different than value)
+PIN_STATE_RESPONSE          0x6E // reply with a pin's current mode and state (different than value)
+EXTENDED_ANALOG             0x6F // analog write (PWM, Servo, etc) to any pin
+SERVO_CONFIG                0x70 // pin number and min and max pulse
+STRING_DATA                 0x71 // a string message with 14-bits per char
+SHIFT_DATA                  0x75 // shiftOut config/data message (reserved - not yet implemented)
+I2C_REQUEST                 0x76 // I2C request messages from a host to an I/O board
+I2C_REPLY                   0x77 // I2C reply messages from an I/O board to a host
+I2C_CONFIG                  0X78 // Enable I2C and provide any configuration settings
+REPORT_FIRMWARE             0x79 // report name and version of the firmware
+SAMPLEING_INTERVAL          0x7A // the interval at which analog input is sampled (default = 19ms)
+SYSEX_NON_REALTIME          0x7E // MIDI Reserved for non-realtime messages
+SYSEX_REALTIME              0X7F // MIDI Reserved for realtime messages
 ```
 
 Query Firmware Name and Version
