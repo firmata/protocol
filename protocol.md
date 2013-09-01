@@ -44,6 +44,26 @@ Sysex-based commands (0x00 - 0x7F) are used for an extended command set.
 Data Message Expansion
 ===
 
+Two byte digital data format, second nibble of byt 0 gives the port number (eg 0x92 is the third port, port 2)
+```
+0  digital data, 0x90-0x9F, (MIDI NoteOn, bud different data format)
+1  digital pins 0-6 bitmask
+2  digital pin 7 bitmask
+```
+
+Analog 14-bit data format
+```
+0  analog pin, 0xE0-0xEF, (MIDI Pitch Wheel)
+1  analog least significant 7 bits
+2  analog most significant 7 bits
+```
+Version report format
+```
+0  version report header (0xF9) (MIDI Undefined)
+1  major version (0-127)
+2  minor version (0-127)
+```
+
 Control Messages Expansion
 ===
 
