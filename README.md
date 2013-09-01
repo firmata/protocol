@@ -1,8 +1,3 @@
-protocol
-========
-
-Documentation of the Firmata protocol.
-
 Firmata is a generic protocol for communicating with microcontrollers from software on a host computer. It is intended to work with any host computer software package. Right now there is a matching object in a number of languages (provide link to list). It is easy to add objects for other software to use this protocol. Basically, this firmware establishes a protocol for talking to the microcontroller from the host software.
 
 TO DO:
