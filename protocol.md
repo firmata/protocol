@@ -13,13 +13,12 @@ TO DO: provide a better description above.
 Message Types
 ===
 
-This protocol uses the MIDI message format, but does not use the whole protocol.
+This protocol uses the [MIDI message format](http://www.midi.org/techspecs/midimessages.php), but does not use the whole protocol.
 Most of the command mappings here will not be directly usable in terms of MIDI
 controllers and synths. It should co-exist with MIDI without trouble and can be
 parsed by standard MIDI interpreters. Just some of the message data is used
 differently.
 
-[MIDI format](http://www.harmony-central.com/MIDI/Doc/table1.html)
 
 | type                | command | MIDI channel | first byte          | second byte     |
 | ------------------- | ------- | ------------ | ------------------- | --------------- |
