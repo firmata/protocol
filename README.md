@@ -1,13 +1,11 @@
-#Firmata protocol
+Firmata is a generic [protocol](protocol.md) for communicating with microcontrollers from software on a host computer. It is intended to work with any host computer software package. Right now there is a matching object in a number of languages (provide link to list). It is easy to add objects for other software to use this protocol. Basically, this firmware establishes a protocol for talking to the microcontroller from the host software.
 
-Firmata is a generic protocol for communicating with microcontrollers from software on a host computer. It is intended to work with any host computer software package. Right now there is a matching object in a number of languages. It is easy to add objects for other software to use this protocol. Basically, this firmware establishes a protocol for talking to the Arduino from the host software. The aim is to allow people to completely control the Arduino from software on the host computer.
+TO DO:
 
-
-If you are interested, we can help you use this protocol with any software whatsoever. The protocol is quite simple. We will all benefit if we use a common firmware. Then microcontroller boards become really cheap sensorboxes in addition to all the rest of the stuff you can already do with them. Check out the [Examples](http://firmata.org/wiki/Examples) page to see Firmata in action.
-
-## Firmware
-Firmaware implementations are available on [firmata/arduino](https://github.com/firmata/arduino). See `Master` and `Configurable` branches.
-
-Official versions can be found on Arduino IDE in File -> Examples -> Firmata.
-
-## Protocol documentation
+- update description on this page perhaps providing any rationale behind design decisions (from design issues section on Firmata.org wiki)
+- define process for contributing to this project
+- provide link to firmata/firmata_test/
+- update firmata_test repository to include all relevant info from the Firmata.org main page
+- provide links to Firmata implementation (firmata/arduino)... any others out there. I know there was a PIC version in the works and maybe an LPC version as well.
+- provide links to projects using firmata
+- provide links to client implementations (this is currently on the firmata/arduino readme)
