@@ -1,6 +1,8 @@
 Firmata is a generic [protocol](protocol.md) for communicating with microcontrollers from software on a host computer. It is intended to work with any host computer software package. Right now there is a matching object in a number of languages (provide link to list). It is easy to add objects for other software to use this protocol. Basically, this firmware establishes a protocol for talking to the microcontroller from the host software.
 
-Firmaware implementations are available on [firmata/arduino](https://github.com/firmata/arduino). See `Master` and `Configurable` branches. Official versions can be found on Arduino IDE in `File -> Examples -> Firmata`.
+Current (official) Version : v2.3 
+
+Firmaware implementations are availables on [firmata/arduino](https://github.com/firmata/arduino), see `Master` and `Configurable` branches. Examples files can also be found on Arduino IDE in `File -> Examples -> Firmata`.
 
 
 TO DO:
