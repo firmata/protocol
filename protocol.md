@@ -148,6 +148,18 @@ Pin State Query
 Sampling Interval
 ---
 
+The sampling interval sets how often analog data and i2c data is reported to the 
+client. The default for the arduino implementation is 19ms. This means that every
+19ms analog data will be reported and any i2c devices with read continuous mode 
+will be read.
+```
+0  START_SYSEX        (0xF0)
+1  SAMPLING_INTERVAL  (0x7A)
+2  sampling interval on the millisecond time scale (LSB)
+3  sampling interval on the millisecond time scale (MSB)
+4  END_SYSEX (0xF7)
+```
+
 Features
 ---
 
