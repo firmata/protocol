@@ -22,7 +22,7 @@ n  END_SYSEX (0xF7)
 
 A note about read/write modes (above). The ```read continuously``` mode indicates that
 the firmware should continuously read the device at the rate specified by the
-sampling interval. A firmware implementation should support read continuous mode
+[sampling interval](https://github.com/firmata/protocol/blob/master/protocol.md). A firmware implementation should support read continuous mode
 for several I2C devices simultaneously. Sending the ```stop reading``` command will
 end read continuous mode for that particular device.
 
