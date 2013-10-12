@@ -58,8 +58,23 @@ register is written to and the data in that register can be read.
 Proposal to ammend: add auto restart support
 ---
 
-Some I2C hardware needs to support an auto-restart mode (MMA8452Q accelerometer for example). There are a couple of options to add support:
+Some I2C hardware needs to support an auto-restart mode (MMA8452Q accelerometer for example).
+One solution is to use (the previously unused) bit 6 of byte 3 to specify whether or not to auto restart the
+transmission. The default value should be false (stop). I2C read/write would be updated
+as follows:
 
-1. Make bit 6 of the I2C read/write request a boolean that indicates whether auto-restart mode should be used for the particular device.
-
-2. Add as byte 4 of the I2C config message.
+```
+0  START_SYSEX (0xF0)
+1  I2C_REQUEST (0x76)
+2  slave address (LSB)
+3  slave address (MSB) + read/write and address mode bits
+   {7: always 0} + {6: restartTX, 0 => false (default), 1 => true} + {5: address mode, 1 => 10-bit mode} +
+   {4-3: read/write, 00 => write, 01 => read once, 10 => read continuously, 11 => stop reading} +
+   {2-0: slave address MSB in 10-bit mode, not used in 7-bit mode}
+4  data 0 (LSB)
+5  data 0 (MSB)
+6  data 1 (LSB)
+7  data 1 (MSB)
+...
+n  END_SYSEX (0xF7)
+```
