@@ -7,6 +7,8 @@ similar functions to `tone` and `noTone` would need to be implemented.
 The duration could be extended if necessary. Duration could also be optional. If
 left out, the user would need to send the NO_TONE command to stop the tone.
 
+An implementation of this proposal is currently available [here](https://github.com/firmata/arduino/compare/configurable...tone).
+
 ```
 // wrapper for tone function
 0  START_SYSEX        (0xF0)
