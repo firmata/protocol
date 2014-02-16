@@ -128,6 +128,7 @@ REPORT_FIRMWARE             0x79 // report name and version of the firmware
 SAMPLEING_INTERVAL          0x7A // the interval at which analog input is sampled (default = 19ms)
 SYSEX_NON_REALTIME          0x7E // MIDI Reserved for non-realtime messages
 SYSEX_REALTIME              0X7F // MIDI Reserved for realtime messages
+ENCODER_DATA                0X61 // Used by encoder feature
 ```
 
 Query Firmware Name and Version
@@ -160,7 +161,13 @@ will be read.
 4  END_SYSEX (0xF7)
 ```
 
-Features
+Features details
 ---
-
-links to i2c, servos, stepper, shift, scheduler, onewire, etc.
+See specific files : 
+* [i2c](https://github.com/firmata/protocol/i2c.md), 
+* [servos](https://github.com/firmata/protocol/servo.md), 
+* [stepper](https://github.com/firmata/protocol/stepper.md), 
+* [shift](https://github.com/firmata/protocol/shift-proposal.md), 
+* [scheduler](https://github.com/firmata/protocol/scheduler.md), 
+* [onewire](https://github.com/firmata/protocol/onewire.md), 
+* [encoder](https://github.com/firmata/protocol/encoder.md).
