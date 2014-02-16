@@ -164,10 +164,10 @@ will be read.
 Features details
 ---
 See specific files : 
-* [i2c](https://github.com/firmata/protocol/i2c.md), 
-* [servos](https://github.com/firmata/protocol/servo.md), 
-* [stepper](https://github.com/firmata/protocol/stepper.md), 
-* [shift](https://github.com/firmata/protocol/shift-proposal.md), 
-* [scheduler](https://github.com/firmata/protocol/scheduler.md), 
-* [onewire](https://github.com/firmata/protocol/onewire.md), 
-* [encoder](https://github.com/firmata/protocol/encoder.md).
+* [i2c](https://github.com/firmata/protocol/blob/master/i2c.md), 
+* [servos](https://github.com/firmata/protocol/blob/master/servo.md), 
+* [stepper](https://github.com/firmata/protocol/blob/master/stepper.md), 
+* [shift](https://github.com/firmata/protocol/blob/master/shift-proposal.md), 
+* [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md), 
+* [onewire](https://github.com/firmata/protocol/blob/master/onewire.md), 
+* [encoder](https://github.com/firmata/protocol/blob/master/encoder.md).
