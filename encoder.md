@@ -6,9 +6,11 @@ This feature is based on based on [PJRC's implementation](http://www.pjrc.com/te
 
 Current implementation supports 5 encoders at the same time (#[0-4]) and you can activate automatic position reports every (SAMPLING_INTERVAL)ms. Reports are disabled by default.
 
+For best Performances, connect only interrupt pins.
+
 Example files : 
- * EncoderFeature is include by default [ConfigurableFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/ConfigurableFirmata/ConfigurableFirmata.ino). 
- * A dedicated example is also available. See [SimpleEncoderFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/SimpleEncoderFirmata/SimpleEncoderFirmata.ino). 
+ * EncoderFeature is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/ConfigurableFirmata/ConfigurableFirmata.ino). 
+ * A dedicated example is available. See [SimpleEncoderFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/SimpleEncoderFirmata/SimpleEncoderFirmata.ino). 
 
 ## Compatible client librairies
 TODO : Update this
@@ -139,7 +141,8 @@ Query
 ```
  
 No response.
-Note : when reports are enabled, EncoderFearmata send the message below at every SAMPLING interval (19ms by default) :
+
+Note : when reports are enabled, EncoderFirmata feature send the message below at every SAMPLING interval (19ms by default) :
 ```c
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
