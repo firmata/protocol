@@ -59,7 +59,7 @@ Response
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
  * 1 ENCODER_DATA               (0x61)
- * 2 Encoder #  &  DIRECTION    [= (direction << 7) | (#)]
+ * 2 Encoder #  &  DIRECTION    [= (direction << 6) | (#)]
  * 3 current position, bits 0-6
  * 4 current position, bits 7-13
  * 5 current position, bits 14-20
@@ -78,7 +78,7 @@ channelMask   = 0x3F; // B00111111
 //ex direction is negative and encoder is on index 2
 direction = 1;
 channel = 2;
-bytes[2] =  (direction << 7) | (channel);
+bytes[2] =  (direction << 6) | (channel);
 ```
 
 ### Report all encoders positions
@@ -147,12 +147,12 @@ Note : when reports are enabled, EncoderFirmata feature send the message below a
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
  * 1 ENCODER_DATA               (0x61)
- * 2 first enc. #  & first enc. dir.   [= (direction << 7) | (#)] 
+ * 2 first enc. #  & first enc. dir.   [= (direction << 6) | (#)] 
  * 4 first enc. position, bits 0-6
  * 5 first enc. position, bits 7-13
  * 6 first enc. position, bits 14-20
  * 7 first enc. position, bits 21-27
- * 8 second enc. #  & second enc. dir. [= (direction << 7) | (#)]
+ * 8 second enc. #  & second enc. dir. [= (direction << 6) | (#)]
  * ...
  * N END_SYSEX                  (0xF7)
  * -----------------------------------------------------
