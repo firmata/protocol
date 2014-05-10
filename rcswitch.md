@@ -7,7 +7,7 @@ Send
 ----
 
 ```
-PINMODE_RC_TRANSMIT     0x0A
+PINMODE_RC_SEND     0x0A
 
 
 // configuration of sender pin: set protocol
@@ -34,28 +34,36 @@ PINMODE_RC_TRANSMIT     0x0A
 4,5 repeatTransmit (int)
 6 END_SYSEX
 
-// send code as tristate 
+// send tristate code (char array)
 0  START_SYSEX
 1  RC_DATA          (0x66)
 2  CODE_TRISTATE    (0x21)
 3  senderPin        
-4..n RC data in tristate format (packed as 7-bit)
+4..n RC data (packed as 7-bit): char array with tristate bits ('0', '1', 'F')
 n+1 END_SYSEX
 
-// send code as long
+// send long code
 0  START_SYSEX
 1  RC_DATA          (0x66)
 2  CODE_LONG        (0x22)
-3  senderPin        
-4..n RC data (long) (packed as 7-bit)
-n+1 END_SYSEX
+3  senderPin
+4..n RC data (packed as 7-bit): 2 bytes (int) with the number of bits to send, 4 bytes (long) data bits
+10 END_SYSEX
 
-// send code as char[]
+// send char[] code
 0  START_SYSEX
 1  RC_DATA          (0x66)
 2  CODE_CHAR        (0x24)
 3  senderPin        
-4..n RC data (char[]) (packed as 7-bit)
+4..n RC data (packed as 7-bit): char array with characters to send
+n+1 END_SYSEX
+
+// send tristate code (packed)
+0  START_SYSEX
+1  RC_DATA          (0x66)
+2  CODE_CHAR        (0x24)
+3  senderPin        
+4..n RC data (packed as 7-bit): byte array with 4 tristate bits per byte
 n+1 END_SYSEX
 ```
 
@@ -95,4 +103,3 @@ TRISTATE_RESERVED       0x02
 TRISTATE_1              0x03
 ```
 Thus, 1 byte consisting of 8 bits ABCDEFGH may hold up to 4 tristate bits AB, CD, EF and GH. The leftmost 2 bits represent the first tristate bit, the rightmost 2 bits represent the fourth tristate bit. If less than 4 tristate bits are used, the byte is filled with the unused value 0x02.
-
