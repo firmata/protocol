@@ -81,6 +81,14 @@ PINMODE_RC_RECEIVE     0x0B
 4 tolerance
 5 END_SYSEX
 
+// configuration of receiver pin: enable raw data
+0 START_SYSEX
+1 RC_DATA           (0x66)
+2 CONFIG_TOLERANCE  (0x32)
+3 receiverPin        
+4 rawdataEnabled
+5 END_SYSEX
+
 // receive message
 0 START_SYSEX
 1 RC_DATA             (0x66)
@@ -90,7 +98,8 @@ PINMODE_RC_RECEIVE     0x0B
 8,9 bitlength (int)
 10,11 delay (int) 
 12,13 protocol (int)
-14 END_SYSEX
+14-n raw data (int[]) optional, only if rawdataEnabled was set to 1
+n+1 END_SYSEX
 ```
 
 Tristate bits
