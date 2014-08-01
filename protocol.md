@@ -137,6 +137,54 @@ Query Firmware Name and Version
 Extended Analog
 ---
 
+Analog Config (proposal)
+---
+
+Based on @ntruchsess original [Extended Configuration Proposal](https://github.com/firmata/arduino/issues/39), add the ability to specify the analog reference source as well as the analog read and write resolution for those boards that support it (such as the Arduino Due). The analog read and write resolution can be queried by sending a configuration query. The analog in response value is the analog read resolution and the pwm response value is the analog write resolution.
+
+```
+// How to query this? Can't add it to the analog pin in the capability response
+// because it would likely break existing Firmata client implementations.
+// Therefore we may need to add a command to query the analog reference voltage.
+/* set analogReference request
+ * 0  START_SYSEX            (0xF0)
+ * 1  ANALOG_CONFIG command  (0x7C)
+ * 2  SET_ANALOG_REF command (0x00)
+ * 3  analog reference source (0-4, 0=DEFAULT, 1=INTERNAL, 2=INTERNAL1V1, 3=INTERNAL2V56, 4=EXTERNAL
+ *    Values supported are device-specific. 
+ *    See http://arduino.cc/en/Reference/AnalogReference and Arduino.h for details)
+ * 4  END_SYSEX              (0xF7)
+ */
+
+/* query analogReference request
+ * 0  START_SYSEX              (0xF0)
+ * 1  ANALOG_CONFIG command    (0x7C)
+ * 2  QUERY_ANALOG_REF command (0x01)
+ * 3  analog reference value   (0-4, 0=DEFAULT, 1=INTERNAL, 2=INTERNAL1V1, 3=INTERNAL2V56, 4=EXTERNAL
+ * 4  END_SYSEX                (0xF7)
+ */
+```
+
+```
+/* set analogReadResolution request
+ * 0  START_SYSEX             (0xF0)
+ * 1  ANALOG_CONFIG   command (0x7C)
+ * 2  ANALOG_READ_RES command (0x02)
+ * 3  analog read resolution (1-32, see http://arduino.cc/en/Reference/AnalogReadResolution for details)
+ * 4  END_SYSEX               (0xF7)
+ */
+```
+
+```
+/* set analogWriteResolution request
+ * 0  START_SYSEX              (0xF0)
+ * 1  ANALOG_CONFIG    command (0x7C)
+ * 2  ANALOG_WRITE_RES command (0x03)
+ * 3  analog write resolution (1-32, see http://arduino.cc/en/Reference/AnalogWriteResolution for details)
+ * 4  END_SYSEX                (0xF7)
+ */
+```
+
 Capability Query
 ---
 
