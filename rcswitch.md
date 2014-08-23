@@ -29,7 +29,7 @@ PINMODE_RC_SEND     0x0A
 // configuration of sender pin: set repeat transmit
 0  START_SYSEX
 1  RESERVED_COMMAND (0x00)
-2  CONFIG_PULSE_LENGTH (0x14)
+2  CONFIG_REPEAT_TRANSMIT (0x14)
 3  senderPin        
 4,5 repeatTransmit (int)
 6 END_SYSEX
@@ -61,7 +61,7 @@ n+1 END_SYSEX
 // send tristate code (packed)
 0  START_SYSEX
 1  RESERVED_COMMAND (0x00)
-2  CODE_CHAR        (0x24)
+2  CODE_TRISTATE_PACKED (0x24)
 3  senderPin        
 4..n RC data (packed as 7-bit): byte array with 4 tristate bits per byte
 n+1 END_SYSEX
