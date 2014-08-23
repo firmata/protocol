@@ -12,7 +12,7 @@ PINMODE_RC_SEND     0x0A
 
 // configuration of sender pin: set protocol
 0  START_SYSEX
-1  RC_DATA          (0x66)
+1  RESERVED_COMMAND (0x00)
 2  CONFIG_PROTOCOL  (0x11)
 3  senderPin        
 4,5 protocol (int)
@@ -20,7 +20,7 @@ PINMODE_RC_SEND     0x0A
 
 // configuration of sender pin: set pulse length
 0  START_SYSEX
-1  RC_DATA             (0x66)
+1  RESERVED_COMMAND (0x00)
 2  CONFIG_PULSE_LENGTH (0x12)
 3  senderPin        
 4,5 pulseLength (int)
@@ -28,7 +28,7 @@ PINMODE_RC_SEND     0x0A
 
 // configuration of sender pin: set repeat transmit
 0  START_SYSEX
-1  RC_DATA             (0x66)
+1  RESERVED_COMMAND (0x00)
 2  CONFIG_PULSE_LENGTH (0x14)
 3  senderPin        
 4,5 repeatTransmit (int)
@@ -36,7 +36,7 @@ PINMODE_RC_SEND     0x0A
 
 // send tristate code (char array)
 0  START_SYSEX
-1  RC_DATA          (0x66)
+1  RESERVED_COMMAND (0x00)
 2  CODE_TRISTATE    (0x21)
 3  senderPin        
 4..n RC data (packed as 7-bit): char array with tristate bits ('0', '1', 'F')
@@ -44,7 +44,7 @@ n+1 END_SYSEX
 
 // send long code
 0  START_SYSEX
-1  RC_DATA          (0x66)
+1  RESERVED_COMMAND (0x00)
 2  CODE_LONG        (0x22)
 3  senderPin
 4..n RC data (packed as 7-bit): 2 bytes (int) with the number of bits to send, 4 bytes (long) data bits
@@ -52,7 +52,7 @@ n+1 END_SYSEX
 
 // send char[] code
 0  START_SYSEX
-1  RC_DATA          (0x66)
+1  RESERVED_COMMAND (0x00)
 2  CODE_CHAR        (0x24)
 3  senderPin        
 4..n RC data (packed as 7-bit): char array with characters to send
@@ -60,7 +60,7 @@ n+1 END_SYSEX
 
 // send tristate code (packed)
 0  START_SYSEX
-1  RC_DATA          (0x66)
+1  RESERVED_COMMAND (0x00)
 2  CODE_CHAR        (0x24)
 3  senderPin        
 4..n RC data (packed as 7-bit): byte array with 4 tristate bits per byte
@@ -75,7 +75,7 @@ PINMODE_RC_RECEIVE     0x0B
 
 // configuration of receiver pin: set receive tolerance (in percent)
 0 START_SYSEX
-1 RC_DATA           (0x66)
+1 RESERVED_COMMAND (0x00)
 2 CONFIG_TOLERANCE  (0x31)
 3 receiverPin        
 4 tolerance
@@ -83,16 +83,16 @@ PINMODE_RC_RECEIVE     0x0B
 
 // configuration of receiver pin: enable raw data
 0 START_SYSEX
-1 RC_DATA           (0x66)
-2 CONFIG_TOLERANCE  (0x32)
+1 RESERVED_COMMAND (0x00)
+2 CONFIG_ENABLE_RAW_DATA (0x32)
 3 receiverPin        
 4 rawdataEnabled
 5 END_SYSEX
 
 // receive message
 0 START_SYSEX
-1 RC_DATA             (0x66)
-2 MESSAGE             (0x41)
+1 RESERVED_COMMAND (0x00)
+2 MESSAGE (0x41)
 3 receiverPin        
 4,5,6,7 value (long)
 8,9 bitlength (int)
