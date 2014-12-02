@@ -291,7 +291,7 @@ Features details
 ---
 See specific files : 
 * [i2c](https://github.com/firmata/protocol/blob/master/i2c.md), 
-* [servos](https://github.com/firmata/protocol/blob/master/servo.md), 
+* [servos](https://github.com/firmata/protocol/blob/master/servos.md), 
 * [stepper](https://github.com/firmata/protocol/blob/master/stepper.md), 
 * [shift](https://github.com/firmata/protocol/blob/master/shift-proposal.md), 
 * [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md), 
