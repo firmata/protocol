@@ -1,7 +1,7 @@
 Stepper Motor
 ===
 
-Provides support for 4 wire and 2 wire stepper mototor drivers as well as step + direction drivers such as the [EasyDriver](http://www.schmalzhaus.com/EasyDriver/).
+Provides support for 4 wire and 2 wire stepper motor drivers (H-bridge, darlington array, etc) as well as step + direction drivers such as the [EasyDriver](http://www.schmalzhaus.com/EasyDriver/).
 Current implementation supports 6 stepper motors at the same time (#[0-5]).
 
 Also includes optional support for acceleration and deceleration of the motor.
