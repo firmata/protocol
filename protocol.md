@@ -7,8 +7,6 @@ The intention of this protocol is allow as much of the microcontroller to be con
 
 The data communication format uses MIDI messages. It is not necessarily a MIDI device, first it uses a faster serial speed, and second, the messages don't always map the same.
 
-TO DO: provide a better description above.
-
 
 Message Types
 ===
@@ -134,17 +132,145 @@ ENCODER_DATA                0X61 // Used by encoder feature
 Query Firmware Name and Version
 ---
 
+The firmware name to be reported should be exactly the same as the name of the
+Firmata client file, minus the file extension. So for StandardFirmata.ino, the
+firmware name is: StandardFirmata.
+
+Query firmware Name and Version
+```
+0  START_SYSEX       (0xF0)
+1  queryFirmware     (0x79)
+2  END_SYSEX         (0xF7)
+```
+
+Receive Firmware Name and Version (after query)
+```
+0  START_SYSEX       (0xF0)
+1  queryFirmware     (0x79)
+2  major version     (0-127)
+3  minor version     (0-127)
+4  first 7-bits of firmware name
+5  second 7-bits of firmware name
+... for as many bytes as it needs
+N  END_SYSEX         (0xF7)
+```
+
 Extended Analog
 ---
+
+As an alternative to the normal analog message, this extended version allows
+addressing beyond pin 15 and supports sending analog values with any number of
+bits. The number of data bits is inferred by the length of the message.
+
+```
+0  START_SYSEX              (0xF0)
+1  extended analog message  (0x6F)
+2  pin                      (0-127)
+3  bits 0-6                 (least significant byte)
+4  bits 7-13                (most significant byte)
+... additionaly bytes may be sent if more bits are needed
+N  END_SYSEX                (0xF7)
+```
 
 Capability Query
 ---
 
+The capability query provides a list of all modes supported by each pin and
+the resolution used by each pin. Each pin has 2 bytes for each supported mode
+and a value of 127 to mark the end of that pin's data. The number of pins
+supported is inferred by the message length. The resolution information may be
+used to adapt to future implementation where PWM, analog input and others may
+have different values (such as 12 or 14 bit analog instead of 10-bit analog).
+*For some features such as i2c, the resolution information is less important so
+a value of 1 is used.*
+
+Capabilities query
+```
+0  START_SYSEX              (0xF0)
+1  capabilities query       (0x6B)
+2  END_SYSEX                (0xF7)
+```
+
+Capabilities response
+```
+0  START_SYSEX              (0xF0)
+1  capabilities response    (0x6C)
+2  1st mode supported of pin 0
+3  1st mode's resolution of pin 0
+4  2nd mode supported of pin 0
+5  2nd mode's resolution of pin 0
+... additional modes/resolutions, followed by a single 127 to mark the end of
+    the pin's modes. Each pin follows with its mode and 127 until all pins are
+    implemented.
+N  END_SYSEX                 (0xF7)
+```
+
 Analog Mapping Query
 ---
 
+Analog messages are numbered 0 to 15, which traditionally refer to the Arduino
+pins labeled A0, A1, A2, etc. However, these pis are actually configured using
+"normal" pin numbers in the pin mode message, and when those pins are used for
+non-analog functions. The analog mapping query provides the information about
+which pins (as used with Firmata's pin mode message) correspond to the analog
+channels.
+
+Analog mapping query
+```
+0  START_SYSEX              (0xF0)
+1  analog mapping query     (0x69)
+2  END_SYSEX                (0xF7)
+```
+
+Analog mapping response
+```
+0  START_SYSEX              (0xF0)
+1  analog mapping response  (0x6A)
+2  analog channel corresponding to pin 0, or 127 if pin 0 does not support analog
+3  analog channel corresponding to pin 1, or 127 if pin 1 does not support analog
+4  analog channel corresponding to pin 2, or 127 if pin 2 does not support analog
+... etc, one byte for each pin
+N  END_SYSEX                (0xF7)
+```
+
+*The above 2 queries provide static data (should never change for a particular
+board). Because this information is fixed and should only need to be read once,
+these messages are designed for a simple implementation in StandardFirmata,
+rather that bandwidth savings (eg, using packed bit fields).*
+
+
 Pin State Query
 ---
+
+The pin **state** is any data written to the pin (*it is important to note that
+pin state != pin value*). For output modes (digital output,
+PWM, and Servo), the state is any value that has been previously written to the
+pin. For input modes, typically the state is zero. However, for digital inputs,
+the state is the status of the pullup resistor.
+
+The pin state query can also be used as a verification after sending pin modes
+or data messages.
+
+Pin state query
+```
+0  START_SYSEX              (0xF0)
+1  pin state query          (0x6D)
+2  END_SYSEX                (0xF7)
+```
+
+Pin state response
+```
+0  START_SYSEX              (0xF0)
+1  pin state response       (0x6E)
+2  pin                      (0-127)
+3  pin mode (the currently configured mode)
+4  pin state, bits 0-6
+5  (optional) pin state, bits 7-13
+6  (optional) pin state, bits 14-20
+... additional optional bytes, as many as needed
+N  END_SYSEX                (0xF7)
+```
+
 
 Sampling Interval
 ---
