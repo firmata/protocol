@@ -9,8 +9,9 @@ Also includes optional support for acceleration and deceleration of the motor.
 Added in Firmata 2.5 ([configurable Firmata](https://github.com/firmata/arduino/tree/configurable)).
 
 Example files: 
- * The Stepper freature is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/ConfigurableFirmata/ConfigurableFirmata.ino).
+ * The Stepper feature is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/ConfigurableFirmata/ConfigurableFirmata.ino).
  * [Example implementation](https://github.com/firmata/arduino/blob/configurable/utility/StepperFirmata.cpp) as a configurable Firmata feature class.
+ * [Example of Stepper implementation in StandardFirmata](https://github.com/soundanalogous/AdvancedFirmata). *Note the dependency on the FirmataStepper class.*
 
 Protocol
 ---
