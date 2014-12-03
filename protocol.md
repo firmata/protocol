@@ -78,12 +78,16 @@ Toggle analogIn reporting by pin
 0  toggle digitalIn reporting (0xC0-0xCF) (MIDI Program Change)
 1  disable(0) / enable(non-zero)
 ```
+*Upon enabling an analog pin, the pin value should be reported to the client
+application.*
 
 Toggle digital port reporting by port (second nibble of byte 0), eg 0xD1 is port 1 is pins 8 to 15
 ```
 0  toggle digital port reporting (0xD0-0xDF) (MIDI Aftertouch)
 1  disable(0) / enable(non-zero)
 ```
+*Upon enabling a digital port, the port value should be reported to the client
+application.*
 
 Request version report
 ```
