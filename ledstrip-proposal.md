@@ -1,54 +1,57 @@
-neopixel proposal
+led strip proposal
 ===
 
-This proposal is to allow you to control neopixel leds via firmata.
+This proposal is to allow you to control led strip leds via firmata.
 
 An implementation of this proposal is currently available [here](https://github.com/RussTheAerialist/arduino/compare/firmata:configurable_dev...RussTheAerialist:neopixel_strip).
 
 ```
-// wrapper for neopixel initialize function
+// wrapper for led strip initialize function
 //  when initialition is finished, firmata sends done response to host
 //  see done response below
-0  START_SYSEX               (0xF0)
-1  NEOPIXEL_DATA             (0x62)
-2  NEOPIXEL_CMD_INIT         (0x01)
-3  NEOPIXEL_INIT_PARAM_PIN 
-4  NEOPIXEL_INIT_PARAM_COUNT (lsb) // Number of pixels on the strand
-5  NEOPIXEL_INIT_PARAM_COUNT (msb)
-6  NEOPIXEL_INIT_ORDER       (see below)
-7  NEOPIXEL_INIT_SPEED       (see below)
-8  END_SYSEX                 (0xF7)
+0  START_SYSEX                  (0xF0)
+1  LEDSTRIP_DATA                (0x62)
+2  LEDSTRIP_CMD_INIT            (0x01)
+3  LEDSTRIP_INIT_PARAM_DATA_PIN 
+4  LEDSTRIP_INIT_PARAM_COUNT    (lsb) // Number of pixels on the strand
+5  LEDSTRIP_INIT_PARAM_COUNT    (msb)
+... Additional Strip specific configuration information
+N  END_SYSEX                 (0xF7)
 ```
 
+For Neopixel, order and speed would be in the additional configuration
+information
+For WS2801, Clock Pin would be included in the additional configuratio information.
+
 ```
-// wrapper for neopixel set pixel function
+// wrapper for led strip set pixel function
 0  START_SYSEX                   (0xF0)
-1  NEOPIXEL_DATA                 (0x62)
-2  NEOPIXEL_CMD_PIXEL            (0x02)
-3  NEOPIXEL_PIXEL_PARAM_LOCATION (lsb) // pos of the pixel to change, 0-based
-4  NEOPIXEL_PIXEL_PARAM_LOCATION (msb)
-5  NEOPIXEL_PIXEL_PARAM_RED      (lsb) // Red value 0-255
-6  NEOPIXEL_PIXEL_PARAM_RED      (msb) 
-7  NEOPIXEL_PIXEL_PARAM_GREEN    (lsb) // Green value 0-255
-8  NEOPIXEL_PIXEL_PARAM_GREEN    (msb) 
-9  NEOPIXEL_PIXEL_PARAM_BLUE     (lsb) // Blue value 0-255
-10 NEOPIXEL_PIXEL_PARAM_BLUE     (msb) 
+1  LEDSTRIP_DATA                 (0x62)
+2  LEDSTRIP_CMD_PIXEL            (0x02)
+3  LEDSTRIP_PIXEL_PARAM_LOCATION (lsb) // pos of the pixel to change, 0-based
+4  LEDSTRIP_PIXEL_PARAM_LOCATION (msb)
+5  LEDSTRIP_PIXEL_PARAM_RED      (lsb) // Red value 0-255
+6  LEDSTRIP_PIXEL_PARAM_RED      (msb) 
+7  LEDSTRIP_PIXEL_PARAM_GREEN    (lsb) // Green value 0-255
+8  LEDSTRIP_PIXEL_PARAM_GREEN    (msb) 
+9  LEDSTRIP_PIXEL_PARAM_BLUE     (lsb) // Blue value 0-255
+10 LEDSTRIP_PIXEL_PARAM_BLUE     (msb) 
 11 END_SYSEX                     (0xF7)
 ```
 
 ```
 // wrapper for show function (displays the next frame on the leds)
 0  START_SYSEX                   (0xF0)
-1  NEOPIXEL_DATA                 (0x62)
-2  NEOPIXEL_CMD_SHOW             (0x05)
+1  LEDSTRIP_DATA                 (0x62)
+2  LEDSTRIP_CMD_SHOW             (0x05)
 3  END_SYSEX                     (0xF7)
 ```
 
 ```
 // wrapper for clear function (sets all pixels to black)
 0  START_SYSEX                   (0xF0)
-1  NEOPIXEL_DATA                 (0x62)
-2  NEOPIXEL_CMD_CLEAR            (0x04)
+1  LEDSTRIP_DATA                 (0x62)
+2  LEDSTRIP_CMD_CLEAR            (0x04)
 3  END_SYSEX                     (0xF7)
 ```
 
@@ -57,10 +60,10 @@ An implementation of this proposal is currently available [here](https://github.
 //   this is also a response from firmata back to the host computer
 //   see query brightness below
 0  START_SYSEX                   (0xF0)
-1  NEOPIXEL_DATA                 (0x62)
-2  NEOPIXEL_CMD_BRIGHTNESS       (0x06)
-3  NEOPIXEL_BRIGHTNESS_PARAM_VALUE (lsb) // 0-255
-4  NEOPIXEL_BRIGHTNESS_PARAM_VALUE (msb) // 0-255
+1  LEDSTRIP_DATA                 (0x62)
+2  LEDSTRIP_CMD_BRIGHTNESS       (0x06)
+3  LEDSTRIP_BRIGHTNESS_PARAM_VALUE (lsb) // 0-255
+4  LEDSTRIP_BRIGHTNESS_PARAM_VALUE (msb) // 0-255
 5  END_SYSEX                     (0xF7)
 ```
 
@@ -68,16 +71,16 @@ An implementation of this proposal is currently available [here](https://github.
 // wrapper for query brightness (return the current brightness value)
 //   responds with above set brightness to host computer
 0  START_SYSEX                   (0xF0)
-1  NEOPIXEL_DATA                 (0x62)
-2  NEOPIXEL_CMD_BRIGHTNESS       (0x06)
+1  LEDSTRIP_DATA                 (0x62)
+2  LEDSTRIP_CMD_BRIGHTNESS       (0x06)
 3  END_SYSEX                     (0xF7)
 ```
 
 ```
 // done response to host computer
 0  START_SYSEX                   (0xF0)
-1  NEOPIXEL_DATA                 (0x62)
-2  NEOPIXEL_CMD_DONE             (0x07)
+1  LEDSTRIP_DATA                 (0x62)
+2  LEDSTRIP_CMD_DONE             (0x07)
 3  END_SYSEX                     (0xF7)
 ```
 
@@ -89,13 +92,16 @@ An implementation of this proposal is currently available [here](https://github.
 //  done response is sent after the frame is shown
 //  (not currently implemented)
 0  START_SYSEX (0xF0)
-1  NEOPIXEL_DATA (0x62)
-2  NEOPIXEL_CMD_FRAME (0x03)
+1  LEDSTRIP_DATA (0x62)
+2  LEDSTRIP_CMD_FRAME (0x03)
 3  ... (number of pixels * 6 bytes, RGB order, two bytes per channel with lsb, msb ordering)
 N  END_SYSEX (0xF7)
 ```
 
-Order and Speed
+Strip Specific Information
+===
+
+Adafruit Neopixel (and other WS2812 strips)
 ---
 
 Order and Speed are from the Adafruit Neopixel library.
