@@ -81,6 +81,20 @@ An implementation of this proposal is currently available [here](https://github.
 3  END_SYSEX                     (0xF7)
 ```
 
+```
+// set frame (send values for all pixels)
+//  all pixels set, and then show is called.
+//  This is to reduce the number of bytes necessary for updating all of the pixels and showing them
+//  useful if the host computer keeps copies of the led values
+//  done response is sent after the frame is shown
+//  (not currently implemented)
+0  START_SYSEX (0xF0)
+1  NEOPIXEL_DATA (0x62)
+2  NEOPIXEL_CMD_FRAME (0x03)
+3  ... (number of pixels * 6 bytes, RGB order, two bytes per channel with lsb, msb ordering)
+N  END_SYSEX (0xF7)
+```
+
 Order and Speed
 ---
 
