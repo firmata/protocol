@@ -56,6 +56,8 @@ There are several client libraries. These are libraries that implement the Firma
   * [http://hackage.haskell.org/package/hArduino]
 * iOS
   * [https://github.com/jacobrosenthal/iosfirmata]
+* Dart
+  * [https://github.com/nfrancois/firmata]
 
 *Each client library may not support the most recent version of the Firmata protocol and all features described in this reposity.*
 
