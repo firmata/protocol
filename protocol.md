@@ -134,7 +134,6 @@ SAMPLEING_INTERVAL          0x7A // the interval at which analog input is sample
 SCHEDULER_DATA              0x7B // send a createtask/deletetask/addtotask/schedule/querytasks/querytask request to the scheduler
 SYSEX_NON_REALTIME          0x7E // MIDI Reserved for non-realtime messages
 SYSEX_REALTIME              0X7F // MIDI Reserved for realtime messages
-ENCODER_DATA                0X61 // Used by encoder feature
 ```
 
 Query Firmware Name and Version
