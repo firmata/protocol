@@ -75,7 +75,7 @@ Set pin mode
 
 Toggle analogIn reporting by pin
 ```
-0  toggle digitalIn reporting (0xC0-0xCF) (MIDI Program Change)
+0  toggle analogIn reporting (0xC0-0xCF) (MIDI Program Change)
 1  disable(0) / enable(non-zero)
 ```
 *As of Firmata 2.4.0, upon enabling an analog pin, the pin value should be reported to the client
