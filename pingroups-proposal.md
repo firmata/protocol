@@ -12,7 +12,7 @@ three pins in order to determine which analog line is being used on the multiple
 states across a set of digital lines (eg: [https://www.sparkfun.com/products/8653](https://www.sparkfun.com/products/8653) )
 
 When you want to issue an equivalent of a digitalWrite to a group of pins,
-you'll then issue a 7-bit byte that provides the states of the pins collectively. 
+you'll then issue a sequence of 7-bit bytes that provides the states of the pins collectively. 
 This will save several calls to digital write and allow them to be done in one group.
 
 Reads will work the same way but return a byte with the states of all of the pins.
@@ -23,7 +23,7 @@ async reads can make it extremely challenging to get the state of the keypress p
 
 * Currently unimplemented (PoC to come shortly)
 * An array of pin groups (suggest 8 groups so it can be identifed with 3 bits 
-each with 7 pins defined in the group)
+each with up to 14 pins defined in the group)
 * Modifications to firmata to accept the new protocol.
 
 ## Protocol
@@ -51,7 +51,7 @@ future reserved     (0x05 - 0x07)
 ### Configuration
 
 Specifies which pins should be grouped together and in which order. A maximum
-of 7 pins can be grouped together in one pin group. When specified in the config
+of 14 pins can be grouped together in one pin group. When specified in the config
 message, the pins will be provided in little endian style so the first pin will
 then be configured to mapped to the Least Significant Bit in subsequent write
 and read messages.
@@ -62,13 +62,15 @@ and read messages.
 2:  pin group id (0 - 7) << 4 | CONFIG
 3:  first pin in pin group (0 - 127)
 4:  second pin in pin group (0 - 127)
-... up to maximum of 7
+... up to maximum of 14
 N:  END_SYSEX           (0xF7)
 ```
 
 ### Clear
 
-Clears the values of a given pin group
+Removes any pin entries associated to a pin group. This should free up any
+memory that has been allocted and remove any references to the pins that were
+configured. This is to ensure no side effects occur if a pin group is recycled.
 
 ```
 0:  START_SYSEX         (0xF0)
@@ -90,7 +92,8 @@ defined so it should be ignored).
 1:  pin group command   (0x60)
 2:  pin group id (0 - 7) << 4 | PIN_STATE_SET
 3:  packed 7 bit array as single byte providing values for the pin group
-4:  END_SYSEX           (0xF7)
+... optional second packed 7 bit array providing values for the pin group
+N:  END_SYSEX           (0xF7)
 ```
 
 ### State request and reply
@@ -114,9 +117,7 @@ Reply with the pin states.
 1:  pin group command   (0x60)
 2:  pin group id (0 - 7) << 4 | PIN_STATE_REPLY
 3:  packed 7 bit array representing pin states, LSB is first pin defined in config
+... optional second 7 bit array representing pin states for additional pins in group
 4:  END_SYSEX
 ```
-
-
-
 
