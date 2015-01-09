@@ -118,6 +118,6 @@ Reply with the pin states.
 2:  pin group id (0 - 7) << 4 | PIN_STATE_REPLY
 3:  packed 7 bit array representing pin states, LSB is first pin defined in config
 ... optional second 7 bit array representing pin states for additional pins in group
-4:  END_SYSEX
+N:  END_SYSEX
 ```
 
