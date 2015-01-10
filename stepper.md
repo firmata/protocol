@@ -8,7 +8,7 @@ Also includes optional support for acceleration and deceleration of the motor.
 
 Added in Firmata 2.5 ([configurable Firmata](https://github.com/firmata/arduino/tree/configurable)).
 
-Example files: 
+Example files:
  * The Stepper feature is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/ConfigurableFirmata/ConfigurableFirmata.ino).
  * [Example implementation](https://github.com/firmata/arduino/blob/configurable/utility/StepperFirmata.cpp) as a configurable Firmata feature class.
  * [Example of Stepper implementation in StandardFirmata](https://github.com/soundanalogous/AdvancedFirmata). *Note the dependency on the FirmataStepper class.*
@@ -17,14 +17,24 @@ Protocol
 ---
 
 Stepper configuration
+
+Note: stepDelay is the the number of microseconds between steps. The default
+value is 1us. You change the delay to 2us (useful for high current stepper
+motor drivers). Additional delay values can be added in the future.
 ```
 0  START_SYSEX                       (0xF0)
 1  Stepper Command                   (0x72)
 2  config command                    (0x00 = config, 0x01 = step)
 3  device number                     (0-5) (supports up to 6 motors)
-4  interface                         (0x01 = step + direction driver,
-                                      0x02 = two wire,
-                                      0x04 = four wire)
+4  stepDelay | interface             (upper 4 bits = step delay:
+                                        0000XXX = default 1us delay [default]
+                                        0001XXX = 2us delay
+                                        additional bits not yet used)
+
+                                     (lower 3 bits = interface:
+                                        XXXX001 = step + direction driver
+                                        XXXX010 = two wire
+                                        XXXX100 = four wire)
 5  steps-per-revolution LSB
 6  steps-per-revolution MSB
 7  motorPin1 or directionPin number  (0-127)
@@ -42,7 +52,7 @@ Stepper step
 3  device number        (0-5)
 4  direction            (0-1) (0x00 = CW, 0x01 = CCW)
 5  num steps byte1 LSB
-6  num steps byte2 
+6  num steps byte2
 7  num steps byte3 MSB  (21 bits (2,097,151 steps max))
 8  speed LSB            (steps in 0.01*rad/sec  (2050 = 20.50 rad/sec))
 9  speed MSB
