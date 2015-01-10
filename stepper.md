@@ -18,9 +18,9 @@ Protocol
 
 Stepper configuration
 
-Note: stepDelay is the the number of microseconds between steps. The default
-value is 1us. You change the delay to 2us (useful for high current stepper
-motor drivers). Additional delay values can be added in the future.
+*Note: `stepDelay` is the the number of microseconds between steps. The default
+value is 1us. You can change the delay to 2us (useful for high current stepper
+motor drivers). Additional delay values can be added in the future.*
 ```
 0  START_SYSEX                       (0xF0)
 1  Stepper Command                   (0x72)
