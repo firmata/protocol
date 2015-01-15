@@ -16,7 +16,7 @@ Example files:
 Protocol
 ---
 
-Stepper configuration
+###Stepper configuration
 
 *Note: `stepDelay` is the the number of microseconds between steps. The default
 value is 1us. You can change the delay to 2us (useful for high current stepper
@@ -47,7 +47,7 @@ motor drivers). Additional delay values can be added in the future.*
  */
 ```
 
-Stepper step
+###Stepper step
 ```c
  /* -----------------------------------------------------
  * 0  START_SYSEX          (0xF0)
@@ -58,8 +58,8 @@ Stepper step
  * 5  num steps byte1 LSB
  * 6  num steps byte2
  * 7  num steps byte3 MSB  (21 bits (2,097,151 steps max))
- * 8  speed LSB            (steps in 0.01*rad/sec  (2050 = 20.50 rad/sec))
- * 9  speed MSB
+ * 8  [optional] speed LSB (steps in 0.01*rad/sec  (2050 = 20.50 rad/sec))
+ * 9  [optional] speed MSB
  * 10 [optional] accel LSB (acceleration in 0.01*rad/sec^2 (1000 = 10.0 rad/sec^2))
  * 11 [optional] accel MSB
  * 12 [optional] decel LSB (deceleration in 0.01*rad/sec^2)
@@ -69,7 +69,8 @@ Stepper step
  */
 ```
 
-Report Steppers's position
+###Report Steppers's position
+
 Query
 ```c
  /* -----------------------------------------------------
@@ -99,7 +100,8 @@ Response
  */
 ```
 
-Report Steppers's Distance from target
+###Report Steppers's Distance from target
+
 Query
 ```c
  /* -----------------------------------------------------
@@ -129,7 +131,7 @@ Response
  */
 ```
 
-Stepper set speed
+###Stepper set speed
 ```c
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
@@ -143,7 +145,7 @@ Stepper set speed
  */
 ```
 
-Stepper set acceleration
+###Stepper set acceleration
 ```c
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
@@ -157,7 +159,7 @@ Stepper set acceleration
  */
 ```
 
-Stepper set deceleration
+###Stepper set deceleration
 ```c
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
@@ -171,8 +173,7 @@ Stepper set deceleration
  */
 ```
 
-Stepper stop
-
+###Stepper stop
  
 ```c
  /* -----------------------------------------------------
@@ -185,11 +186,10 @@ Stepper stop
  */
 ```
 
-Stepper has reached target/is done stepping
+###Stepper has reached target/is done stepping
 
 is sent automatically when the stepper reaches its destination 
-only is sent once during the report cycle so it is possible
-that 
+only is sent once during the report cycle 
  
 ```c
  /* -----------------------------------------------------
