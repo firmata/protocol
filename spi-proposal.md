@@ -104,7 +104,7 @@ N:  END_SYSEX
 1:  SPI_DATA
 2:  SPI_REPLY
 3:  csPin (0 - 127)  (or deviceId: 0 - MAX_SPI_DEVICES - 1)
-4:  numBytes (limit TBD)
+4:  numWords
 5:  data 0 (bits 0 - 6)
 6:  data 1 (bit 7)  or bits 7 - 14 if wordSize > 8 && <= 14
 7:  data 2 (bits 15 - 16 if wordSize > 14)
