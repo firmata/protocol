@@ -13,6 +13,7 @@ Additional options can be set for less common cases such as changing the word le
 or forcing the CS pin to toggle between every word sent.
 
 There are 3 ways to send and receive data from the SPI slave device:
+
 1. Transfer - for each word sent a word is received
 2. Write - only write data (ignore any data retuned by the slave device)
 3. Read - only read data, writing 0 for each byte to be read
@@ -23,7 +24,6 @@ There are 3 ways to send and receive data from the SPI slave device:
 ### Begin
 
 ```
-// SPI_BEGIN
 // called once to initialize SPI hardware
 // can optionally be set internally on first SPI_CONFIG_DEVICE message
 0:  START_SYSEX
@@ -45,7 +45,6 @@ Data modes:
 
 
 ```
-// SPI_CONFIG_DEVICE
 // sent once for each SPI device
 0:  START_SYSEX
 1:  SPI_DATA
@@ -68,7 +67,6 @@ Data modes:
 ### Transfer
 
 ```
-// SPI_TRANSFER_REQUEST
 // send an array of data to transfer to the SPI slave device
 0:  START_SYSEX
 1:  SPI_DATA
@@ -83,10 +81,23 @@ Data modes:
 N:  END_SYSEX
 ```
 
+### Read
+
+```
+// use if device has a ready signal or requires a delay after
+// a write command
+// writes zeros for each byte to be read
+0:  START_SYSEX
+1:  SPI_DATA
+2:  SPI_READ_REQUEST
+3:  csPin (0 - 127) (or deviceId: 0 - MAX_SPI_DEVICES - 1)
+4:  numWords
+5:  END_SYSEX
+```
+
 ### Reply
 
 ```
-// SPI_REPLY
 // a byte array of data received from the SPI slave device in response to the transfer
 // used for both SPI_TRANSFER_REQUEST AND SPI_READ_REQUEST
 0:  START_SYSEX
@@ -101,26 +112,10 @@ N:  END_SYSEX
 N: END_SYSEX
 ```
 
-### Read
-
-```
-// use if device has a ready signal or requires a delay after
-// a write command
-// writes zeros for each byte to be read
-SPI_READ_REQUEST
-0:  START_SYSEX
-1:  SPI_DATA
-2:  SPI_READ_REQUEST
-3:  csPin (0 - 127) (or deviceId: 0 - MAX_SPI_DEVICES - 1)
-4:  numWords
-5:  END_SYSEX
-```
-
 ### Write
 
 ```
 // use when a transfer does not require a response
-SPI_WRITE
 0:  START_SYSEX
 1:  SPI_DATA
 2:  SPI_WRITE
@@ -136,7 +131,6 @@ N: END_SYSEX
 ### End
 
 ```
-// SPI_END
 // called once to release SPI hardware
 // send before quitting a Firmata client application
 0:  START_SYSEX
