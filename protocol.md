@@ -27,6 +27,7 @@ differently.
 |                     |         |              |                     |                 |
 | start sysex         | 0xF0    |              |                     |                 |
 | set pin mode(I/O)   | 0xF4    |              | pin # (0-127)       | pin state(0=in) |
+| set pin output value| 0xF5    |              | pin # (0-127)       | pin value(0/1)  |
 | sysex end           | 0xF7    |              |                     |                 |
 | protocol version    | 0xF9    |              | major version       | minor version   |
 
@@ -71,6 +72,13 @@ Set pin mode
 0  set digital pin mode (0xF4) (MIDI Undefined)
 1  set pin number (0-127)
 2  state (INPUT/OUTPUT/ANALOG/PWM/SERVO/I2C/ONEWIRE/STEPPER/ENCODER, 0/1/2/3/4/6/7/8/9)
+```
+
+Set digital pin value
+```
+0  set digital pin value (0xF5) (MIDI Undefined)
+1  set pin number (0-127)
+2  value (LOW/HIGH, 0/1)
 ```
 
 Toggle analogIn reporting by pin
