@@ -27,7 +27,7 @@ differently.
 |                     |         |              |                     |                 |
 | start sysex         | 0xF0    |              |                     |                 |
 | set pin mode(I/O)   | 0xF4    |              | pin # (0-127)       | pin state(0=in) |
-| set pin output value| 0xF5    |              | pin # (0-127)       | pin value(0/1) |
+| set pin output value| 0xF5    |              | pin # (0-127)       | pin value(0/1)  |
 | sysex end           | 0xF7    |              |                     |                 |
 | protocol version    | 0xF9    |              | major version       | minor version   |
 
