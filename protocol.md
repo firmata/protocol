@@ -18,18 +18,18 @@ parsed by standard MIDI interpreters. Just some of the message data is used
 differently.
 
 
-| type                | command | MIDI channel | first byte          | second byte     |
-| ------------------- | ------- | ------------ | ------------------- | --------------- |
-| analog I/O message  | 0xE0    | pin #        | LSB(bits 0-6)       | MSB(bits 7-13)  |
-| digital I/O message | 0x90    | port         | LSB(bits 0-6)       | MSB(bits 7-13)  |
-| report analog pin   | 0xC0    | pin #        | disable/enable(0/1) | - n/a -         |
-| report digital port | 0xD0    | port         | disable/enable(0/1) | - n/a -         |
-|                     |         |              |                     |                 |
-| start sysex         | 0xF0    |              |                     |                 |
-| set pin mode(I/O)   | 0xF4    |              | pin # (0-127)       | pin state(0=in) |
-| set pin output value| 0xF5    |              | pin # (0-127)       | pin value(0/1)  |
-| sysex end           | 0xF7    |              |                     |                 |
-| protocol version    | 0xF9    |              | major version       | minor version   |
+| type                  | command | MIDI channel | first byte          | second byte     |
+| --------------------- | ------- | ------------ | ------------------- | --------------- |
+| analog I/O message    | 0xE0    | pin #        | LSB(bits 0-6)       | MSB(bits 7-13)  |
+| digital I/O message   | 0x90    | port         | LSB(bits 0-6)       | MSB(bits 7-13)  |
+| report analog pin     | 0xC0    | pin #        | disable/enable(0/1) | - n/a -         |
+| report digital port   | 0xD0    | port         | disable/enable(0/1) | - n/a -         |
+|                       |         |              |                     |                 |
+| start sysex           | 0xF0    |              |                     |                 |
+| set pin mode(I/O)     | 0xF4    |              | pin # (0-127)       | pin state(0=in) |
+| set digital pin value | 0xF5    |              | pin # (0-127)       | pin value(0/1)  |
+| sysex end             | 0xF7    |              |                     |                 |
+| protocol version      | 0xF9    |              | major version       | minor version   |
 
 
 Sysex-based commands (0x00 - 0x7F) are used for an extended command set.
