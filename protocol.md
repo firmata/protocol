@@ -35,8 +35,8 @@ Sysex-based sub-commands (0x00 - 0x7F) are used for an extended command set.
 
 | type                  | sub-command | first byte       | second byte   | ...            |
 | --------------------- | -------     | ---------------  | ------------- | -------------- |
-| string                | 0x71        | char *string ... |               |                |
-| firmware name/version | 0x79        | major version    | minor version | char *name ... |
+| string                | 0x71    | char *string ...    |               |                |
+| firmware name/version | 0x79    | major version       | minor version | char *name ... |
 
 
 Data Message Expansion
@@ -129,6 +129,7 @@ EXTENDED_ANALOG             0x6F // analog write (PWM, Servo, etc) to any pin
 STRING_DATA                 0x71 // a string message with 14-bits per char
 REPORT_FIRMWARE             0x79 // report name and version of the firmware
 SAMPLING_INTERVAL           0x7A // the interval at which analog input is sampled (default = 19ms)
+SAMPLING_INTERVAL_QUERY     0x7C // query the sampling interval (use 0x7A for the response)
 SYSEX_NON_REALTIME          0x7E // MIDI Reserved for non-realtime messages
 SYSEX_REALTIME              0X7F // MIDI Reserved for realtime messages
 ```
@@ -210,7 +211,7 @@ The capability query provides a list of all modes supported by each pin. Each mo
     to mark the end of the pin's modes. Subsequently, each pin
     follows with its modes/resolutions and `0x7F`,
     until all pins are defined.
-N  END_SYSEX                (0xF7)
+N  END_SYSEX                 (0xF7)
 ```
 
 #### Supported Modes
@@ -357,10 +358,38 @@ The sampling interval sets how often analog data and i2c data is reported to the
 client. The default for the arduino implementation is 19ms. This means that every
 19ms analog data will be reported and any i2c devices with read continuous mode
 will be read.
+
+Set the sampling interval
 ```
 0  START_SYSEX        (0xF0)
 1  SAMPLING_INTERVAL  (0x7A)
 2  sampling interval on the millisecond time scale (LSB)
 3  sampling interval on the millisecond time scale (MSB)
-4  END_SYSEX          (0xF7)
+4  END_SYSEX (0xF7)
 ```
+
+Query the sampling interval
+```
+0  START_SYSEX             (0xF0)
+1  SAMPLING_INTERVAL_QUERY (0x7C)
+2  END_SYSEX               (0xF7)
+```
+
+Sampling interval query response
+```
+0  START_SYSEX        (0xF0)
+1  SAMPLING_INTERVAL  (0x7A)
+2  sampling interval on the millisecond time scale (LSB)
+3  sampling interval on the millisecond time scale (MSB)
+4  END_SYSEX (0xF7)
+```
+
+Features details
+---
+See specific files : 
+* [i2c](https://github.com/firmata/protocol/blob/master/i2c.md), 
+* [servos](https://github.com/firmata/protocol/blob/master/servos.md), 
+* [stepper](https://github.com/firmata/protocol/blob/master/stepper.md), 
+* [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md), 
+* [onewire](https://github.com/firmata/protocol/blob/master/onewire.md), 
+* [encoder](https://github.com/firmata/protocol/blob/master/encoder.md).
