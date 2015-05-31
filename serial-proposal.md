@@ -14,29 +14,15 @@ A discussion and sample implementation code for Arduino is available here: https
 // config: creates new software Serial or hardware serial instance and calls begin(baud)
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)  // command byte
-2  CONFIG           (0x11)  // subcommand byte (SERIAL_CONFIG | HW_SERIAL1)
+2  CONFIG           (0x10)  // OR with port (0x11 = SERIAL_CONFIG | HW_SERIAL1)
 3  baud             (bits 0 - 6)
 4  baud             (bits 7 - 13)
 5  baud             (bits 14 - 20) // need to send 3 bytes for baud even if value is < 14 bits
-6  bufferLen        (bits 0 - 6)
+6  bufferLen        (bits 0 - 6)   // TODO - decide if buffer is optional
 7  bufferLen        (bits 7 - 13)
 8  txPin            (0-127) [softserial only] // restrictions apply per board
 9  rxPin            (0-127) [softserial only] // restrictions apply per board
 10 END_SYSEX        (0XF7)
-```
-
-```
-// Board -> Firmata client
-// read contents of serial buffer and send to Firmata client
-0  START_SYSEX      (0xF0)
-1  SERIAL_DATA      (0x60)
-2  SERIAL_TX        (0x21) // subcommand byte (SERIAL_TX | HW_SERIAL1)
-3  data 0           (LSB)  // each byte is split
-4  data 0           (MSB)
-5  data 1           (LSB)
-6  data 1           (MSB)
-...                 // up to max buffer - 5
-n  END_SYSEX        (0XF7)
 ```
 
 ```
@@ -45,7 +31,7 @@ n  END_SYSEX        (0XF7)
 // write for each byte received
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)
-2  SERIAL_RX        (0x31) // subcommand byte (SERIAL_RX | HW_SERIAL1)
+2  SERIAL_WRITE     (0x20) // OR with port (0x21 = SERIAL_WRITE | HW_SERIAL1)
 3  data 0           (LSB)
 4  data 0           (MSB)
 5  data 1           (LSB)
@@ -55,10 +41,40 @@ n  END_SYSEX        (0XF7)
 ```
 
 ```
+// Board -> Firmata client
+// read contents of serial buffer and send to Firmata client (send with SERIAL_REPLY)
+0  START_SYSEX      (0xF0)
+1  SERIAL_DATA      (0x60)
+2  SERIAL_READ      (0x30) // OR with port (0x31 = SERIAL_READ | HW_SERIAL1)
+3  SERIAL_READ_MODE (0x00) // 0x00 => read once, 0x01 => read continuously, 0x02 => stop reading
+                           // 0x10 => read until char (can be OR'd with read modes above)
+// if read until char
+4  SERIAL_TERM_CHAR (LSB)
+5  SERIAL_TERM_CHAR (MSB)
+
+n  END_SYSEX        (0XF7)
+```
+
+```
+// Board -> Firmata client
+// Sent in response to a SERIAL_READ event or on each iteration of the reporting loop
+// if SERIAL_READ_CONTINUOUSLY is set.
+0  START_SYSEX      (0xF0)
+1  SERIAL_DATA      (0x60)
+2  SERIAL_REPLY     (0x40) // OR with port (0x41 = SERIAL_REPLY | HW_SERIAL1)
+3  data 0           (LSB)
+4  data 0           (MSB)
+3  data 1           (LSB)
+4  data 1           (MSB)
+...                 // up to max buffer - 5
+n  END_SYSEX        (0xF7)
+```
+
+```
 // [optional]
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)
-2  SERIAL_CLOSE     (0x41) // subcommand byte (SERIAL_CLOSE | HW_SERIAL1)
+2  SERIAL_CLOSE     (0x50) // OR with port (0x51 = SERIAL_CLOSE | HW_SERIAL1)
 3  END_SYSEX        (0XF7)
 ```
 
@@ -66,6 +82,6 @@ n  END_SYSEX        (0XF7)
 // [optional]
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)
-2  SERIAL_FLUSH     (0x51) // subcommand byte (SERIAL_FLUSH | HW_SERIAL1)
+2  SERIAL_FLUSH     (0x60) // OR with port (0x61 = SERIAL_FLUSH | HW_SERIAL1)
 3  END_SYSEX        (0XF7)
 ```
