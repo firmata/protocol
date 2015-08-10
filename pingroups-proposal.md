@@ -60,8 +60,9 @@ and read messages.
 0:  START_SYSEX         (0xF0)
 1:  pin group command   (0x60)
 2:  pin group id (0 - 7) << 4 | CONFIG
-3:  first pin in pin group (0 - 127)
-4:  second pin in pin group (0 - 127)
+3:  lowest bit set for pinMode (0=READ, 1=WRITE) top 6 bits reserved
+4:  first pin in pin group (0 - 127)
+5:  second pin in pin group (0 - 127)
 ... up to maximum of 14
 N:  END_SYSEX           (0xF7)
 ```
