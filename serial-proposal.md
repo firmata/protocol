@@ -1,22 +1,57 @@
-Serial proposal
-===
+#Serial proposal
 
 A draft proposal for adding Software and Hardware Serial support to Firmata.
 
 Sample implementation code for Arduino is available [here](https://github.com/firmata/arduino/pull/205).
 
+## Constants
+
+### Port IDs
+
+Use these constants to identify the hardware or software serial port to address for each command.
+
 ```
-// HW_SERIAL0 = 0x00 (for using Serial when another transport is used for the Firmata Stream)
-// HW_SERIAL1 = 0x01
-// HW_SERIAL2 = 0x02
-// HW_SERIAL3 = 0x03
+HW_SERIAL0 = 0x00 (for using Serial when another transport is used for the Firmata Stream)
+HW_SERIAL1 = 0x01
+HW_SERIAL2 = 0x02
+HW_SERIAL3 = 0x03
 
-// SW_SERIAL0 = 0x08
-// SW_SERIAL1 = 0x09
-// SW_SERIAL2 = 0x0A
-// SW_SERIAL3 = 0x0B
+SW_SERIAL0 = 0x08
+SW_SERIAL1 = 0x09
+SW_SERIAL2 = 0x0A
+SW_SERIAL3 = 0x0B
+```
 
-// config: creates new software Serial or hardware serial instance and calls begin(baud)
+### Serial pin capability response
+
+Use these constants to identify the pin type in a [capability query response](https://github.com/firmata/protocol/blob/master/protocol.md#capability-query).
+
+```
+// Where the pin mode = "Serial" and the pin resolution = one of the following:
+RES_RX0 = 0x00
+RES_TX0 = 0x01
+RES_RX1 = 0x02
+RES_TX1 = 0x03
+RES_RX2 = 0x04
+RES_TX2 = 0x05
+RES_RX3 = 0x06
+RES_TX4 = 0x07
+
+```
+
+### Serial pin mode
+
+```
+MODE_SERIAL = 0x0A
+```
+
+## Commands
+
+### Serial Config
+
+Creates new software Serial or hardware serial instance and calls begin(baud).
+
+```
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)  // command byte
 2  CONFIG           (0x10)  // OR with port (0x11 = SERIAL_CONFIG | HW_SERIAL1)
@@ -31,10 +66,13 @@ Sample implementation code for Arduino is available [here](https://github.com/fi
 10 END_SYSEX        (0xF7)
 ```
 
+### Serial Write
+
+Firmata client -> Board
+
+Receive serial data from Firmata client, reassemble and write for each byte received.
+
 ```
-// Firmata client -> Board
-// receive serial data from Firmata client, reassemble and
-// write for each byte received
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)
 2  SERIAL_WRITE     (0x20) // OR with port (0x21 = SERIAL_WRITE | HW_SERIAL1)
@@ -46,9 +84,13 @@ Sample implementation code for Arduino is available [here](https://github.com/fi
 n  END_SYSEX        (0xF7)
 ```
 
+### Serial Read
+
+Board -> Firmata client
+
+Read contents of serial buffer and send to Firmata client (send with `SERIAL_REPLY`).
+
 ```
-// Board -> Firmata client
-// read contents of serial buffer and send to Firmata client (send with SERIAL_REPLY)
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)
 2  SERIAL_READ      (0x30) // OR with port (0x31 = SERIAL_READ | HW_SERIAL1)
@@ -56,10 +98,13 @@ n  END_SYSEX        (0xF7)
 4  END_SYSEX        (0xF7)
 ```
 
+### Serial Reply
+
+Board -> Firmata client
+
+Sent in response to a SERIAL_READ event or on each iteration of the reporting loop if `SERIAL_READ_CONTINUOUSLY` is set.
+
 ```
-// Board -> Firmata client
-// Sent in response to a SERIAL_READ event or on each iteration of the reporting loop
-// if SERIAL_READ_CONTINUOUSLY is set.
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)
 2  SERIAL_REPLY     (0x40) // OR with port (0x41 = SERIAL_REPLY | HW_SERIAL1)
@@ -71,25 +116,35 @@ n  END_SYSEX        (0xF7)
 n  END_SYSEX        (0xF7)
 ```
 
+### Serial Close
+
+Optional
+
 ```
-// [optional]
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)
 2  SERIAL_CLOSE     (0x50) // OR with port (0x51 = SERIAL_CLOSE | HW_SERIAL1)
 3  END_SYSEX        (0xF7)
 ```
 
+### Serial Flush
+
+Optional
+
 ```
-// [optional]
 0  START_SYSEX      (0xF0)
 1  SERIAL_DATA      (0x60)
 2  SERIAL_FLUSH     (0x60) // OR with port (0x61 = SERIAL_FLUSH | HW_SERIAL1)
 3  END_SYSEX        (0xF7)
 ```
 
+### Serial Listen
+
+Enable switching serial ports.
+
+*For Arduino, `SERIAL_LISTEN` is only used for SoftwareSerial ports.*
+
 ```
-// Enable switching serial ports
-// For Arduino, this is only used for SoftwareSerial ports
 0  START_SYSEX        (0xF0)
 1  SERIAL_DATA        (0x60)
 2  SERIAL_LISTEN      (0x70) // OR with port to switch to (0x79 = switch to SW_SERIAL1)
