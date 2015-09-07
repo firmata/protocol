@@ -76,7 +76,7 @@ which format (or "config") options are available per serial port per board.
                     // Restrictions will apply per capabilities of individual serial ports
 8  rxPin            (0-127) [softserial only] // restrictions apply per board
 9  txPin            (0-127) [softserial only] // restrictions apply per board
-10 END_SYSEX        (0xF7)
+8|10 END_SYSEX      (0xF7)
 ```
 
 ### Serial Write
@@ -103,12 +103,18 @@ Board -> Firmata client
 
 Read contents of serial buffer and send to Firmata client (send with `SERIAL_REPLY`).
 
+`maxBytesToRead` optionally specifies how many bytes to read for each iteration. Set to 0 (or do not
+define) to read all available bytes. If there are less bytes in the buffer than the number of bytes
+specified by `maxBytesToRead` then the lesser number of bytes will be returned.
+
 ```
 0  START_SYSEX        (0xF0)
 1  SERIAL_DATA        (0x60)
 2  SERIAL_READ        (0x30) // OR with port (0x31 = SERIAL_READ | HW_SERIAL1)
 3  SERIAL_READ_MODE   (0x00) // 0x00 => read continuously, 0x01 => stop reading
-4  END_SYSEX          (0xF7)
+4  maxBytesToRead     (lsb) [optional]
+5  maxBytesToRead     (msb) [optional]
+4|6 END_SYSEX         (0xF7)
 ```
 
 ### Serial Reply
@@ -170,36 +176,4 @@ Enable switching serial ports.
 1  SERIAL_DATA        (0x60)
 2  SERIAL_LISTEN      (0x70) // OR with port to switch to (0x79 = switch to SW_SERIAL1)
 3  END_SYSEX          (0xF7)
-```
-
-### Serial Read Configuration
-
-[Optional] Configure the interval for reading the serial port and the number of bytes to read on
-each iteration.
-
-`maxBytesToRead` specifies how many bytes to read for each iteration. Set to 0 to read all available
-bytes. If there are less bytes in the buffer than the number of bytes specified by `maxBytesToRead`
-then the lesser number of bytes will be returned.
-
-Set the `readInterval` in milliseconds at which the serial port is read. Default value is 0 which
-will read as frequently as possible. Lower values such as 1 or 2ms may not be accurate depending on
-how much time it takes the MCU to execute other tasks in the main loop.
-
-*These parameters are for advanced tuning of serial performance. Using them improperly may result
-in an overrun serial buffer or may negatively impact performance other devices connected
-to the MCU board.*
-
-```
-0  START_SYSEX          (0xF0)
-1  SERIAL_DATA          (0x60)
-2  SERIAL_READ_CONFIG   (0x80) // OR with port to configure (0x81 = configure HW_SERIAL1)
-3  maxBytesToRead       (lsb)
-4  maxBytesToRead       (msb)
-                        if 0, read all available bytes per iteration of the main loop
-                        else read the number of bytes specified per iteration
-5  readInterval         (lsb) // milliseconds
-6  readInterval         (msb)
-                        if 0, read as frequently as possible, otherwise read at the specified
-                        interval
-7  END_SYSEX            (0xF7)
 ```
