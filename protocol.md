@@ -312,5 +312,5 @@ See specific files:
 * [stepper](https://github.com/firmata/protocol/blob/master/stepper.md)
 * [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md)
 * [onewire](https://github.com/firmata/protocol/blob/master/onewire.md)
-* [encoder](https://github.com/firmata/protocol/blob/master/encoder.md
+* [encoder](https://github.com/firmata/protocol/blob/master/encoder.md)
 * [serial](https://github.com/firmata/protocol/blob/master/serial.md)
