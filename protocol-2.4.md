@@ -1,7 +1,7 @@
 protocol
 ========
 
-Current version: 2.5.0
+Version: 2.4.0
 
 The intention of this protocol is allow as much of the microcontroller to be controlled as possible from the host computer. This protocol then was designed for the direct communication between a microcontroller and an software object on a host computer. The host software object should then provide an interface that makes sense in that environment.
 
@@ -25,19 +25,18 @@ differently.
 | report analog pin     | 0xC0    | pin #        | disable/enable(0/1) | - n/a -         |
 | report digital port   | 0xD0    | port         | disable/enable(0/1) | - n/a -         |
 |                       |         |              |                     |                 |
-| start sysex           | 0xF0    |              |                     |                 |
+| start sysex           | 0xF0    | sub-command  | ...                 |                 |
 | set pin mode(I/O)     | 0xF4    |              | pin # (0-127)       | pin state(0=in) |
-| set digital pin value | 0xF5    |              | pin # (0-127)       | pin value(0/1)  |
 | sysex end             | 0xF7    |              |                     |                 |
 | protocol version      | 0xF9    |              | major version       | minor version   |
 
 
-Sysex-based commands (0x00 - 0x7F) are used for an extended command set.
+Sysex-based sub-commands (0x00 - 0x7F) are used for an extended command set.
 
-| type                  | command | first byte          | second byte   | ...            |
-| --------------------- | ------- | ------------------- | ------------- | -------------- |
-| string                | 0x71    | char *string ...    |               |                |
-| firmware name/version | 0x79    | major version       | minor version | char *name ... |
+| type                  | sub-command | first byte          | second byte   | ...            |
+| --------------------- | ----------- | ------------------- | ------------- | -------------- |
+| string                |   0x71      | char *string ...    |               |                |
+| firmware name/version |   0x79      | major version       | minor version | char *name ... |
 
 
 Data Message Expansion
@@ -74,13 +73,6 @@ Set pin mode
 2  state (INPUT/OUTPUT/ANALOG/PWM/SERVO/I2C/ONEWIRE/STEPPER/ENCODER, 0/1/2/3/4/6/7/8/9)
 ```
 
-Set digital pin value (added in v2.5)
-```
-0  set digital pin value (0xF5) (MIDI Undefined)
-1  set pin number (0-127)
-2  value (LOW/HIGH, 0/1)
-```
-
 Toggle analogIn reporting by pin
 ```
 0  toggle analogIn reporting (0xC0-0xCF) (MIDI Program Change)
@@ -112,7 +104,7 @@ than just one or two bytes for standard MIDI messages.
 Generic SysEx Message
 ```
 0   START_SYSEX (0xF0) (MIDI System Exclusive)
-1   sysex command (0x00-0x7F)
+1   sysex sub-command (0x00-0x7F)
 ... between 0 and MAX_DATA_BYTES 7-bit bytes of arbitrary data
 N   END_SYSEX (0xF7) (MIDI End of SysEx - EOX)
 ```
@@ -139,7 +131,7 @@ I2C_REQUEST                 0x76 // I2C request messages from a host to an I/O b
 I2C_REPLY                   0x77 // I2C reply messages from an I/O board to a host
 I2C_CONFIG                  0X78 // Enable I2C and provide any configuration settings
 REPORT_FIRMWARE             0x79 // report name and version of the firmware
-SAMPLEING_INTERVAL          0x7A // the interval at which analog input is sampled (default = 19ms)
+SAMPLING_INTERVAL           0x7A // the interval at which analog input is sampled (default = 19ms)
 SCHEDULER_DATA              0x7B // send a createtask/deletetask/addtotask/schedule/querytasks/querytask request to the scheduler
 SYSEX_NON_REALTIME          0x7E // MIDI Reserved for non-realtime messages
 SYSEX_REALTIME              0X7F // MIDI Reserved for realtime messages
@@ -313,4 +305,3 @@ See specific files:
 * [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md)
 * [onewire](https://github.com/firmata/protocol/blob/master/onewire.md)
 * [encoder](https://github.com/firmata/protocol/blob/master/encoder.md)
-* [serial](https://github.com/firmata/protocol/blob/master/serial.md)
