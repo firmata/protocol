@@ -7,21 +7,21 @@ Each one-wire-device has a unique identifier which is 8 bytes long and comes fac
 
 The actual commands executed on the OneWire-bus are 'reset', 'skip', 'select', 'read', 'delay' and 'write' All these commands may be executed with a single OneWire-command-message. The subcommand-byte contains these commands bit-encoded. The data required to execute each bus-command must only be included in the message when the corresponding bit is set.
 
-The order of execution of bus commands is: 'reset'->'skip'->'select'->'write'->'read'->'delay' (remember: each of these steps is optional. Also some combinations don't make sense and in fact are mutual exclusive in terms of OneWire bus protocol, so you cannot run a 'skip' followed by a 'select') The delay is useful for OneWire-commands included into taskdata (see [Firmata-scheduler proposal](https://github.com/firmata/protocol/blob/add-onewire/scheduler.md)).
+The order of execution of bus commands is: 'reset'->'skip'->'select'->'write'->'read'->'delay' (remember: each of these steps is optional. Also some combinations don't make sense and in fact are mutual exclusive in terms of OneWire bus protocol, so you cannot run a 'skip' followed by a 'select') The delay is useful for OneWire-commands included into taskdata (see [Firmata-scheduler proposal](https://github.com/firmata/protocol/blob/master/scheduler.md)).
 
 Some OneWire-devices require some time to carry out e.g. a a/d-conversion after receiving the appropriate command. Including a delay into a OneWire-message saves some bytes in the taskdata (in comparism to the inclusion of a 'delay_task' scheduler message). OneWire Read- and ReadReply messages are correlated using a correlationid (16bits). The reply contains the correlationid-value that was sent with the original request.
 
 
-Added in Firmata 2.5 ([configurable Firmata](https://github.com/firmata/arduino/tree/configurable)).
+Added in ConfigurableFirmata v2.5 ([configurable Firmata](https://github.com/firmata/ConfigurableFirmata)).
 
 
 ### Example files: 
- * OneWire is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/ConfigurableFirmata/ConfigurableFirmata.ino). 
- * [Example implementation](https://github.com/firmata/arduino/blob/configurable/utility/OneWireFirmata.cpp) as a configurable Firmata feature class.
+ * OneWire is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/ConfigurableFirmata/blob/master/examples/ConfigurableFirmata/ConfigurableFirmata.ino). 
+ * [Example implementation](https://github.com/firmata/ConfigurableFirmata/blob/master/src/OneWireFirmata.cpp) as a configurable Firmata feature class.
 
 
 ### Compatible host implementations
-* [Arduino firmata (configurable branch)](https://github.com/firmata/arduino/tree/configurable)
+* [ConfigurableFirmata](https://github.com/firmata/ConfigurableFirmata)
 
 
 ### Compatible client librairies

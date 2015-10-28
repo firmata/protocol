@@ -1,7 +1,7 @@
 protocol
 ========
 
-Current version: 2.4.0
+Current version: 2.5.0
 
 The intention of this protocol is allow as much of the microcontroller to be controlled as possible from the host computer. This protocol then was designed for the direct communication between a microcontroller and an software object on a host computer. The host software object should then provide an interface that makes sense in that environment.
 
@@ -74,7 +74,7 @@ Set pin mode
 2  state (INPUT/OUTPUT/ANALOG/PWM/SERVO/I2C/ONEWIRE/STEPPER/ENCODER, 0/1/2/3/4/6/7/8/9)
 ```
 
-Set digital pin value
+Set digital pin value (added in v2.5)
 ```
 0  set digital pin value (0xF5) (MIDI Undefined)
 1  set pin number (0-127)
@@ -121,6 +121,7 @@ Following are SysEx commands used in this version of the protocol:
 ```
 RESERVED               0x00-0x0F // The first 16 bytes are reserved for custom commands
                                  // (provide link to section describing custom commands)
+SERIAL_MESSAGE              0x60 // communicate with serial devices, including other boards
 ENCODER_DATA                0x61 // reply with encoders current positions
 ANALOG_MAPPING_QUERY        0x69 // ask for mapping of analog to pin numbers
 ANALOG_MAPPING_RESPONSE     0x6A // reply with mapping info
@@ -290,9 +291,9 @@ N  END_SYSEX                (0xF7)
 Sampling Interval
 ---
 
-The sampling interval sets how often analog data and i2c data is reported to the 
+The sampling interval sets how often analog data and i2c data is reported to the
 client. The default for the arduino implementation is 19ms. This means that every
-19ms analog data will be reported and any i2c devices with read continuous mode 
+19ms analog data will be reported and any i2c devices with read continuous mode
 will be read.
 ```
 0  START_SYSEX        (0xF0)
@@ -304,10 +305,12 @@ will be read.
 
 Features details
 ---
-See specific files : 
-* [i2c](https://github.com/firmata/protocol/blob/master/i2c.md), 
-* [servos](https://github.com/firmata/protocol/blob/master/servos.md), 
-* [stepper](https://github.com/firmata/protocol/blob/master/stepper.md), 
-* [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md), 
-* [onewire](https://github.com/firmata/protocol/blob/master/onewire.md), 
-* [encoder](https://github.com/firmata/protocol/blob/master/encoder.md).
+See specific files:
+
+* [i2c](https://github.com/firmata/protocol/blob/master/i2c.md)
+* [servos](https://github.com/firmata/protocol/blob/master/servos.md)
+* [stepper](https://github.com/firmata/protocol/blob/master/stepper.md)
+* [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md)
+* [onewire](https://github.com/firmata/protocol/blob/master/onewire.md)
+* [encoder](https://github.com/firmata/protocol/blob/master/encoder.md
+* [serial](https://github.com/firmata/protocol/blob/master/serial.md)

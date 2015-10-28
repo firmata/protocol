@@ -25,6 +25,7 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/lupeke/python-firmata]
   * [https://github.com/tino/pyFirmata]
   * [https://github.com/MrYsLab/PyMata]
+  * [https://github.com/MrYsLab/pymata-aio]
 * perl
   * [https://github.com/ntruchsess/perl-firmata]
   * [https://github.com/rcaputo/rx-firmata]
@@ -58,6 +59,8 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/jacobrosenthal/iosfirmata]
 * Dart
   * [https://github.com/nfrancois/firmata]
+* Max/MSP
+  * [http://www.maxuino.org/]
 
 *Each client library may not support the most recent version of the Firmata protocol and all features described in this reposity.*
 
