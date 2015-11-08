@@ -1,9 +1,11 @@
-#Serial proposal
+#Serial
 
 Enables control of up to 4 software and 4 hardware (UART) serial ports. Multiple ports can be
 used simultaneously (depending on restrictions of a given microcontroller board's capabilities).
 
-Sample implementation code for Arduino is available [here](https://github.com/firmata/arduino/pull/205).
+Sample implementation code for Arduino is available [here](https://github.com/firmata/arduino/blob/master/examples/StandardFirmataPlus/StandardFirmataPlus.ino).
+
+A client implementation can be found [here](https://github.com/jgautier/firmata/blob/master/lib/firmata.js).
 
 Added in Firmata v2.5
 
@@ -48,7 +50,7 @@ RES_TX3 = 0x07
 ### Serial pin mode
 
 ```
-MODE_SERIAL = 0x0A
+PIN_MODE_SERIAL = 0x0A
 ```
 
 ## Commands
