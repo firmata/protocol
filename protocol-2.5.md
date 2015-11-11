@@ -1,12 +1,15 @@
 protocol
 ========
 
-Current version: 2.5.0
+Version: 2.5.0
 
 The intention of this protocol is allow as much of the microcontroller to be controlled as possible from the host computer. This protocol then was designed for the direct communication between a microcontroller and an software object on a host computer. The host software object should then provide an interface that makes sense in that environment.
 
 The data communication format uses MIDI messages. It is not necessarily a MIDI device, first it uses a faster serial speed, and second, the messages don't always map the same.
 
+Changes
+===
+Version 2.5 added the direct command "set digital pin value" (0xF5) and the serial feature.
 
 Message Types
 ===
@@ -25,7 +28,7 @@ differently.
 | report analog pin     | 0xC0    | pin #        | disable/enable(0/1) | - n/a -         |
 | report digital port   | 0xD0    | port         | disable/enable(0/1) | - n/a -         |
 |                       |         |              |                     |                 |
-| start sysex           | 0xF0    |              |                     |                 |
+| start sysex           | 0xF0    | sub-command  | ...                 |                 |
 | set pin mode(I/O)     | 0xF4    |              | pin # (0-127)       | pin state(0=in) |
 | set digital pin value | 0xF5    |              | pin # (0-127)       | pin value(0/1)  |
 | sysex end             | 0xF7    |              |                     |                 |
@@ -34,10 +37,10 @@ differently.
 
 Sysex-based commands (0x00 - 0x7F) are used for an extended command set.
 
-| type                  | command | first byte          | second byte   | ...            |
-| --------------------- | ------- | ------------------- | ------------- | -------------- |
-| string                | 0x71    | char *string ...    |               |                |
-| firmware name/version | 0x79    | major version       | minor version | char *name ... |
+| type                  | sub-command | first byte          | second byte   | ...            |
+| --------------------- | ----------- | ------------------- | ------------- | -------------- |
+| string                |     0x71    | char *string ...    |               |                |
+| firmware name/version |     0x79    | major version       | minor version | char *name ... |
 
 
 Data Message Expansion
@@ -313,4 +316,4 @@ See specific files:
 * [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md)
 * [onewire](https://github.com/firmata/protocol/blob/master/onewire.md)
 * [encoder](https://github.com/firmata/protocol/blob/master/encoder.md)
-* [serial](https://github.com/firmata/protocol/blob/master/serial.md)
+* [serial](https://github.com/firmata/protocol/blob/master/serial.md) Added in v2.5
