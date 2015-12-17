@@ -17,7 +17,7 @@ The Firmata protocol could theoretically be implemented for any microcontroller 
 ## Firmata client libraries
 There are several client libraries. These are libraries that implement the Firmata protocol in order to communicate (from a computer, smartphone or tablet for example) with Firmata firmware running on a microcontroller platform. The following is a list of Firmata client library implementations:
 
-* procesing
+* processing
   * [https://github.com/firmata/processing]
   * [http://funnel.cc]
 * python
