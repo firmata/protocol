@@ -17,7 +17,7 @@ The Firmata protocol could theoretically be implemented for any microcontroller 
 ## Firmata client libraries
 There are several client libraries. These are libraries that implement the Firmata protocol in order to communicate (from a computer, smartphone or tablet for example) with Firmata firmware running on a microcontroller platform. The following is a list of Firmata client library implementations:
 
-* procesing
+* processing
   * [https://github.com/firmata/processing]
   * [http://funnel.cc]
 * python
@@ -68,7 +68,7 @@ There are several client libraries. These are libraries that implement the Firma
 
 To submit a proposal for a new feature, create a [markdown](https://help.github.com/articles/github-flavored-markdown/) file for your proposal and append "-proposal" to the filename. Submit a pull request to add the proposal.
 
-To make a change to an existing protocol, submit a pull request with your proposed changes. Be sure to provide any rational in the pull request description.
+To make a change to an existing protocol, submit a pull request with your proposed changes. Be sure to provide any rationale in the pull request description.
 
 Some hints for drafting a new proposal:
 
