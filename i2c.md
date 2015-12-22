@@ -1,17 +1,23 @@
-I2C
-===
+# I2C
+
+Enables communication with I2C devices. Currently only supports one I2C port per board.
 
 Added in Firmata 2.3.
 
-I2C read/write request
+### I2C read/write request
+
+Updated in Firmata 2.5.1 to enable setting auto-restart by setting bit 6 of byte 3.
+
 ```
 0  START_SYSEX (0xF0)
 1  I2C_REQUEST (0x76)
 2  slave address (LSB)
 3  slave address (MSB) + read/write and address mode bits
-   {7: always 0} + {6: reserved} + {5: address mode, 1 means 10-bit mode} +
-   {4-3: read/write, 00 => write, 01 => read once, 10 => read continuously, 11 => stop reading} +
-   {2-0: slave address MSB in 10-bit mode, not used in 7-bit mode}
+     {bit 7: always 0}
+     {bit 6: auto restart transmission, 0 = stop (default), 1 = restart}
+     {bit 5: address mode, 1 = 10-bit mode}
+     {bits 4-3: read/write, 00 = write, 01 = read once, 10 = read continuously, 11 = stop reading}
+     {bits 2-0: slave address MSB in 10-bit mode, not used in 7-bit mode}
 4  data 0 (LSB)
 5  data 0 (MSB)
 6  data 1 (LSB)
@@ -26,8 +32,11 @@ the firmware should continuously read the device at the rate specified by the
 for several I2C devices simultaneously. Sending the ```stop reading``` command will
 end read continuous mode for that particular device.
 
+*auto-restart (byte 3, bit 6) is needed by some devices such as the MMA8452Q accelerometer and the MPL3115As altimeter*
 
-I2C reply
+
+### I2C reply
+
 ```
 0  START_SYSEX (0xF0)
 1  I2C_REPLY (0x77)
@@ -41,7 +50,8 @@ I2C reply
 n  END_SYSEX (0XF7)
 ```
 
-I2C config
+### I2C config
+
 ```
 0  START_SYSEX (0xF0)
 1  I2C_CONFIG (0x78)
@@ -53,28 +63,3 @@ n  END_SYSEX (0xF7)
 
 The optional ```Delay``` is for I2C devices that require a delay between when the
 register is written to and the data in that register can be read.
-
-
-Proposal to ammend: add auto restart support
----
-
-Some I2C hardware needs to support an auto-restart mode (MMA8452Q accelerometer for example).
-One solution is to use (the previously unused) bit 6 of byte 3 to specify whether or not to auto restart the
-transmission. The default value should be false (stop). I2C read/write would be updated
-as follows:
-
-```
-0  START_SYSEX (0xF0)
-1  I2C_REQUEST (0x76)
-2  slave address (LSB)
-3  slave address (MSB) + read/write and address mode bits
-   {7: always 0} + {6: restartTX, 0 => false (default), 1 => true} + {5: address mode, 1 => 10-bit mode} +
-   {4-3: read/write, 00 => write, 01 => read once, 10 => read continuously, 11 => stop reading} +
-   {2-0: slave address MSB in 10-bit mode, not used in 7-bit mode}
-4  data 0 (LSB)
-5  data 0 (MSB)
-6  data 1 (LSB)
-7  data 1 (MSB)
-...
-n  END_SYSEX (0xF7)
-```
