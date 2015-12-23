@@ -61,6 +61,8 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/nfrancois/firmata]
 * Max/MSP
   * [http://www.maxuino.org/]
+* Elixir
+  * [https://github.com/kfatehi/firmata]
 
 *Each client library may not support the most recent version of the Firmata protocol and all features described in this reposity.*
 
