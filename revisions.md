@@ -1,13 +1,13 @@
-## v2.5.1 - December 21st, 2015
+## Version 2.5.1 - December 21st, 2015
 
 - Enable I2C auto-restart by setting [bit 6 of byte 3](https://github.com/firmata/protocol/commit/22cc239b5a527556d82707fe0c540b16ed42f0bc#diff-ab7ff1e563b418ee1e557d6ece901dc7R17) of the `I2C_REQUEST` message.
 
-## v2.5.0 - November 7th, 2015
+## Version 2.5.0 - November 7th, 2015
 
 - Added [Serial feature](https://github.com/firmata/protocol/blob/master/serial.md) for interfacing with serial devices via hardware or software serial.
 - Added ability to set the value of a pin by sending a single pin value instead of a port value. See 'set digital pin value' in [protocol.md](https://github.com/firmata/protocol/blob/master/protocol.md#message-types) for details.
 
-## Version 2.4.0 - December 21st, 2014
+## Version 2.4.0 - December 2014
 
 - Changed `report digital port` and `report analog pin` definition to return the port (digital) or pin (analog) value upon toggling to `enable`.
 - Added [OneWire feature](https://github.com/firmata/protocol/blob/master/onewire.md) to interface with 1-Wire devices.
