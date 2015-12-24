@@ -8,6 +8,8 @@ could have a different interface, e.g. Arduino's `attach()` and `detach()`.
 
 The `SERVO_CONFIG` message can be sent at any time to chang the settings.
 
+Added in version 2.1.0.
+
 Servo config
 ```
 // minPulse and maxPulse are 14-bit unsigned integers

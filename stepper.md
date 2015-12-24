@@ -6,7 +6,7 @@ Current implementation supports 6 stepper motors at the same time (#[0-5]).
 
 Also includes optional support for acceleration and deceleration of the motor.
 
-Added in ConfigurableFirmata 2.5 ([configurable Firmata](https://github.com/firmata/ConfigurableFirmata)).
+Added in version 2.4.0.
 
 Example files:
  * The Stepper feature is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/ConfigurableFirmata/blob/master/examples/ConfigurableFirmata/ConfigurableFirmata.ino).

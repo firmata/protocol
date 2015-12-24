@@ -2,7 +2,7 @@
 
 Enables communication with I2C devices. Currently only supports one I2C port per board.
 
-Added in Firmata 2.3.
+Added in version 2.3.0.
 
 ### I2C read/write request
 

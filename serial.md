@@ -7,7 +7,7 @@ Sample implementation code for Arduino is available [here](https://github.com/fi
 
 A client implementation can be found [here](https://github.com/jgautier/firmata/blob/master/lib/firmata.js).
 
-Added in Firmata v2.5
+Added in version 2.5.0
 
 ## Constants
 
