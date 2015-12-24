@@ -17,27 +17,26 @@
 
 *Note: The above 4 features were initially added for `ConfigurableFirmata` which had a different version number. They have been moved under the `v2.4.0` release here to get things back on track for the protocol version.*
 
-## Version 2.3.0
+## Version 2.3.0 - February 2013
 
-- Added [I2C feature](https://github.com/firmata/protocol/blob/master/i2c.md) to interface with I2C devices.
+- Angle was removed from the `SERVO_CONFIG` message.
 
-*Note: I2C was initially added in protocol version 2.1.0 but was not implemented in any Firmata client libraries until version 2.3.0 and may have undergone minor changes sincde 2.1.0.*
-
-## Version 2.2.0
+## Version 2.2.0 - January 2011
 
 - Added [Extended Analog](https://github.com/firmata/protocol/blob/master/protocol.md#extended-analog) to allow addressing beyond pin 15 and support analog values with any number of bits.
 - Added [Capability Query](https://github.com/firmata/protocol/blob/master/protocol.md#capability-query) to query the capabilities supported by each pin.
 - Added [Analog Mapping Query](https://github.com/firmata/protocol/blob/master/protocol.md#analog-mapping-query) to map analog pin numbers to their digital pin number equivalent.
 - Added [Pin State Query](https://github.com/firmata/protocol/blob/master/protocol.md#pin-state-query) to query the state of pin (output value or if input pullup enabled).
 
-## Version 2.1.0
+## Version 2.1.0 - March 2010
 
+- Added [I2C feature](https://github.com/firmata/protocol/blob/master/i2c.md) to interface with I2C devices.
 - Added [Servo feature](https://github.com/firmata/protocol/blob/master/servos.md) to interface with servo motors.
 - Added ability to change the [sampling interval](https://github.com/firmata/protocol/blob/master/protocol.md#sampling-interval).
 
-## Version 2.0.0
+## Version 2.0.0 - September 2008
 
-- Changed to 8-bit port-based digital messages to mirror ports from previous 14-bit ports modled after the standard Arduino board.
+- Changed to 8-bit port-based digital messages (a collection of 8 pins) to mirror ports from previous 14-bit ports (a collection of 14 pins) modeled after the standard (ATmega8/168/328) Arduino boards.
 - Added ability to [query firmware name and version](https://github.com/firmata/protocol/blob/master/protocol.md#query-firmware-name-and-version).
 
 ## Version 1.0.0
