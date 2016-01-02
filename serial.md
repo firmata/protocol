@@ -62,7 +62,7 @@ only be specified if the platform requires them to be set.
 
 ```
 0  START_SYSEX      (0xF0)
-1  SERIAL_DATA      (0x60)  // command byte
+1  SERIAL_MESSAGE   (0x60)  // command byte
 2  SERIAL_CONFIG    (0x10)  // OR with port (0x11 = SERIAL_CONFIG | HW_SERIAL1)
 3  baud             (bits 0 - 6)
 4  baud             (bits 7 - 13)
@@ -80,7 +80,7 @@ Receive serial data from Firmata client, reassemble and write for each byte rece
 
 ```
 0  START_SYSEX      (0xF0)
-1  SERIAL_DATA      (0x60)
+1  SERIAL_MESSAGE   (0x60)
 2  SERIAL_WRITE     (0x20) // OR with port (0x21 = SERIAL_WRITE | HW_SERIAL1)
 3  data 0           (LSB)
 4  data 0           (MSB)
@@ -102,7 +102,7 @@ specified by `maxBytesToRead` then the lesser number of bytes will be returned.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
+1  SERIAL_MESSAGE     (0x60)
 2  SERIAL_READ        (0x30) // OR with port (0x31 = SERIAL_READ | HW_SERIAL1)
 3  SERIAL_READ_MODE   (0x00) // 0x00 => read continuously, 0x01 => stop reading
 4  maxBytesToRead     (lsb) [optional]
@@ -118,7 +118,7 @@ Sent in response to a SERIAL_READ event or on each iteration of the reporting lo
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
+1  SERIAL_MESSAGE     (0x60)
 2  SERIAL_REPLY       (0x40) // OR with port (0x41 = SERIAL_REPLY | HW_SERIAL1)
 3  data 0             (LSB)
 4  data 0             (MSB)
@@ -135,7 +135,7 @@ reopen it.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
+1  SERIAL_MESSAGE     (0x60)
 2  SERIAL_CLOSE       (0x50) // OR with port (0x51 = SERIAL_CLOSE | HW_SERIAL1)
 3  END_SYSEX          (0xF7)
 ```
@@ -153,7 +153,7 @@ cases.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
+1  SERIAL_MESSAGE     (0x60)
 2  SERIAL_FLUSH       (0x60) // OR with port (0x61 = SERIAL_FLUSH | HW_SERIAL1)
 3  END_SYSEX          (0xF7)
 ```
@@ -165,7 +165,21 @@ other platforms.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
+1  SERIAL_MESSAGE     (0x60)
 2  SERIAL_LISTEN      (0x70) // OR with port to switch to (0x79 = switch to SW_SERIAL1)
 3  END_SYSEX          (0xF7)
+```
+
+### Serial Update Baud
+
+Update the baud rate on a configured serial port.
+
+```
+0  START_SYSEX        (0xF0)
+1  SERIAL_MESSAGE     (0x60)
+2  SERIAL_UPDATE_BAUD (0x80) // OR with port to switch to (0x89 = SERIAL_UPDATE_BAUD | SW_SERIAL1)
+3  baud               (bits 0 - 6)
+4  baud               (bits 7 - 13)
+5  baud               (bits 14 - 20) // need to send 3 bytes for baud even if value is < 14 bits
+6  END_SYSEX          (0xF7)
 ```
