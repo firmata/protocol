@@ -3,7 +3,7 @@ protocol
 
 Current version: 2.5.1
 
-The intention of this protocol is allow as much of the microcontroller to be controlled as possible from the host computer. This protocol then was designed for the direct communication between a microcontroller and an software object on a host computer. The host software object should then provide an interface that makes sense in that environment.
+The intention of this protocol is to allow as much of the microcontroller to be controlled as possible from the host computer. This protocol was designed for the direct communication between a microcontroller and a software object on a host computer. The host software object should then provide an interface that makes sense in that environment.
 
 The data communication format uses MIDI messages. It is not necessarily a MIDI device, first it uses a faster serial speed, and second, the messages don't always map the same.
 
@@ -32,12 +32,12 @@ differently.
 | protocol version      | 0xF9    |              | major version       | minor version   |
 
 
-Sysex-based commands (0x00 - 0x7F) are used for an extended command set.
+Sysex-based sub-commands (0x00 - 0x7F) are used for an extended command set.
 
-| type                  | command | first byte          | second byte   | ...            |
-| --------------------- | ------- | ------------------- | ------------- | -------------- |
-| string                | 0x71    | char *string ...    |               |                |
-| firmware name/version | 0x79    | major version       | minor version | char *name ... |
+| type                  | sub-command | first byte       | second byte   | ...            |
+| --------------------- | -------     | ---------------  | ------------- | -------------- |
+| string                | 0x71        | char *string ... |               |                |
+| firmware name/version | 0x79        | major version    | minor version | char *name ... |
 
 
 Data Message Expansion
@@ -63,7 +63,6 @@ Version report format
 2  minor version (0-127)
 ```
 
-
 Control Messages Expansion
 ===
 
@@ -71,7 +70,7 @@ Set pin mode
 ```
 0  set digital pin mode (0xF4) (MIDI Undefined)
 1  set pin number (0-127)
-2  state (INPUT/OUTPUT/ANALOG/PWM/SERVO/I2C/ONEWIRE/STEPPER/ENCODER, 0/1/2/3/4/6/7/8/9)
+2  mode (INPUT/OUTPUT/ANALOG/PWM/SERVO/I2C/ONEWIRE/STEPPER/ENCODER/SERIAL/PULLUP, 0/1/2/3/4/6/7/8/9/10/11)
 ```
 
 Set digital pin value (added in v2.5)
@@ -120,7 +119,6 @@ N   END_SYSEX (0xF7) (MIDI End of SysEx - EOX)
 Following are SysEx commands used in this version of the protocol:
 ```
 RESERVED               0x00-0x0F // The first 16 bytes are reserved for custom commands
-                                 // (provide link to section describing custom commands)
 SERIAL_MESSAGE              0x60 // communicate with serial devices, including other boards
 ENCODER_DATA                0x61 // reply with encoders current positions
 ANALOG_MAPPING_QUERY        0x69 // ask for mapping of analog to pin numbers
@@ -286,7 +284,6 @@ Pin state response
 ... additional optional bytes, as many as needed
 N  END_SYSEX                (0xF7)
 ```
-
 
 Sampling Interval
 ---
