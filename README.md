@@ -65,6 +65,8 @@ There are several client libraries. These are libraries that implement the Firma
   * [http://www.maxuino.org/]
 * Elixir
   * [https://github.com/kfatehi/firmata]
+* Modelica
+  * [https://www.wolfram.com/system-modeler/libraries/model-plug/]
 
 *Each client library may not support the most recent version of the Firmata protocol and all features described in this reposity.*
 
