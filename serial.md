@@ -7,7 +7,8 @@ Sample implementation code for Arduino is available [here](https://github.com/fi
 
 A client implementation can be found [here](https://github.com/jgautier/firmata/blob/master/lib/firmata.js).
 
-Added in version 2.5.0
+Added in Firmata protocol version 2.5.0
+Updated in version 2.6.0 to add `SERIAL_UPDATE_BAUD`
 
 ## Constants
 
@@ -174,12 +175,16 @@ other platforms.
 
 Update the baud rate on a configured serial port.
 
+Note: Due to an oversight in the initial version of the `SERIAL_MESSAGE` format, `SERIAL_EXTEND`
+is necessary to add additional serial commands.
+
 ```
 0  START_SYSEX        (0xF0)
 1  SERIAL_MESSAGE     (0x60)
-2  SERIAL_UPDATE_BAUD (0x80) // OR with port to switch to (0x89 = SERIAL_UPDATE_BAUD | SW_SERIAL1)
-3  baud               (bits 0 - 6)
-4  baud               (bits 7 - 13)
-5  baud               (bits 14 - 20) // need to send 3 bytes for baud even if value is < 14 bits
-6  END_SYSEX          (0xF7)
+2  SERIAL_EXTEND      (0x00) // OR with portId (0x09 = SERIAL_EXTEND | SW_SERIAL1)
+3  SERIAL_UPDATE_BAUD (0x01) // up to 127 extended commands
+4  baud               (bits 0 - 6)
+5  baud               (bits 7 - 13)
+6  baud               (bits 14 - 20) // need to send 3 bytes for baud even if value is < 14 bits
+7  END_SYSEX          (0xF7)
 ```
