@@ -44,8 +44,8 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/rwldrn/johnny-five]
 * java
   * [https://github.com/4ntoine/Firmata]
-  * [https://github.com/shigeodayo/Javarduino]
   * [https://github.com/kurbatov/firmata4j]
+  * [https://github.com/reapzor/FiloFirmata]
 * .NET
   * [https://github.com/SolidSoils/Arduino]
   * [http://www.imagitronics.org/projects/firmatanet/]
