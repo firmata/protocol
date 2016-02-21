@@ -69,6 +69,8 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://www.wolfram.com/system-modeler/libraries/model-plug/]
 * golang
   * [https://github.com/kraman/go-firmata] 
+* Qt/QML
+  * [https://github.com/callaa/qfirmata]
 
 *Each client library may not support the most recent version of the Firmata protocol and all features described in this reposity.*
 
