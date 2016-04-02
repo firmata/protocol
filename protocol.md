@@ -269,7 +269,8 @@ Pin state query
 ```
 0  START_SYSEX              (0xF0)
 1  pin state query          (0x6D)
-2  END_SYSEX                (0xF7)
+2  pin                      (0-127)
+3  END_SYSEX                (0xF7)
 ```
 
 Pin state response
