@@ -121,6 +121,7 @@ Following are SysEx commands used in this version of the protocol:
 RESERVED               0x00-0x0F // The first 16 bytes are reserved for custom commands
 SERIAL_MESSAGE              0x60 // communicate with serial devices, including other boards
 ENCODER_DATA                0x61 // reply with encoders current positions
+REPORT_FEATURES             0x62 // report the features supported by this firmware (Servo, I2C, etc)
 ANALOG_MAPPING_QUERY        0x69 // ask for mapping of analog to pin numbers
 ANALOG_MAPPING_RESPONSE     0x6A // reply with mapping info
 CAPABILITY_QUERY            0x6B // ask for supported modes and resolution of all pins
@@ -167,6 +168,75 @@ Receive Firmware Name and Version (after query)
 5  second 7-bits of firmware name
 ... for as many bytes as it needs
 N  END_SYSEX         (0xF7)
+```
+
+Report features
+---
+
+Report standard and contributed features supported by the firmware and the version of each feature.
+
+As of Firmata version 2.6.0 there are now 3 types of features:
+1. Core features (those defined in this protocol.md file)
+2. Standard features (I2C, Serial)
+3. Contributed features (Encoder, OneWire, Stepper, Servo, Scheduler)
+
+*Core features* are composed of both *Core Direct* messages such as `SystemReset(0xFF)`,
+`ReportVersion(0xF9)`, `ReportDigital(0xD0)`, `ReportAnalog(0xE0)`, etc and *Core Sysex* messages
+such as `ReportFirmware(0x79)`, `ExtendedAnalog(0x6F)`, `StringData(0x71)`, `CapabilityQuery(0x68)`,
+etc.
+
+*Standard features* are typically pin-level features of the microcontroller board such as I2C, SPI,
+UART, CAN, etc.
+
+*Contributed features* define generic (Servo, Stepper, OneWire) or device-specific (DHT11, NeoPixel)
+interfaces or other services (Scheduler) that are not integral to the functionality of the
+microcontroller itself or part of the core logic.
+
+The *core* protocol version is defined at the top of this file and covers the features specified
+in this document. The core version covers the Core Direct and Core Sysex messages. If any change is
+made to those message, the core version needs to be incremented appropriately.
+
+As of Firmata v2.6.0, standard and contributed features have their own version, beginning at v1.0.0
+for each feature that was in use prior to v2.6.0 and beginning at v0.1.0 for any new features added
+since core v2.6.0. The feature bugfix version is not reported but it should be maintained.
+
+This enables changes to be made to individual features without needing to change the core version.
+It also enables multiple variations of a feature to coexist simultaneously, for example a new I2C
+feature could be added that enables the ability to use multiple I2C ports rather than a single
+version. That enables Firmata client libraries to adapt the new I2C interface while deprecating the
+old one without breaking client libraries that don't update to the new version. Both versions would
+use the same pin mode but have different command identifiers.
+
+**Query supported standard and contributed features.**
+```
+0  START_SYSEX                (0xF0)
+1  REPORT_FEATURES            (0x62)
+2  REPORT_FEATURES_QUERY      (0x00)
+3  END_SYSEX                  (0xF7)
+```
+
+**Supported standard and contributes features query response.**
+
+The `FEATURE_ID` is 2 bytes for scalability (composed as a pair of two 7-bit bytes rather than a
+single number). Features existing prior core protocol v2.6.0 should assign their existing 1 byte
+subcommand to the LSB of the ID and set the MSB to 0. For existing features that don't have a single
+subcommand byte (I2C), the CONFIG subcommand should be the identifying subcommand, so for I2C the
+ID would be: `0x0078`. This also means the the LSB in the range `0x50 - 0x7F` is reserved so new new
+IDs cannot be allocated within this range: `0xXX50 - 0xXX7F`.
+```
+0  START_SYSEX                (0xF0)
+1  REPORT_FEATURES            (0x62)
+2  REPORT_FEATURES_RESPONSE   (0x01)
+3  1st FEATURE_ID LSB         The subcommand byte allocated to the feature
+4  1st FEATURE_ID MSB         use 2 bytes to ensure scalability
+5  1st FEATURE_MAJOR_VERSION  (0-127)
+6  1st FEATURE_MINOR_VERSION  (0-127)
+7  2nd FEATURE_ID LSB
+8  2nd FEATURE_ID MSB
+9  2nd FEATURE_MAJOR_VERSION  (0-127)
+10 2nd FEATURE_MINOR_VERSION  (0-127)
+... for all supported features
+n  END_SYSEX                  (0xF7)
 ```
 
 Extended Analog
