@@ -286,6 +286,23 @@ Pin state response
 N  END_SYSEX                (0xF7)
 ```
 
+String
+---
+
+Send short string messages between the board and the client application. String length is limited
+to half the buffer size - 3 (for Arduino this limits strings to 30 chars). Commonly used to report
+error messages to the client.
+```
+0  START_SYSEX        (0xF0)
+1  STRING_DATA        (0x71)
+2  first char LSB
+3  first char MSB
+3  second char LSB
+4  second char MSB
+... additional bytes up to half the buffer size - 3 (START_SYSEX, STRING_DATA, END_SYSEX)
+N  END_SYSEX (0xF7)
+```
+
 Sampling Interval
 ---
 
