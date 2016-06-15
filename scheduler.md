@@ -7,7 +7,7 @@ Added in version 2.4.0.
 
 调度程序
 ===
-思想是保存一个微控制器上的稍后会重发的消息流（无论是一次或多次）。一个任务是通过发送一个create_task信息创建。运行的时间被初始化为0（这意味着任务尚未准备运行）。填补taskdata消息后（使用add_to_task命令消息）最后发送schedule_task请求，设置运行时间（以毫秒为单位在“现在”之后）。如果一个任务本身包含delay_task或schedule_task-messages导致动作任务在这样的消息的发送后暂停和恢复执行。如果一个任务的最后一条消息是一个delay_task消息任务计划的时间会重新指定。如果在任务结束后没有delay_task消息（所以运行期间运行时间不更新），任务执行后被删除。
+设计思想是保存一个微控制器上的稍后会重发的消息流（无论是一次或多次）。一个任务是通过发送一个create_task信息创建。运行的时间被初始化为0（这意味着任务尚未准备运行）。填补taskdata消息后（使用add_to_task命令消息）最后发送schedule_task请求，设置运行时间（以毫秒为单位在“现在”之后）。如果一个任务本身包含delay_task或schedule_task-messages导致动作任务在这样的消息的发送后暂停和恢复执行。如果一个任务的最后一条消息是一个delay_task消息任务计划的时间会重新指定。如果在任务结束后没有delay_task消息（所以运行期间运行时间不更新），任务执行后被删除。
 
 ### Example files: 
  * OneWire is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/ConfigurableFirmata/blob/master/examples/ConfigurableFirmata/ConfigurableFirmata.ino). 
