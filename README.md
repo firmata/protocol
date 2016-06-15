@@ -8,6 +8,8 @@ Firmata是与来自电脑上（或智能手机/平板电脑等）的软件的微
 
 
 Firmata is based on the [midi message format](http://www.midi.org/techspecs/midimessages.php) in that commands bytes are 8 bits and data bytes are 7 bits. For example the midi Channel Pressure (Command: 0xD0) message is 2 bytes long, in Firmata the Command 0xD0 is used to enable reporting for a digital port (collection of 8 pins). Both the midi and Firmata versions are 2 bytes long, but the meaning is obviously different. In Firmata, the number of bytes in a message must conform with the corresponding midi message. Midi [System Exclusive](http://www.2writers.com/eddie/tutsysex.htm) (Sysex) messages however, can be any length and are therefore used most prominently throughout the Firmata protocol.
+Firmata是基于[MIDI消息格式]（http://www.midi.org/techspecs/midimessages.php）,命令字节是8位和数据字节是7位。例如MIDI通道压力（命令：0xD0）消息是2字节长，在Firmata,命令0xD0用于启用用于数字端口（8个管脚集合）的报告。无论是MIDI和Firmata版本都是2个字节长，但含义显然是不同的。在Firmata，一消息字节的数目必须与相应的MIDI消息符合。然而，MIDI [系统专用]（http://www.2writers.com/eddie/tutsysex.htm）（SYSEX）消息，可以是任意长度，因此在Firmata协议中，MIDI消息使用的最多。
+
 
 This repository contains documentation of the Firmata protocol. The core of the protocol is described in the [protocol.md file](protocol.md) file. Feature-specific documentation is described in individual markdown files ([i2c.md](i2c.md), [stepper.md](stepper.md), [servos.md](servos.md), etc). Files appended with '-proposal' are proposals for new features that have not yet been finalized.
 
