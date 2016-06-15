@@ -1,18 +1,26 @@
 #Encoder Feature
 
 Provide incremental encoders support, for both [linear](http://en.wikipedia.org/wiki/Linear_encoder) and [rotary](http://en.wikipedia.org/wiki/Rotary_encoder#Incremental_rotary_encoder) encoders.
+提供增量编码器的支持，为[线性]（http://en.wikipedia.org/wiki/Linear_encoder）和[转]（http://en.wikipedia.org/wiki/Rotary_encoder#Incremental_rotary_encoder）编码器。
 
 This feature is based on based on [PJRC's implementation](http://www.pjrc.com/teensy/td_libs_Encoder.html). See [this article](http://www.pjrc.com/teensy/td_libs_Encoder.html) for more informations about how it works (well explained!).
+此特征是基于[PJRC的实现]（http://www.pjrc.com/teensy/td_libs_Encoder.html）。参见[这篇文章]（http://www.pjrc.com/teensy/td_libs_Encoder.html）有关如何它的作品更多的信息（很好的解释！）。
 
 Current implementation supports 5 encoders at the same time (#[0-4]) and you can activate automatic position reports every (SAMPLING_INTERVAL)ms. Reports are disabled by default.
+当前实现支持在同一时间（＃[0-4]）5编码器和可以激活自动位置报告每隔（SAMPLING_INTERVAL）毫秒。报告默认情况下禁用。
 
 For best Performances, connect only interrupt pins.
+为了获得最佳性能，只能连接中断引脚。
 
 Added in version 2.4.0.
 
 Example files : 
+示例文件：
  * EncoderFeature is a contributed feature for [ConfigurableFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/ConfigurableFirmata/ConfigurableFirmata.ino). 
+*EncoderFeature是一个贡献功能[ConfigurableFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/ConfigurableFirmata/ConfigurableFirmata.ino)
+
  * A dedicated example is available. See [SimpleEncoderFirmata.ino](https://github.com/firmata/FirmataEncoder/tree/master/examples/SimpleFirmataEncoder). 
+ * 一个详细的例子是可用的。 参见[SimpleEncoderFirmata.ino](https://github.com/firmata/FirmataEncoder/tree/master/examples/SimpleFirmataEncoder)
 
 ## Compatible client librairies
 TODO : Update this
