@@ -5,23 +5,34 @@ The idea is to store a stream of messages on a microcontroller which is replayed
 
 Added in version 2.4.0.
 
+调度程序
+===
+思想是保存一个微控制器上的稍后会重发的消息流（无论是一次或多次）。一个任务是通过发送一个create_task信息创建。运行的时间被初始化为0（这意味着任务尚未准备运行）。填补taskdata消息后（使用add_to_task命令消息）最后发送schedule_task请求，设置运行时间（以毫秒为单位在“现在”之后）。如果一个任务本身包含delay_task或schedule_task-messages导致动作任务在这样的消息的发送后暂停和恢复执行。如果一个任务的最后一条消息是一个delay_task消息任务计划的时间会重新指定。如果在任务结束后没有delay_task消息（所以运行期间运行时间不更新），任务执行后被删除。
 
 ### Example files: 
  * OneWire is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/ConfigurableFirmata/blob/master/examples/ConfigurableFirmata/ConfigurableFirmata.ino). 
  * [Example implementation](https://github.com/firmata/ConfigurableFirmata/blob/master/src/FirmataScheduler.cpp) as a configurable Firmata feature class.
-
+### 示例文件：
+* OneWire默认情况下在包括[ConfigurableFirmata.ino](https://github.com/firmata/ConfigurableFirmata/blob/master/examples/ConfigurableFirmata/ConfigurableFirmata.ino).
+ * [示例实现（https://github.com/firmata/ConfigurableFirmata/blob/master/src/FirmataScheduler.cpp）作为配置Firmata要素类。
 
 ### Compatible host implementations
 * [ConfigurableFirmata](https://github.com/firmata/ConfigurableFirmata)
 
+### 兼容主机实现
+* [ConfigurableFirmata（https://github.com/firmata/ConfigurableFirmata）
 
 ### Compatible client librairies
 * [perl-firmata](https://github.com/ntruchsess/perl-firmata)
 
+### 兼容的客户端库
+* [Perl的firmata（https://github.com/ntruchsess/perl-firmata）
 
 ### Protocol details
+### 协议细节
 
 Scheduler CREATE_TASK request
+
 ```
 0  START_SYSEX          (0xF0)
 1  Scheduler Command    (0x7B)
@@ -31,8 +42,18 @@ Scheduler CREATE_TASK request
 5  length MSB           (bit 7-13)
 6  END_SYSEX            (0xF7)
 ```
-
+调度CREATE_TASK请求
+```
+0  START_SYSEX          (0xF0)
+1  Scheduler Command    (0x7B)
+2  create_task command  (0x00)
+3  task id              (0-127)
+4  length LSB           (bit 0-6)
+5  length MSB           (bit 7-13)
+6  END_SYSEX            (0xF7)
+```
 Scheduler DELETE_TASK request
+调度DELETE_TASK请求
 ```
 0  START_SYSEX          (0xF0)
 1  Scheduler Command    (0x7B)
