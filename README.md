@@ -16,7 +16,7 @@ This repository contains documentation of the Firmata protocol. The core of the 
 
 
 The Firmata protocol could theoretically be implemented for any microcontroller platform. Currently however, the most complete implementation is for [Arduino](http://arduino.cc) (including Arduino-compatible microcontrollers). Here are the known Firmata microcontroller platform implementations:      
-该Firmata协议理论上可以用于任何单片机平台上实现。然而，目前最完整的实现是[Arduino]（http://arduino.cc）的（包括Arduino的兼容微控制器）。下面是已知的Firmata微控制器平台实现：
+该Firmata协议理论上可以用于任何单片机平台上实现。然而，目前最完整的实现是[Arduino](http://arduino.cc)的（包括Arduino的兼容微控制器）。下面是已知的Firmata微控制器平台实现：
 
 * [Firmata for Arduino](https://github.com/firmata/arduino)
 * [Firmata for Spark.io](https://github.com/firmata/spark)
