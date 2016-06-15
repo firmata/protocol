@@ -12,8 +12,7 @@ Examples of this behaviour would include:
 
 * Analog Multiplexer / Demultimplexer, where you need to set the bit value of
 three pins in order to determine which analog line is being used on the multiplexer.
-*模拟多路复用器/ Demultimplexer，你需要设置的位值
-三个销以确定哪些模拟线路上正在多路复用使用。
+*模拟多路复用器/ Demultimplexer，你需要设置三个引脚的位值 以确定哪些模拟线路上正在多路复用使用。
 
 * Keypads where the value of the key presses are expressed using a combination of
 states across a set of digital lines (eg: [https://www.sparkfun.com/products/8653](https://www.sparkfun.com/products/8653) )
@@ -47,11 +46,16 @@ each with up to 14 pins defined in the group)
 
 In order to save space in the protocol, the Digital Pin Group command comprises
 both protocol commands as well as the id address space for the groups as below:
+为了节省空间，在协议中，数字引脚组命令包括：
+两个协议命令以及用于组如下的ID地址空间：
 
 LSB
 0 - 2:  3 bits to determine which Pin Group command is being issued
+3位，以确定哪个引脚组命令正在发行
 3    :  Reserved for future use / address space increases
+保留供将来使用/地址空间增大
 4 - 6:  3 bits for Pin Group ID address space - providing up to 8 distinct digital pin groups
+3位为引脚组ID地址空间 - 提供多达8个不同的数字引脚组
 
 Command values are provided below
 ```
@@ -70,7 +74,9 @@ of 14 pins can be grouped together in one pin group. When specified in the confi
 message, the pins will be provided in little endian style so the first pin will
 then be configured to mapped to the Least Significant Bit in subsequent write
 and read messages.
-
+指定哪些引脚要相对集中及顺序。最大14引脚可以放在一个针组进行分组。当在配置中指定
+消息时，引脚将用little endian风格提供，这样第一针会然后经配置以映射到后续的写入的最低有效位
+和阅读邮件。
 ```
 0:  START_SYSEX         (0xF0)
 1:  pin group command   (0x60)
@@ -116,6 +122,7 @@ N:  END_SYSEX           (0xF7)
 
 Getting the states of the group of pins (essentially a group digital read)
 comprises a request to the board and a reply back.
+获取组引脚（基本上是一组数字读）的状态包括向董事会和回一个应答请求。
 
 Make a request for getting the states of the pin group.
 
