@@ -1,19 +1,26 @@
 #Serial
 
 Enables control of up to 4 software and 4 hardware (UART) serial ports. Multiple ports can be
-used simultaneously (depending on restrictions of a given microcontroller board's capabilities).
+used simultaneously (depending on restrictions of a given microcontroller board's capabilities).   
+允许最多4软件和4个硬件（UART）串行端口控制。多个端口可同时使用（根据给定的微控制器板的能力的限制）。
 
-Sample implementation code for Arduino is available [here](https://github.com/firmata/arduino/blob/master/examples/StandardFirmataPlus/StandardFirmataPlus.ino).
+Sample implementation code for Arduino is available   
+对于Arduino的示例实现代码可用   
+[here](https://github.com/firmata/arduino/blob/master/examples/StandardFirmataPlus/StandardFirmataPlus.ino).
 
-A client implementation can be found [here](https://github.com/jgautier/firmata/blob/master/lib/firmata.js).
+A client implementation can be found   
+一个客户实现   
+[here](https://github.com/jgautier/firmata/blob/master/lib/firmata.js).
 
-Added in version 2.5.0
+Added in version 2.5.0   
+新增的2.5.0版本
 
 ## Constants
 
 ### Port IDs
 
-Use these constants to identify the hardware or software serial port to address for each command.
+Use these constants to identify the hardware or software serial port to address for each command.   
+使用这些常数来识别硬件或软件的串行端口，以解决每个命令。  
 
 ```
 HW_SERIAL0 = 0x00 (for using Serial when another transport is used for the Firmata Stream)
@@ -29,9 +36,10 @@ SW_SERIAL3 = 0x0B
 // extensible up to 8 SW serial ports
 ```
 
-### Serial pin capability response
+### Serial pin capability response  Serial pin能力响应
 
 Use these constants to identify the pin type in a [capability query response](https://github.com/firmata/protocol/blob/master/protocol.md#capability-query).
+使用这些常量标识在pin类型
 
 ```
 // Where the pin mode = "Serial" and the pin resolution = one of the following:
@@ -58,7 +66,8 @@ PIN_MODE_SERIAL = 0x0A
 ### Serial Config
 
 Configures the specified hardware or software serial port. RX and TX pins are optional and should
-only be specified if the platform requires them to be set.
+only be specified if the platform requires them to be set.     
+配置指定的硬件或软件串行端口。RX和TX引脚是可选的，如果平台要求它们应被设置仅指定。
 
 ```
 0  START_SYSEX      (0xF0)
@@ -76,7 +85,8 @@ only be specified if the platform requires them to be set.
 
 Firmata client -> Board
 
-Receive serial data from Firmata client, reassemble and write for each byte received.
+Receive serial data from Firmata client, reassemble and write for each byte received.  
+从Firmata客户端接收串行数据，重组和写入每个字节接收。
 
 ```
 0  START_SYSEX      (0xF0)
@@ -94,11 +104,15 @@ n  END_SYSEX        (0xF7)
 
 Board -> Firmata client
 
-Read contents of serial buffer and send to Firmata client (send with `SERIAL_REPLY`).
+Read contents of serial buffer and send to Firmata client (send with `SERIAL_REPLY`).   
+读串口缓冲区的内容并传送到客户端Firmata
 
 `maxBytesToRead` optionally specifies how many bytes to read for each iteration. Set to 0 (or do not
 define) to read all available bytes. If there are less bytes in the buffer than the number of bytes
-specified by `maxBytesToRead` then the lesser number of bytes will be returned.
+specified by `maxBytesToRead` then the lesser number of bytes will be returned.    
+`maxBytesToRead`可选择指定多少字节，为每个迭代读取。设置为0（或不定义）来读取所有可用的字节。如果在缓冲区比字节数较少字节    
+通过指定`maxBytesToRead`那么小的字节数将被退回。
+
 
 ```
 0  START_SYSEX        (0xF0)
@@ -114,7 +128,8 @@ specified by `maxBytesToRead` then the lesser number of bytes will be returned.
 
 Board -> Firmata client
 
-Sent in response to a SERIAL_READ event or on each iteration of the reporting loop if `SERIAL_READ_CONTINUOUSLY` is set.
+Sent in response to a SERIAL_READ event or on each iteration of the reporting loop if `SERIAL_READ_CONTINUOUSLY` is set.   
+如果`SERIAL_READ_CONTINUOUSLY`设置，发送响应SERIAL_READ事件或报告的每个迭代循环。
 
 ```
 0  START_SYSEX        (0xF0)
@@ -131,7 +146,8 @@ n  END_SYSEX          (0xF7)
 ### Serial Close
 
 Close the serial port. If you close a port, you will need to send a `SERIAL_CONFIG` message to
-reopen it.
+reopen it.   
+关闭串行端口。 如果你关闭端口，您需要一个 `27SERIAL_CONFIG` 消息发送到重新打开它。
 
 ```
 0  START_SYSEX        (0xF0)
@@ -146,10 +162,13 @@ Flush the serial port. The exact behavior of flush depends on the underlying pla
 with Arduino, calling `flush` on a HW serial port will drain the TX output buffer, calling `flush`
 on a SW serial port will reset the RX buffer to the beginning, abandoning any data in the buffer.
 Other platforms may define `flush` differently as well so see the documentation of flush for the
-platform you are working with to understand exactly how it functions.
+platform you are working with to understand exactly how it functions.     
+刷新串行端口。 exact的确切行为取决于基础平台。例如，用Arduino`flush`硬件上的串行端口将释放TX输出缓冲区，`flush`上的串行端口接收缓冲区将重置到开始放弃缓冲区中的任何数据。其他平台可以定义`flush`不同，所以看到flush的文件为您正在使用的平台了解它是如何运作。
 
 Generally `flush` is rarely needed so this functionality is primarily provided for advanced use
-cases.
+cases.     
+一般很少需要`flush`所以这个功能主要是提供先进的应用
+案例。
 
 ```
 0  START_SYSEX        (0xF0)
@@ -161,7 +180,10 @@ cases.
 ### Serial Listen
 
 Enable switching serial ports. Necessary for Arduino SoftwareSerial but may not be applicable to
-other platforms.
+other platforms.   
+启用切换串行端口。
+必要的Arduino SoftwareSerial，但可能并不适用于
+其他平台。
 
 ```
 0  START_SYSEX        (0xF0)
