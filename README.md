@@ -12,14 +12,18 @@ Firmata是基于[MIDI消息格式]（http://www.midi.org/techspecs/midimessages.
 
 
 This repository contains documentation of the Firmata protocol. The core of the protocol is described in the [protocol.md file](protocol.md) file. Feature-specific documentation is described in individual markdown files ([i2c.md](i2c.md), [stepper.md](stepper.md), [servos.md](servos.md), etc). Files appended with '-proposal' are proposals for new features that have not yet been finalized.
+这个库包含Firmata协议文档。协议的核心在[protocol.md文件（protocol.md）文件中描述。特定功能的文档在单独的markdown文件（[i2c.md（i2c.md），[stepper.md]（stepper.md），[servos.md]（servos.md）等）描述。“-proposal”附加文件是尚未敲定新功能的建议。
+
 
 The Firmata protocol could theoretically be implemented for any microcontroller platform. Currently however, the most complete implementation is for [Arduino](http://arduino.cc) (including Arduino-compatible microcontrollers). Here are the known Firmata microcontroller platform implementations:
+该Firmata协议理论上可以用于任何单片机平台上实现。然而，目前最完整的实现是[Arduino的（http://arduino.cc）（包括Arduino的兼容微控制器）。下面是已知的Firmata微控制器平台实现：
 
 * [Firmata for Arduino](https://github.com/firmata/arduino)
 * [Firmata for Spark.io](https://github.com/firmata/spark)
 
 
 *Please note: I'm sure there are other implementations. If you know of others, please submit a pull request to update this readme file, or open an issue providing the link to be added to this document.*
+*请注意：我敢肯定还有其他的实现。如果你知道别人的，请提交pull请求更新此自述文件，或打开提供的链接被添加到该文件的问题。*
 
 ## Firmata client libraries
 There are several client libraries. These are libraries that implement the Firmata protocol in order to communicate (from a computer, smartphone or tablet for example) with Firmata firmware running on a microcontroller platform. The following is a list of Firmata client library implementations:
