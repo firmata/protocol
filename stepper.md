@@ -3,15 +3,20 @@ Stepper Motor
 
 Provides support for 4 wire and 2 wire stepper motor drivers (H-bridge, darlington array, etc) as well as step + direction drivers such as the [EasyDriver](http://www.schmalzhaus.com/EasyDriver/).
 Current implementation supports 6 stepper motors at the same time (#[0-5]).
+提供4线和2线步进电机驱动器（H桥，达林顿阵列等）的支持，以及步+方向驱动器，如EasyDriver。当前实现支持在同一时间6步进电机（＃[0-5]）。
 
 Also includes optional support for acceleration and deceleration of the motor.
+还包括用于将电动机的加速和减速的可选支持。
 
 Added in version 2.4.0.
 
 Example files:
  * The Stepper feature is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/ConfigurableFirmata/blob/master/examples/ConfigurableFirmata/ConfigurableFirmata.ino).
+ * 步进功能是默认包括[ConfigurableFirmata.ino](https://github.com/firmata/ConfigurableFirmata/blob/master/examples/ConfigurableFirmata/ConfigurableFirmata.ino)
  * [Example implementation](https://github.com/firmata/ConfigurableFirmata/blob/master/src/StepperFirmata.cpp) as a configurable Firmata feature class.
+ * 示例实现（https://github.com/firmata/ConfigurableFirmata/blob/master/src/StepperFirmata.cpp）作为配置Firmata要素类。
  * [Example of Stepper implementation in StandardFirmata](https://github.com/soundanalogous/AdvancedFirmata). *Note the dependency on the FirmataStepper class.*
+ *[在StandardFirmata步进实施示例]（https://github.com/soundanalogous/AdvancedFirmata）。 *注意：在FirmataStepper类的依赖*
 
 Protocol
 ---
