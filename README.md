@@ -88,7 +88,7 @@ Firmata客户端库:有几个客户端库。这是实现以（从电脑，智能
 ## Contributing
 
 To submit a proposal for a new feature, create a [markdown](https://help.github.com/articles/github-flavored-markdown/) file for your proposal and append "-proposal" to the filename. Submit a pull request to add the proposal.    
-提交一份提案中的新功能，创建一个[markdown]（https://help.github.com/articles/github-flavored-markdown/）提交您的建议，并追加“-proposal”的文件名。提交pull请求来添加建议。
+提交一份提案中的新功能，创建一个[markdown](https://help.github.com/articles/github-flavored-markdown/)提交您的建议，并追加“-proposal”的文件名。提交pull请求来添加建议。
 
 To make a change to an existing protocol, submit a pull request with your proposed changes. Be sure to provide any rationale in the pull request description.     
 若要更改现有协议，提交pull请求你的修改建议。请务必提供pull要求说明任何理由。
@@ -97,19 +97,19 @@ Some hints for drafting a new proposal:
 为了起草一个新的建议的一些提示：
 
 * If your proposal is sysex-based (it likely will be), try to limit the COMMAND byte (2nd byte in the sysex message) to a single value. Use sub-commands (3rd byte) as necessary if you have more than one message. See the [stepper.md](stepper.md) file for an example. Note the use of `0x72` for the COMMAND and how each section has a unique subcommand (0x00 = config, 0x01 = step).
-* 如果您的建议是专用信息为基础的（很可能会），尽量限制命令字节（在SysEx信息第2个字节），以单个值。使用子命令（3字节）作为必要的，如果你有一个以上的消息。见一个例子[stepper.md]（stepper.md）文件。注意：该命令的使用0x72`的`以及每个部分都有一个唯一的子命令（0×00=配置，0×01=步骤）。
+* 如果您的建议是专用信息为基础的（很可能会），尽量限制命令字节（在SysEx信息第2个字节），以单个值。使用子命令（3字节）作为必要的，如果你有一个以上的消息。见一个例子[stepper.md](stepper.md)文件。注意：该命令的使用0x72`的`以及每个部分都有一个唯一的子命令（0×00=配置，0×01=步骤）。
 
 * The range of values of the COMMAND is any avaliable byte in the range of 0x10 - 0x7F. See the Sysex Message Format section of the [protocol.md](protocol.md) document for the currently used COMMAND values (you may not use any of these values).
-* 该命令的值的范围是在0×10范围内的任何avaliable字节-0x7F的。请参阅[protocol.md]（protocol.md）文件的SysEx信息格式部分当前使用的指令值（您可能无法使用其中的任何值）。   
+* 该命令的值的范围是在0×10范围内的任何avaliable字节-0x7F的。请参阅[protocol.md](protocol.md)文件的SysEx信息格式部分当前使用的指令值（您可能无法使用其中的任何值）。   
 
 * It's okay to have optional values in a sysex message as long as those values are all at the end of the message. See the bytes 10 - 13 of the Stepper step message in [stepper.md](stepper.md)
-* 没关系有可选值在SysEx信息，只要这些值都在邮件的末尾。请参阅字节10 - 步进一步的消息在[stepper.md]（stepper.md）13
+* 没关系有可选值在SysEx信息，只要这些值都在邮件的末尾。请参阅字节10 - 步进一步的消息在[stepper.md](stepper.md)13
 
 * Try to keep your sysex messages as short as possible。
 * 尽量保持你的系统专用信息尽可能短。
 
 * Pack bits if necessary. See the Response message for **Report encoder's position** in [encoder.md](encoder.md) for an example (also note how this was documented following the response message... please include similar documentation if you use bit packing in your proposal).
-* 如有必要，包位。见**报告编码器的位置**在[encoder.md]（encoder.md）的响应消息的例子（也注意到这是如何记录下响应消息......请包括类似文件，如果您使用的打包的你的建议）。
+* 如有必要，包位。见**报告编码器的位置**在[encoder.md](encoder.md)的响应消息的例子（也注意到这是如何记录下响应消息......请包括类似文件，如果您使用的打包的你的建议）。
 
 * If your proposal uses any of the available non-sysex midi messages, the number of bytes in the message must correspond to the number of bytes in the midi message. The meaning however does not need to be the same. However if the midi message is part of a range of values (such as Note Off (0x80)) then the Firmata message must also be a range (such as a range of pins).
 * 如果你的提议使用任何可用的非系统专用信息的MIDI消息，字节的消息中的数量必须对应于MIDI消息中的字节数。含义然而并不需要是相同的。然而，如果MIDI消息是值的范围的一部分（如注关（0x80的）），则Firmata消息还必须是一个范围（例如，一个范围销）。
