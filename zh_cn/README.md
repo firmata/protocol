@@ -1,7 +1,4 @@
 # Firmata Protocol Documentation
-
-#### [中文](zh_cn/README.md)
-
 ![程序架构图](info.png)
 
 [![Join the chat at https://gitter.im/firmata/protocol](https://badges.gitter.im/firmata/protocol.svg)](https://gitter.im/firmata/protocol?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
