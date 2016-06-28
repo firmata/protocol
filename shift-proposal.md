@@ -5,6 +5,7 @@ There are a few different ways to approach shift in/out support. It's complicate
 since different hardware handles shift in/out in different ways. For example,
 not all hardware requires a latch pin and those that use some sort of a latch
 don't always use it the same way.
+
 有几种不同的方式来处理输入/输出支持转变。 情况很复杂
 因为不同的硬件处理输入/输出以不同的方式转变。 例如，
 不是所有的硬件要求的闩锁引脚和那些使用的锁存器的某种
@@ -14,6 +15,7 @@ don't always use it the same way.
 There has also been some discussion around supporting fractional byte devices. The proposals below do not include such functionality. I'm not sure how popular
 such devices are. If someone has a proposal that includes support for shifting 
 fractional bytes, please submit a pull request to add the proposal to this document.
+
 此外，也有周边配套小数字节的设备进行一些讨论。提案下面不包括这样的功能。我不知道有多受欢迎
 这种装置。如果有人有包括用于移动支持的建议
 分数字节，请提交pull请求的建议添加到该文件。

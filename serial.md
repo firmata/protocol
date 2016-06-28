@@ -2,6 +2,7 @@
 
 Enables control of up to 4 software and 4 hardware (UART) serial ports. Multiple ports can be
 used simultaneously (depending on restrictions of a given microcontroller board's capabilities).   
+
 允许最多4软件和4个硬件（UART）串行端口控制。多个端口可同时使用（根据给定的微控制器板的能力的限制）。
 
 Sample implementation code for Arduino is available   
@@ -10,6 +11,7 @@ Sample implementation code for Arduino is available
 
 A client implementation can be found   
 一个客户实现   
+
 [here](https://github.com/jgautier/firmata/blob/master/lib/firmata.js).
 
 Added in version 2.5.0   

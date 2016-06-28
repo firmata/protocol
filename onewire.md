@@ -5,12 +5,15 @@ The idea is to configure Arduino Pins as OneWire Busmaster. The may be more than
 这个想法是配置Arduino Pins作为OneWire BUSMASTER。可能有多个为配置OneWire的pin和可能存在连接到这样一个pins的多个设备。
 
 Each one-wire-device has a unique identifier which is 8 bytes long and comes factory-programmed into the the device. To scan all devices connected to a pin configured for onewire a SEARCH-request message is sent. The response contains all addresses of devices found. Having the address of a device OneWire-command-messages may be sent to this device.
+
 每线设备都有一个唯一的标识符，是8个字节长，出厂时编程到设备中。要扫描连接到配置为onewire引脚发送一个搜索请求消息的所有设备。响应包含找到的设备的所有地址。具有设备OneWire-命令消息的地址可以被发送到该设备。
 
 The actual commands executed on the OneWire-bus are 'reset', 'skip', 'select', 'read', 'delay' and 'write' All these commands may be executed with a single OneWire-command-message. The subcommand-byte contains these commands bit-encoded. The data required to execute each bus-command must only be included in the message when the corresponding bit is set.
+
 在OneWire总线上执行的'复位'，'跳'，'选择'的实际命令，“读”，“延迟”和“写”所有这些命令可以与单个OneWire命令消息来执行。子命令字节包含这些命令位编码。执行每个总线命令所需的数据必须只被包括在该消息中，当相应的位被置位。
 
 The order of execution of bus commands is: 'reset'->'skip'->'select'->'write'->'read'->'delay' (remember: each of these steps is optional. Also some combinations don't make sense and in fact are mutual exclusive in terms of OneWire bus protocol, so you cannot run a 'skip' followed by a 'select') The delay is useful for OneWire-commands included into taskdata (see [Firmata-scheduler proposal](https://github.com/firmata/protocol/blob/master/scheduler.md)).
+
 总线的执行命令的顺序是：'重置' - >'跳过' - >'选择' - >'写' - >'读' - >'延迟'（记住：每个步骤是可选的另外一些组合没有意义，实际上是相互独家OneWire总线协议的条款，所以不能运行'跳过'后'选择'）的延迟是有用OneWire的命令纳入taskdata（见[Firmata调度器建议]（https://github.com/firmata/protocol/blob/master/scheduler.md））。
 
 Some OneWire-devices require some time to carry out e.g. a a/d-conversion after receiving the appropriate command. Including a delay into a OneWire-message saves some bytes in the taskdata (in comparism to the inclusion of a 'delay_task' scheduler message). OneWire Read- and ReadReply messages are correlated using a correlationid (16bits). The reply contains the correlationid-value that was sent with the original request.

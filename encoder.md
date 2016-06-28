@@ -36,8 +36,11 @@ This feature has been tested on :
 ## Protocol details
 协议细节
 The protocol below use exclusively SysEx queries and SysEx responses.
+
 下面的协议专门使用专用信息查询和系统专用的响应。
+
 ### Attach encoder query
+
 Query :
 ```c
  /* -----------------------------------------------------

@@ -3,6 +3,7 @@
 Provides support for the situation where you want to set or get the values of 
 an arbitrary set of digital IO pins that may not necessarily align to a port and 
 do all of this in one operation.
+
 为要设置或获取的数字IO引脚不一定对齐到端口，做这一切在一个操作中的任意一组的值的情况下支持。
 
 
@@ -12,16 +13,20 @@ Examples of this behaviour would include:
 
 * Analog Multiplexer / Demultimplexer, where you need to set the bit value of
 three pins in order to determine which analog line is being used on the multiplexer.
+
 *模拟多路复用器/ Demultimplexer，你需要设置三个引脚的位值 以确定哪些模拟线路上正在多路复用使用。
 
 * Keypads where the value of the key presses are expressed using a combination of
 states across a set of digital lines (eg: [https://www.sparkfun.com/products/8653](https://www.sparkfun.com/products/8653) )
+
 *其中按键的价值正在使用的组合表示键盘
 在一组数字线路状态（例如：[https://www.sparkfun.com/products/8653](https://www.sparkfun.com/products/8653））
 
 When you want to issue an equivalent of a digitalWrite to a group of pins,
 you'll then issue a sequence of 7-bit bytes that provides the states of the pins collectively. 
 This will save several calls to digital write and allow them to be done in one group.
+
+
 当你想发出digitalWrite的相当于一组引脚，
 那么你会发出的，提供了引脚的状态集体7位字节序列。
 这将节省几个电话到数字写，让他们在一个组来完成。
@@ -29,6 +34,8 @@ This will save several calls to digital write and allow them to be done in one g
 Reads will work the same way but return a byte with the states of all of the pins.
 This is particularly important in a scenario like a keypad where independent
 async reads can make it extremely challenging to get the state of the keypress properly.
+
+
 将读取的工作方式相同，但与所有的引脚的状态返回一个字节。
 这是在像一个小键盘的情形特别重要，其中独立
 异步读取可以使它极具挑战性，以获得按键状态正常。
@@ -46,6 +53,7 @@ each with up to 14 pins defined in the group)
 
 In order to save space in the protocol, the Digital Pin Group command comprises
 both protocol commands as well as the id address space for the groups as below:
+
 为了节省空间，在协议中，数字引脚组命令包括：
 两个协议命令以及用于组如下的ID地址空间：
 
@@ -74,9 +82,13 @@ of 14 pins can be grouped together in one pin group. When specified in the confi
 message, the pins will be provided in little endian style so the first pin will
 then be configured to mapped to the Least Significant Bit in subsequent write
 and read messages.
+
+
 指定哪些引脚要相对集中及顺序。最大14引脚可以放在一个针组进行分组。当在配置中指定
 消息时，引脚将用little endian风格提供，这样第一针会然后经配置以映射到后续的写入的最低有效位
 和阅读邮件。
+
+
 ```
 0:  START_SYSEX         (0xF0)
 1:  pin group command   (0x60)

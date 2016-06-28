@@ -7,6 +7,7 @@
 [![Join the chat at https://gitter.im/firmata/protocol](https://badges.gitter.im/firmata/protocol.svg)](https://gitter.im/firmata/protocol?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Firmata is a protocol for communicating with microcontrollers from software on a computer (or smartphone/tablet, etc). The protocol can be implemented in firmware on any microcontroller architecture as well as software on any computer software package (see list of client libraries below).       
+
 Firmata是与微控制器进行通信的协议，这些微控制器是来自电脑上（或智能手机/平板电脑等）的软件。该协议可以在任何微控制器架构的固件以及任何计算机软件的软件包来实现（见客户端库的名单如下）。
 
 
@@ -19,6 +20,8 @@ This repository contains documentation of the Firmata protocol. The core of the 
 
 
 The Firmata protocol could theoretically be implemented for any microcontroller platform. Currently however, the most complete implementation is for [Arduino](http://arduino.cc) (including Arduino-compatible microcontrollers). Here are the known Firmata microcontroller platform implementations:      
+
+
 该Firmata协议理论上可以用于任何单片机平台上实现。然而，目前最完整的实现是[Arduino](http://arduino.cc)的（包括Arduino的兼容微控制器）。下面是已知的Firmata微控制器平台实现：
 
 * [Firmata for Arduino](https://github.com/firmata/arduino)
@@ -26,10 +29,12 @@ The Firmata protocol could theoretically be implemented for any microcontroller 
 
 
 *Please note: I'm sure there are other implementations. If you know of others, please submit a pull request to update this readme file, or open an issue providing the link to be added to this document.*
+
 *请注意：我敢肯定还有其他的实现。如果你知道别人的，请提交pull请求更新此自述文件，或打开提供的链接被添加到该文件的问题。*
 
 ## Firmata client libraries
 There are several client libraries. These are libraries that implement the Firmata protocol in order to communicate (from a computer, smartphone or tablet for example) with Firmata firmware running on a microcontroller platform. The following is a list of Firmata client library implementations:            
+
 Firmata客户端库:有几个客户端库。这是实现以（从电脑，智能手机或平板电脑为例）与微控制器平台上运行Firmata固件沟通Firmata协议库。以下是Firmata客户端库实现的列表：
 
 * processing
