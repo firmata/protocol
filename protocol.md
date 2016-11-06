@@ -325,7 +325,8 @@ See specific files:
 
 * [i2c](https://github.com/firmata/protocol/blob/master/i2c.md)
 * [servos](https://github.com/firmata/protocol/blob/master/servos.md)
-* [stepper](https://github.com/firmata/protocol/blob/master/stepper.md)
+* [stepper-1.0](https://github.com/firmata/protocol/blob/master/stepper-1.0.md)
+* [stepper-2.0](https://github.com/firmata/protocol/blob/master/stepper-2.0.md)
 * [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md)
 * [onewire](https://github.com/firmata/protocol/blob/master/onewire.md)
 * [encoder](https://github.com/firmata/protocol/blob/master/encoder.md)
