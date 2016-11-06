@@ -121,6 +121,7 @@ Following are SysEx commands used in this version of the protocol:
 RESERVED               0x00-0x0F // The first 16 bytes are reserved for custom commands
 SERIAL_MESSAGE              0x60 // communicate with serial devices, including other boards
 ENCODER_DATA                0x61 // reply with encoders current positions
+STEPPER2_DATA               0x62 // control a stepper motor
 ANALOG_MAPPING_QUERY        0x69 // ask for mapping of analog to pin numbers
 ANALOG_MAPPING_RESPONSE     0x6A // reply with mapping info
 CAPABILITY_QUERY            0x6B // ask for supported modes and resolution of all pins
