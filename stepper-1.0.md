@@ -1,5 +1,7 @@
-Stepper Motor
+Stepper Motor 1.0
 ===
+
+*Note: Version 1.0 will be deprectated once [version 2.0](https://github.com/firmata/protocol/blob/master/stepper-2.0.md) has been implemented in ConfigurableFirmata.*
 
 Provides support for 4 wire and 2 wire stepper motor drivers (H-bridge, darlington array, etc) as well as step + direction drivers such as the [EasyDriver](http://www.schmalzhaus.com/EasyDriver/).
 Current implementation supports 6 stepper motors at the same time (#[0-5]).

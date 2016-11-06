@@ -9,8 +9,7 @@ Includes optional support for acceleration and deceleration of the motor.
 Also includes multiStepper support which allows groups of steppers to be simultaneously passed different ```to``` values and the duration of their movements will match. Up to five multiStepper groups can be created. The total number of steppers is still limited to 10.
 
 Example files:
- * The Stepper feature is included by default in [ConfigurableFirmata.ino](https://github.com/firmata/ConfigurableFirmata/blob/master/examples/ConfigurableFirmata/ConfigurableFirmata.ino).
- * [Example implementation](https://github.com/firmata/ConfigurableFirmata/blob/master/src/StepperFirmata.cpp) as a configurable Firmata feature class.
+ * Version 2.0 of the stepper protocol has not yet been implemented.
 
 Protocol
 ---
@@ -40,7 +39,7 @@ Protocol
 5  minPulseWidth                              (0-127 measured in us)
 6  num steps-per-revolution LSB
 7  num steps-per-revolution MSB
-8  maxSpeed LSB                               
+8  maxSpeed LSB
 9 maxSpeed MSB
 10 motorPin1 or directionPin number           (0-127)
 11 motorPin2 or stepPin number                (0-127)
@@ -123,8 +122,8 @@ Sets a stepper to a desired position based on the number of steps from the zero 
 1  Stepper Command                         (0x62)
 2  stop reply command                      (0x06)
 3  device number                           (0-9)
-4  position byte 1 LSB                            
-5  position byte 2 MSB                            
+4  position byte 1 LSB
+5  position byte 2 MSB
 6  END_SYSEX                               (0xF7)
 ```
 
@@ -205,8 +204,8 @@ Stepper instances that have been created with the stepper configuration command 
 1  Stepper Command                         (0x62)
 2  multi stop reply command                (0x24)
 3  group  number                           (0-127)
-4  member number                       (0-9)
-5  device 0 position byte 1 LSB                            
+4  member number                           (0-9)
+5  device 0 position byte 1 LSB
 6  device 0 position byte 2 MSB
 
 *Optionally repeat 4 through 6 for each device in group*
