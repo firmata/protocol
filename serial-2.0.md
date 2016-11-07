@@ -1,13 +1,12 @@
-#Serial
+#Serial 2.0
 
 Enables control of up to 4 software and 4 hardware (UART) serial ports. Multiple ports can be
 used simultaneously (depending on restrictions of a given microcontroller board's capabilities).
 
-Sample implementation code for Arduino is available [here](https://github.com/firmata/arduino/blob/master/examples/StandardFirmataPlus/StandardFirmataPlus.ino).
+Example files:
+ * Version 2.0 of the Serial feature has not yet been implemented.
 
-A client implementation can be found [here](https://github.com/jgautier/firmata/blob/master/lib/firmata.js).
-
-Added in version 2.5.0
+Added in version 2.6.0
 
 ## Constants
 
@@ -20,13 +19,11 @@ HW_SERIAL0 = 0x00 (for using Serial when another transport is used for the Firma
 HW_SERIAL1 = 0x01
 HW_SERIAL2 = 0x02
 HW_SERIAL3 = 0x03
-// extensible up to 8 HW serial ports
 
 SW_SERIAL0 = 0x08
 SW_SERIAL1 = 0x09
 SW_SERIAL2 = 0x0A
 SW_SERIAL3 = 0x0B
-// extensible up to 8 SW serial ports
 ```
 
 ### Serial pin capability response
@@ -62,14 +59,15 @@ only be specified if the platform requires them to be set.
 
 ```
 0  START_SYSEX      (0xF0)
-1  SERIAL_DATA      (0x60)  // command byte
-2  SERIAL_CONFIG    (0x10)  // OR with port (0x11 = SERIAL_CONFIG | HW_SERIAL1)
-3  baud             (bits 0 - 6)
-4  baud             (bits 7 - 13)
-5  baud             (bits 14 - 20) // need to send 3 bytes for baud even if value is < 14 bits
-6  rxPin            (0-127) [optional] // only set if platform requires RX pin number
-7  txPin            (0-127) [optional] // only set if platform requires TX pin number
-6|8 END_SYSEX      (0xF7)
+1  SERIAL_MESSAGE   (0x64)  // command byte
+2  SERIAL_CONFIG    (0x00)
+3  port             (HW_SERIALn OR SW_SERIALn)
+4  baud             (bits 0 - 6)
+5  baud             (bits 7 - 13)
+6  baud             (bits 14 - 20) // need to send 3 bytes for baud even if value is < 14 bits
+7  rxPin            (0-127) [optional] // only set if platform requires RX pin number
+8  txPin            (0-127) [optional] // only set if platform requires TX pin number
+7|9 END_SYSEX       (0xF7)
 ```
 
 ### Serial Write
@@ -80,12 +78,13 @@ Receive serial data from Firmata client, reassemble and write for each byte rece
 
 ```
 0  START_SYSEX      (0xF0)
-1  SERIAL_DATA      (0x60)
-2  SERIAL_WRITE     (0x20) // OR with port (0x21 = SERIAL_WRITE | HW_SERIAL1)
-3  data 0           (LSB)
-4  data 0           (MSB)
-5  data 1           (LSB)
-6  data 1           (MSB)
+1  SERIAL_MESSAGE   (0x64)
+2  SERIAL_WRITE     (0x01)
+3  port             (HW_SERIALn OR SW_SERIALn)
+4  data 0           (LSB)
+5  data 0           (MSB)
+6  data 1           (LSB)
+7  data 1           (MSB)
 ...                 // up to max buffer - 5
 n  END_SYSEX        (0xF7)
 ```
@@ -102,12 +101,13 @@ specified by `maxBytesToRead` then the lesser number of bytes will be returned.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
-2  SERIAL_READ        (0x30) // OR with port (0x31 = SERIAL_READ | HW_SERIAL1)
-3  SERIAL_READ_MODE   (0x00) // 0x00 => read continuously, 0x01 => stop reading
-4  maxBytesToRead     (lsb) [optional]
-5  maxBytesToRead     (msb) [optional]
-4|6 END_SYSEX         (0xF7)
+1  SERIAL_MESSAGE     (0x64)
+2  SERIAL_READ        (0x02)
+3  port               (HW_SERIALn OR SW_SERIALn)
+4  SERIAL_READ_MODE   (0x00) // 0x00 => read continuously, 0x01 => stop reading
+5  maxBytesToRead     (lsb) [optional]
+6  maxBytesToRead     (msb) [optional]
+5|7 END_SYSEX         (0xF7)
 ```
 
 ### Serial Reply
@@ -118,12 +118,13 @@ Sent in response to a SERIAL_READ event or on each iteration of the reporting lo
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
-2  SERIAL_REPLY       (0x40) // OR with port (0x41 = SERIAL_REPLY | HW_SERIAL1)
-3  data 0             (LSB)
-4  data 0             (MSB)
-3  data 1             (LSB)
-4  data 1             (MSB)
+1  SERIAL_MESSAGE     (0x64)
+2  SERIAL_REPLY       (0x03)
+3  port               (HW_SERIALn OR SW_SERIALn)
+4  data 0             (LSB)
+5  data 0             (MSB)
+6  data 1             (LSB)
+7  data 1             (MSB)
 ...                   // up to max buffer - 5
 n  END_SYSEX          (0xF7)
 ```
@@ -135,9 +136,10 @@ reopen it.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
-2  SERIAL_CLOSE       (0x50) // OR with port (0x51 = SERIAL_CLOSE | HW_SERIAL1)
-3  END_SYSEX          (0xF7)
+1  SERIAL_MESSAGE     (0x64)
+2  SERIAL_CLOSE       (0x04)
+3  port               (HW_SERIALn OR SW_SERIALn)
+4  END_SYSEX          (0xF7)
 ```
 
 ### Serial Flush
@@ -153,9 +155,10 @@ cases.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
-2  SERIAL_FLUSH       (0x60) // OR with port (0x61 = SERIAL_FLUSH | HW_SERIAL1)
-3  END_SYSEX          (0xF7)
+1  SERIAL_MESSAGE     (0x64)
+2  SERIAL_FLUSH       (0x05)
+3  port               (HW_SERIALn OR SW_SERIALn)
+4  END_SYSEX          (0xF7)
 ```
 
 ### Serial Listen
@@ -165,7 +168,23 @@ other platforms.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_DATA        (0x60)
-2  SERIAL_LISTEN      (0x70) // OR with port to switch to (0x79 = switch to SW_SERIAL1)
-3  END_SYSEX          (0xF7)
+1  SERIAL_MESSAGE     (0x64)
+2  SERIAL_LISTEN      (0x06)
+3  port               (HW_SERIALn OR SW_SERIALn)
+4  END_SYSEX          (0xF7)
+```
+
+### Serial Update Baud
+
+Update the baud rate on a configured serial port.
+
+```
+0  START_SYSEX        (0xF0)
+1  SERIAL_MESSAGE     (0x64)
+2  SERIAL_UPDATE_BAUD (0x07)
+3  port               (HW_SERIALn OR SW_SERIALn)
+4  baud               (bits 0 - 6)
+5  baud               (bits 7 - 13)
+6  baud               (bits 14 - 20) // need to send 3 bytes for baud even if value is < 14 bits
+7  END_SYSEX          (0xF7)
 ```
