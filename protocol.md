@@ -30,6 +30,7 @@ differently.
 | set digital pin value | 0xF5    |              | pin # (0-127)       | pin value(0/1)  |
 | sysex end             | 0xF7    |              |                     |                 |
 | protocol version      | 0xF9    |              | major version       | minor version   |
+| system reset          | 0xFF    |              |                     |                 |
 
 
 Sysex-based sub-commands (0x00 - 0x7F) are used for an extended command set.
