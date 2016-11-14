@@ -141,6 +141,7 @@ I2C_CONFIG                  0X78 // Enable I2C and provide any configuration set
 REPORT_FIRMWARE             0x79 // report name and version of the firmware
 SAMPLEING_INTERVAL          0x7A // the interval at which analog input is sampled (default = 19ms)
 SCHEDULER_DATA              0x7B // send a createtask/deletetask/addtotask/schedule/querytasks/querytask request to the scheduler
+SAMPLING_INTERVAL_QUERY     0x7C // query the sampling interval (use 0x7A for the response)
 SYSEX_NON_REALTIME          0x7E // MIDI Reserved for non-realtime messages
 SYSEX_REALTIME              0X7F // MIDI Reserved for realtime messages
 ```
@@ -312,6 +313,24 @@ The sampling interval sets how often analog data and i2c data is reported to the
 client. The default for the arduino implementation is 19ms. This means that every
 19ms analog data will be reported and any i2c devices with read continuous mode
 will be read.
+
+Set the sampling interval
+```
+0  START_SYSEX        (0xF0)
+1  SAMPLING_INTERVAL  (0x7A)
+2  sampling interval on the millisecond time scale (LSB)
+3  sampling interval on the millisecond time scale (MSB)
+4  END_SYSEX (0xF7)
+```
+
+Query the sampling interval
+```
+0  START_SYSEX             (0xF0)
+1  SAMPLING_INTERVAL_QUERY (0x7C)
+2  END_SYSEX               (0xF7)
+```
+
+Sampling interval query response
 ```
 0  START_SYSEX        (0xF0)
 1  SAMPLING_INTERVAL  (0x7A)
