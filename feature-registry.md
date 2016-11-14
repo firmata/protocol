@@ -59,8 +59,8 @@ Each feature should be documented in a markdown file and versioned independently
 
 | Feature ID  | Feature name                       | Link to documentation  | Status     |
 | ----------- | ---------------------------------- | ---------------------- | ---------- |
-| 5EH         | DEVICE_QUERY                       |                        | proposed   |
-| 5FH         | DEVICE_RESPONSE                    |                        | proposed   |
+| 5EH         | DEVICE_QUERY                       | [proposal](https://github.com/finson-release/Luni/blob/master/extras/v0.9/v0.8-device-driver-C-firmata-messages.md) | proposed |
+| 5FH         | DEVICE_RESPONSE                    | [proposal](https://github.com/finson-release/Luni/blob/master/extras/v0.9/v0.8-device-driver-C-firmata-messages.md) | proposed |
 | 60H         | SERIAL_DATA (1.0)                  | [serial-1.0.md](https://github.com/firmata/protocol/blob/master/serial.md) | current |
 | 61H         | ENCODER_DATA                       | [encoder.md](https://github.com/firmata/protocol/blob/master/encoder.md) | current |
 | 62H         | STEPPER_DATA (2.0)                 | [stepper-2.0.md](https://github.com/firmata/protocol/blob/master/stepper-2.0.md) | current |
