@@ -12,9 +12,7 @@ Message Types
 ===
 
 This protocol uses the [MIDI message format](http://www.midi.org/techspecs/midimessages.php), but does not use the whole protocol.
-Most of the command mappings here will not be directly usable in terms of MIDI
-controllers and synths. It should co-exist with MIDI without trouble and can be
-parsed by standard MIDI interpreters. Just some of the message data is used
+Most of the command mappings here will not be directly usable in terms of MIDI controllers and synths. It should co-exist with MIDI without trouble and can be parsed by standard MIDI interpreters. Just some of the message data is used
 differently.
 
 
@@ -26,7 +24,7 @@ differently.
 | report digital port   | 0xD0    | port         | disable/enable(0/1) | - n/a -         |
 |                       |         |              |                     |                 |
 | start sysex           | 0xF0    |              |                     |                 |
-| set pin mode(I/O)     | 0xF4    |              | pin # (0-127)       | pin state(0=in) |
+| set pin mode(I/O)     | 0xF4    |              | pin # (0-127)       | pin mode        |
 | set digital pin value | 0xF5    |              | pin # (0-127)       | pin value(0/1)  |
 | sysex end             | 0xF7    |              |                     |                 |
 | protocol version      | 0xF9    |              | major version       | minor version   |
@@ -105,24 +103,21 @@ Request version report
 Sysex Message Format
 ===
 
-The idea for SysEx is to have a second command space using the first byte after
-the SysEx start byte. The key difference is that data can be of any size, rather
-than just one or two bytes for standard MIDI messages.
+System exclusive (sysex) messages are used to define sets of core and optional firmata features. Core features are related to functionality such as digital and analog I/O, querying information about the state and capabilities of the microcontroller board and the firmware running on the board. All core features are documented in this protocol.md file. Optional features extend the hardware capabilities beyond basic digital I/O and analog I/O and also provide APIs to interface with general and specific components and system services. Optional features are individually documented in separate markdown files.
 
-Generic SysEx Message
-```
-0   START_SYSEX (0xF0) (MIDI System Exclusive)
-1   sysex command (0x00-0x7F)
-... between 0 and MAX_DATA_BYTES 7-bit bytes of arbitrary data
-N   END_SYSEX (0xF7) (MIDI End of SysEx - EOX)
-```
 
-Following are SysEx commands used in this version of the protocol:
+Each firmata sysex message has a feature ID composed of either a single byte or an extended ID composed of 3 bytes where the first byte is always 0 to indicate it's an extended ID. The following table illustrates the structure. The most significant bit must be set to 0 in each byte between the `START_SYSEX` and `END_SYSEX` which frame the message.
+
+| byte 0      | byte 1       | bytes 2 - N-1                             | byte N    |
+| ----------- | ------------ | ----------------------------------------- | --------- |
+| START_SYSEX | ID (01H-7DH) | PAYLOAD                                   | END_SYSEX |
+| START_SYSEX | ID (00H)     | EXTENDED_ID (00H 00H - 7FH 7FH) + PAYLOAD | END_SYSEX |
+
+Following are SysEx commands used for core features defined in this version of the protocol:
+
 ```
-RESERVED               0x00-0x0F // The first 16 bytes are reserved for custom commands
-SERIAL_MESSAGE              0x60 // communicate with serial devices, including other boards
-ENCODER_DATA                0x61 // reply with encoders current positions
-STEPPER2_DATA               0x62 // control a stepper motor
+EXTENDED_ID                 0x00 // A value of 0x00 indicates the next 2 bytes define the extended ID
+RESERVED               0x01-0x0F // IDs 0x01 - 0x0F are reserved for user defined commands
 ANALOG_MAPPING_QUERY        0x69 // ask for mapping of analog to pin numbers
 ANALOG_MAPPING_RESPONSE     0x6A // reply with mapping info
 CAPABILITY_QUERY            0x6B // ask for supported modes and resolution of all pins
@@ -130,20 +125,14 @@ CAPABILITY_RESPONSE         0x6C // reply with supported modes and resolution
 PIN_STATE_QUERY             0x6D // ask for a pin's current mode and state (different than value)
 PIN_STATE_RESPONSE          0x6E // reply with a pin's current mode and state (different than value)
 EXTENDED_ANALOG             0x6F // analog write (PWM, Servo, etc) to any pin
-SERVO_CONFIG                0x70 // pin number and min and max pulse
 STRING_DATA                 0x71 // a string message with 14-bits per char
-STEPPER_DATA                0x72 // control a stepper motor
-ONEWIRE_DATA                0x73 // send an OneWire read/write/reset/select/skip/search request
-SHIFT_DATA                  0x75 // shiftOut config/data message (reserved - not yet implemented)
-I2C_REQUEST                 0x76 // I2C request messages from a host to an I/O board
-I2C_REPLY                   0x77 // I2C reply messages from an I/O board to a host
-I2C_CONFIG                  0X78 // Enable I2C and provide any configuration settings
 REPORT_FIRMWARE             0x79 // report name and version of the firmware
 SAMPLEING_INTERVAL          0x7A // the interval at which analog input is sampled (default = 19ms)
-SCHEDULER_DATA              0x7B // send a createtask/deletetask/addtotask/schedule/querytasks/querytask request to the scheduler
 SYSEX_NON_REALTIME          0x7E // MIDI Reserved for non-realtime messages
 SYSEX_REALTIME              0X7F // MIDI Reserved for realtime messages
 ```
+
+The full set of core and optional Firmata feature IDs is defined in the [firmata-registry.md](https://github.com/firmata/protocol/blob/master/feature-registry.md) file. See the registry for more info on proposing a new feature and obtaining an feature ID.
 
 Query Firmware Name and Version
 ---
@@ -184,7 +173,7 @@ bits. The number of data bits is inferred by the length of the message.
 2  pin                      (0-127)
 3  bits 0-6                 (least significant byte)
 4  bits 7-13                (most significant byte)
-... additionaly bytes may be sent if more bits are needed
+... additional bytes may be sent if more bits are needed
 N  END_SYSEX                (0xF7)
 ```
 
@@ -262,7 +251,7 @@ The pin **state** is any data written to the pin (*it is important to note that
 pin state != pin value*). For output modes (digital output,
 PWM, and Servo), the state is any value that has been previously written to the
 pin. For input modes, typically the state is zero. However, for digital inputs,
-the state is the status of the pullup resistor.
+the state is the status of the pull-up resistor.
 
 The pin state query can also be used as a verification after sending pin modes
 or data messages.
@@ -319,16 +308,3 @@ will be read.
 3  sampling interval on the millisecond time scale (MSB)
 4  END_SYSEX (0xF7)
 ```
-
-Features details
----
-See specific files:
-
-* [i2c](https://github.com/firmata/protocol/blob/master/i2c.md)
-* [servos](https://github.com/firmata/protocol/blob/master/servos.md)
-* [stepper-1.0](https://github.com/firmata/protocol/blob/master/stepper-1.0.md)
-* [stepper-2.0](https://github.com/firmata/protocol/blob/master/stepper-2.0.md)
-* [scheduler](https://github.com/firmata/protocol/blob/master/scheduler.md)
-* [onewire](https://github.com/firmata/protocol/blob/master/onewire.md)
-* [encoder](https://github.com/firmata/protocol/blob/master/encoder.md)
-* [serial](https://github.com/firmata/protocol/blob/master/serial.md)
