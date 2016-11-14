@@ -1,12 +1,12 @@
 #Serial 2.0
 
+Current version: 2.0.0
+
 Enables control of up to 4 software and 4 hardware (UART) serial ports. Multiple ports can be
 used simultaneously (depending on restrictions of a given microcontroller board's capabilities).
 
 Example files:
  * Version 2.0 of the Serial feature has not yet been implemented.
-
-Added in version 2.6.0
 
 ## Constants
 
@@ -59,7 +59,7 @@ only be specified if the platform requires them to be set.
 
 ```
 0  START_SYSEX      (0xF0)
-1  SERIAL_MESSAGE   (0x64)  // command byte
+1  SERIAL_DATA      (0x67)  // command byte
 2  SERIAL_CONFIG    (0x00)
 3  port             (HW_SERIALn OR SW_SERIALn)
 4  baud             (bits 0 - 6)
@@ -78,7 +78,7 @@ Receive serial data from Firmata client, reassemble and write for each byte rece
 
 ```
 0  START_SYSEX      (0xF0)
-1  SERIAL_MESSAGE   (0x64)
+1  SERIAL_DATA      (0x67)
 2  SERIAL_WRITE     (0x01)
 3  port             (HW_SERIALn OR SW_SERIALn)
 4  data 0           (LSB)
@@ -101,7 +101,7 @@ specified by `maxBytesToRead` then the lesser number of bytes will be returned.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_MESSAGE     (0x64)
+1  SERIAL_DATA        (0x67)
 2  SERIAL_READ        (0x02)
 3  port               (HW_SERIALn OR SW_SERIALn)
 4  SERIAL_READ_MODE   (0x00) // 0x00 => read continuously, 0x01 => stop reading
@@ -118,7 +118,7 @@ Sent in response to a SERIAL_READ event or on each iteration of the reporting lo
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_MESSAGE     (0x64)
+1  SERIAL_DATA        (0x67)
 2  SERIAL_REPLY       (0x03)
 3  port               (HW_SERIALn OR SW_SERIALn)
 4  data 0             (LSB)
@@ -136,7 +136,7 @@ reopen it.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_MESSAGE     (0x64)
+1  SERIAL_DATA        (0x67)
 2  SERIAL_CLOSE       (0x04)
 3  port               (HW_SERIALn OR SW_SERIALn)
 4  END_SYSEX          (0xF7)
@@ -155,7 +155,7 @@ cases.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_MESSAGE     (0x64)
+1  SERIAL_DATA        (0x67)
 2  SERIAL_FLUSH       (0x05)
 3  port               (HW_SERIALn OR SW_SERIALn)
 4  END_SYSEX          (0xF7)
@@ -168,7 +168,7 @@ other platforms.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_MESSAGE     (0x64)
+1  SERIAL_DATA        (0x67)
 2  SERIAL_LISTEN      (0x06)
 3  port               (HW_SERIALn OR SW_SERIALn)
 4  END_SYSEX          (0xF7)
@@ -180,7 +180,7 @@ Update the baud rate on a configured serial port.
 
 ```
 0  START_SYSEX        (0xF0)
-1  SERIAL_MESSAGE     (0x64)
+1  SERIAL_DATA        (0x67)
 2  SERIAL_UPDATE_BAUD (0x07)
 3  port               (HW_SERIALn OR SW_SERIALn)
 4  baud               (bits 0 - 6)
