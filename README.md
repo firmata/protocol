@@ -6,7 +6,7 @@ Firmata is a protocol for communicating with microcontrollers from software on a
 
 Firmata is based on the [midi message format](http://www.midi.org/techspecs/midimessages.php) in that commands bytes are 8 bits and data bytes are 7 bits. For example the midi Channel Pressure (Command: 0xD0) message is 2 bytes long, in Firmata the Command 0xD0 is used to enable reporting for a digital port (collection of 8 pins). Both the midi and Firmata versions are 2 bytes long, but the meaning is obviously different. In Firmata, the number of bytes in a message must conform with the corresponding midi message. Midi [System Exclusive](http://www.2writers.com/eddie/tutsysex.htm) (Sysex) messages however, can be any length and are therefore used most prominently throughout the Firmata protocol.
 
-This repository contains documentation of the Firmata protocol. The core of the protocol is described in the [protocol.md file](protocol.md) file. Feature-specific documentation is described in individual markdown files ([i2c.md](i2c.md), [stepper.md](stepper.md), [servos.md](servos.md), etc). Files appended with '-proposal' are proposals for new features that have not yet been finalized.
+This repository contains documentation of the Firmata protocol. The core of the protocol is described in the [protocol.md file](protocol.md) file. Feature-specific documentation is described in individual markdown files ([i2c.md](i2c.md), [stepper-2.0.md](stepper-2.0.md), [servos.md](servos.md), etc). Files added to the proposals directory are proposals for new features that have not yet been finalized. See [firmata-registry.md](https://github.com/firmata/protocol/blob/master/feature-registry.md) for the full list of documented firmata features.
 
 The Firmata protocol could theoretically be implemented for any microcontroller platform. Currently however, the most complete implementation is for [Arduino](http://arduino.cc) (including Arduino-compatible microcontrollers). Here are the known Firmata microcontroller platform implementations:
 
@@ -68,7 +68,7 @@ There are several client libraries. These are libraries that implement the Firma
 * Modelica
   * [https://www.wolfram.com/system-modeler/libraries/model-plug/]
 * golang
-  * [https://github.com/kraman/go-firmata] 
+  * [https://github.com/kraman/go-firmata]
 * Qt/QML
   * [https://github.com/callaa/qfirmata]
 
@@ -82,9 +82,9 @@ To make a change to an existing protocol, submit a pull request with your propos
 
 Some hints for drafting a new proposal:
 
-* If your proposal is sysex-based (it likely will be), try to limit the COMMAND byte (2nd byte in the sysex message) to a single value. Use sub-commands (3rd byte) as necessary if you have more than one message. See the [stepper.md](stepper.md) file for an example. Note the use of `0x72` for the COMMAND and how each section has a unique subcommand (0x00 = config, 0x01 = step).
-* The range of values of the COMMAND is any avaliable byte in the range of 0x10 - 0x7F. See the Sysex Message Format section of the [protocol.md](protocol.md) document for the currently used COMMAND values (you may not use any of these values).
-* It's okay to have optional values in a sysex message as long as those values are all at the end of the message. See the bytes 10 - 13 of the Stepper step message in [stepper.md](stepper.md)
+* See [feature-registry.md](https://github.com/firmata/protocol/blob/master/feature-registry.md) for information on proposing a new feature and requesting a feature ID.
+* Use sub-commands (3rd byte) as necessary if you have more than one message. See the [stepper-2.0.md](stepper-2.0.md) file for an example. Note the use of `0x62` for the feature ID and how each section has an enumerated set of subcommands (0x00 = config, 0x01 = stop, 02 = step, etc).
+* It's okay to have optional values in a sysex message as long as those values are all at the end of the message. See the bytes 8 - 11 of the Stepper `to` message in [stepper-2.0.md](stepper-2.0.md)
 * Try to keep your sysex messages as short as possible.
 * Pack bits if necessary. See the Response message for **Report encoder's position** in [encoder.md](encoder.md) for an example (also note how this was documented following the response message... please include similar documentation if you use bit packing in your proposal).
-* If your proposal uses any of the available non-sysex midi messages, the number of bytes in the message must correspond to the number of bytes in the midi message. The meaning however does not need to be the same. However if the midi message is part of a range of values (such as Note Off (0x80)) then the Firmata message must also be a range (such as a range of pins).
+* If your proposal uses any of the available non-sysex midi messages, the number of bytes in the message must correspond to the number of bytes in the midi message. The meaning however does not need to be the same. However if the midi message uses channels (such as Note Off (0x80)) then the Firmata message must also use channels since a midi parser may expect this.
