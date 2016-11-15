@@ -180,59 +180,73 @@ N  END_SYSEX                (0xF7)
 Capability Query
 ---
 
-The capability query provides a list of all modes supported by each pin and the resolution used by each pin. Each pin has 2 bytes for each supported mode and a value of 127 to mark the end of that pin's data. The number of pins supported is inferred by the message length.
+The capability query provides a list of all modes supported by each pin. Each mode is described by 2 bytes where the first byte is the pin mode (such as digital input, digital output, PWM) and the second byte is the resolution (or sometimes the type of pin such as RX or TX for a UART pin). A value of `0x7F` is used as a separator to mark the end each pin's list of modes. The number of pins supported is inferred by the message length.
 
 ### Capabilities query
-```c++
+```
 0  START_SYSEX              (0xF0)
 1  CAPABILITY_QUERY         (0x6B)
 2  END_SYSEX                (0xF7)
 ```
 
 ### Capabilities response
-```c++
+```
 0  START_SYSEX              (0xF0)
 1  CAPABILITY_RESPONSE      (0x6C)
 2  1st supported mode of pin 0
 3  1st mode's resolution of pin 0
 4  2nd supported mode of pin 0
 5  2nd mode's resolution of pin 0
-... additional modes/resolutions, followed by PIN_MODE_IGNORE,
+... additional modes/resolutions, followed by `0x7F`,
     to mark the end of the pin's modes. Subsequently, each pin
-    follows with its modes/resolutions and a PIN_MODE_IGNORE,
-    until all pins are implemented.
+    follows with its modes/resolutions and `0x7F`,
+    until all pins are defined.
 N  END_SYSEX                (0xF7)
 ```
 
 #### Supported Modes
 The modes in the following list are the modes of operation that can be returned during the capability response:
-```c++
-PIN_MODE_INPUT              (0x00)  
-PIN_MODE_OUTPUT             (0x01)  
-PIN_MODE_ANALOG             (0x02)  
-PIN_MODE_PWM                (0x03)  
-PIN_MODE_SERVO              (0x04)  
-PIN_MODE_SHIFT              (0x05)  
-PIN_MODE_I2C                (0x06)  
-PIN_MODE_ONEWIRE            (0x07)  
-PIN_MODE_STEPPER            (0x08)  
-PIN_MODE_ENCODER            (0x09)  
-PIN_MODE_SERIAL             (0x0A)  
-PIN_MODE_PULLUP             (0x0B)  
-PIN_MODE_IGNORE             (0x7F)  
 ```
+DIGITAL_INPUT      (0x00)
+DIGITAL_OUTPUT     (0x01)
+ANALOG_INPUT       (0x02)
+PWM                (0x03)
+SERVO              (0x04)
+SHIFT              (0x05)
+I2C                (0x06)
+ONEWIRE            (0x07)
+STEPPER            (0x08)
+ENCODER            (0x09)
+SERIAL             (0x0A)
+INPUT_PULLUP       (0x0B)
+```
+
+*If no modes are defined for a pin, no values are returned (other than the separator value `0x7F`) and it should be assumed that pin is unsupported by Firmata.*
 
 #### Mode Resolution
-The resolution information may be used to adapt to future implementation where PWM, analog input and others may have different values (such as 12 or 14 bit analog instead of 10-bit analog).
+The resolution byte serves a couple of different purpose:
 
-Modes utilizing resolution:
-```c++
-PIN_MODE_ANALOG             (0x02)  
-PIN_MODE_PWM                (0x03)  
-PIN_MODE_SERVO              (0x04)  
+1. The original purpose was to define the resolution for analog input, pwm, servo and other modes that define a specific resolution (such as 10-bit for analog).
+2. The resolution byte has been adapted for another purpose for Serial/UART pins, it defines if the pin is RX or TX and which UART it belongs to. [RX0](https://github.com/firmata/protocol/blob/master/serial.md#serial-pin-capability-response) is the RX pin of UART0 (Serial on an Arduino for example), TX1 if the TX pin of UART1 (Serial1 on an Arduino).
+
+Modes utilizing the resolution byte as resolution data:
+```
+DIGITAL_INPUT      (0x00) // resolution is 1 (binary)
+DIGITAL_OUTPUT     (0x01) // resolution is 1 (binary)
+ANALOG_INPUT       (0x02) // analog input resolution in number of bits
+PWM                (0x03) // pwm resolution in number of bits
+SERVO              (0x04) // servo resolution in number of bits
+STEPPER            (0x08) // resolution is number number of bits in max number of steps
+INPUT_PULLUP       (0x0B) // resolution is 1 (binary)
 ```
 
-*For some features such as i2c, the resolution information is less important so a value of 1 is used.*
+Modes utilizing the resolution byte to define type of pin:
+```
+SERIAL             (0x0A) // See description in [serial.md](https://github.com/firmata/protocol/blob/master/serial.md#serial-pin-capability-response)
+// also to be added to I2C in the future to define SCL and SDA pins
+```
+
+*For other features (including I2C until updated) the resolution information is less important so a value of 1 is used.*
 
 Analog Mapping Query
 ---
@@ -275,7 +289,7 @@ The pin **state** is any data written to the pin (*it is important to note that
 pin state != pin value*). For output modes (digital output,
 PWM, and Servo), the state is any value that has been previously written to the
 pin. For input modes, typically the state is zero. However, for digital inputs,
-the state is the status of the pull-up resistor.
+the state is the status of the pull-up resistor which is 1 if enabled, 0 if disabled.
 
 The pin state query can also be used as a verification after sending pin modes
 or data messages.
