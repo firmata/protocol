@@ -30,8 +30,7 @@ Firmata firmware should report the current protocol version (using the [protocol
 | 01H - 0FH   | *Reserved for user features*         | n/a        |
 | 63H         | [REPORT_DIGTIAL_PIN - proposal](https://github.com/firmata/protocol/issues/68#issuecomment-257105540) | proposed |
 | 64H         | [EXTENDED_REPORT_ANALOG - proposal](https://github.com/firmata/protocol/issues/68#issuecomment-258748963) | proposed |
-| 65H         | [REPORT_FEATURES_QUERY - proposal](https://github.com/firmata/protocol/issues/41) | proposed |
-| 66H         | [REPORT_FEATURES_RESPONSE - proposal](https://github.com/firmata/protocol/issues/41) | proposed |
+| 65H         | [REPORT_FEATURES - proposal](https://github.com/firmata/protocol/issues/41) | proposed |
 | 69H         | [ANALOG_MAPPING_QUERY](https://github.com/firmata/protocol/blob/master/protocol.md#analog-mapping-query) | current |
 | 6AH         | [ANALOG_MAPPING_RESPONSE](https://github.com/firmata/protocol/blob/master/protocol.md#analog-mapping-query) | current |
 | 6BH         | [CAPABILITY_QUERY](https://github.com/firmata/protocol/blob/master/protocol.md#capability-query) | current |
