@@ -40,7 +40,7 @@ Protocol
 6  num steps-per-revolution LSB
 7  num steps-per-revolution MSB
 8  maxSpeed LSB
-9 maxSpeed MSB
+9  maxSpeed MSB
 10 motorPin1 or directionPin number           (0-127)
 11 motorPin2 or stepPin number                (0-127)
 12 [when interface >= 0x0110000] motorPin3    (0-127)
@@ -59,42 +59,58 @@ Protocol
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
-2  stop command                            (0x01)
+2  zero command                            (0x01)
 3  device number                           (0-9)
 4  END_SYSEX                               (0xF7)
 ```
 
-**Stepper step**
+**Stepper step (relative move)**
+
+Position is specified as a 32-bit unsigned long. Speed is specified as a
+16-bit unsigned int.
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
 2  step command                            (0x02)
 3  device number                           (0-9)
 4  direction                               (0-1) (0x00 = CW, 0x01 = CCW)
-5  num steps byte1 LSB
-6  num steps byte2
-7  num steps byte3 MSB                     (21 bits (2,097,151 steps max))
-8  num speed LSB                           (steps per second)
-9  num speed MSB
-10 END_SYSEX                               (0xF7)
+5  num steps, bits 0-6
+6  num steps, bits 7-13
+7  num steps, bits 14-20
+8  num steps, bits 21-27
+9  num steps, bits 28-32
+10 speed, bits 0-6                         (steps per second * 1000)
+11 speed, bits 7-13
+12 speed, bits 14-16
+12 END_SYSEX                               (0xF7)
 ```
 
-**Stepper to**
+**Stepper to (absolute move)**
+
 Sets a stepper to a desired position based on the number of steps from the zero position.
+Position is specified as a 32-bit signed long.
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
 2  to command                              (0x03)
 3  device number                           (0-9)
-4  num target byte1 LSB
-5  num target byte2 MSB
-6  speed LSB                               (steps per second)
-7  speed MSB
-8  [optional] accel LSB                    (acceleration in steps/sec^2)
-9  [optional] accel MSB
-10 [optional] decel LSB                    (deceleration in steps/sec^2)
-11 [optional] decel MSB
-12 END_SYSEX                               (0xF7)
+4  num steps, bits 0-6
+5  num steps, bits 7-13
+6  num steps, bits 14-20
+7  num steps, bits 21-27
+8  num steps, bits 28-32
+9  speed, bits 0-6                         (steps per second * 1000)
+10 speed, bits 7-13
+11 speed, bits 14-16
+12 [optional] accel, bits 0-6              (acceleration in steps/sec^2 * 1000)
+13 [optional] accel, bits 7-13
+14 [optional] accel, bits 14-16
+15 [optional] decel, bits 0-6              (deceleration in steps/sec^2 * 1000)
+16 [optional] decel, bits 7-13
+17 [optional] decel, bits 14-16
+18 END_SYSEX                               (0xF7)
 ```
 
 **Stepper enable**
@@ -103,7 +119,7 @@ Sets a stepper to a desired position based on the number of steps from the zero 
 1  Stepper Command                         (0x62)
 2  enable command                          (0x04)
 3  device number                           (0-9)
-4  device state                            (HIGH | LOW)
+4  device state                            (HIGH : enabled | LOW : disabled)
 4  END_SYSEX                               (0xF7)
 ```
 
@@ -116,19 +132,27 @@ Sets a stepper to a desired position based on the number of steps from the zero 
 4  END_SYSEX                               (0xF7)
 ```
 
-**Stepper report position (sent when a move completes or stop is called)**
+**Stepper report position**
+
+Sent when a move completes or stop is called. Position is reported as a 32-bit signed long.
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
 2  stop reply command                      (0x06)
 3  device number                           (0-9)
-4  position byte 1 LSB
-5  position byte 2 MSB
-6  END_SYSEX                               (0xF7)
+4  position, bits 0-6
+5  position, bits 7-13
+6  position, bits 14-20
+7  position, bits 21-27
+8  position, bits 28-32
+9  END_SYSEX                               (0xF7)
 ```
 
 **Stepper limit**
+
 When a limit pin (digital) is set to its limit state, movement in that direction is disabled.
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
@@ -142,19 +166,24 @@ When a limit pin (digital) is set to its limit state, movement in that direction
 ```
 
 **Stepper set acceleration**
-Sets the acceleration/deceleration in steps/sec^2.
+
+Sets the acceleration/deceleration in steps/sec^2. Value is specified as step/sec^2 * 1000 since Firmata doesn't support sending and receiving floats.
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
 2  set acceleration command                (0x08)
 3  device number                           (0-9) (Supports up to 10 motors)
-4  accel LSB                               (acceleration in steps/sec^2)
-5  accel MSB
-6  END_SYSEX                               (0xF7)
+4  accel, bits 0-6                         (acceleration in steps/sec^2 * 1000)
+5  accel, bits 7-13
+6  accel, bits 14-16
+7  END_SYSEX                               (0xF7)
 ```
 
 **MultiStepper configuration**
+
 Stepper instances that have been created with the stepper configuration command above can be added to a multiStepper group. Groups can be sent a list of devices/positions in a single command and their movements will be coordinated to begin and end simultaneously. Note that multiStepper does not support acceleration or deceleration.
+
 ```
 0  START_SYSEX                              (0xF0)
 1  Stepper Command                          (0x62)
@@ -181,12 +210,15 @@ Stepper instances that have been created with the stepper configuration command 
 2  multi to command                         (0x21)
 3  group number                             (0-127)
 4  member number                            (0-9)
-5  num member target byte1 LSB
-6  num member target byte2 MSB
+5  num steps, bits 0-6
+6  num steps, bits 7-13
+7  num steps, bits 14-20
+8  num steps, bits 21-27
+9  num steps, bits 28-32
 
-*Optionally repeat 4 through 6 for each device in group*
+*Optionally repeat 4 through 9 for each device in group*
 
-33 END_SYSEX                                (0xF7)
+63 END_SYSEX                                (0xF7)
 ```
 
 **MultiStepper stop**
@@ -198,17 +230,23 @@ Stepper instances that have been created with the stepper configuration command 
 4  END_SYSEX                               (0xF7)
 ```
 
-**MultiStepper report positions (sent when a move completes or stop is called)**
+**MultiStepper report positions**
+
+Sent when a move completes or stop is called.
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
 2  multi stop reply command                (0x24)
 3  group  number                           (0-127)
 4  member number                           (0-9)
-5  device 0 position byte 1 LSB
-6  device 0 position byte 2 MSB
+5  position, bits 0-6
+6  position, bits 7-13
+7  position, bits 14-20
+8  position, bits 21-27
+9  position, bits 28-32
 
-*Optionally repeat 4 through 6 for each device in group*
+*Optionally repeat 4 through 9 for each device in group*
 
-33 END_SYSEX                               (0xF7)
+63 END_SYSEX                               (0xF7)
 ```
