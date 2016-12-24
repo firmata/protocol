@@ -188,3 +188,30 @@ Update the baud rate on a configured serial port.
 6  baud               (bits 14 - 20) // need to send 3 bytes for baud even if value is < 14 bits
 7  END_SYSEX          (0xF7)
 ```
+
+### Serial Max Char Delay
+
+Set to collect bytes received by serial port until the receive buffer is filled or a data gap is
+detected to avoid forwarding single bytes at baud rates below 50000.
+
+To set a delay value, specify the number of bits, where the delay is calculated by the following:
+
+numBits * 1000 / baudRate
+
+For example, if the baud is 9600, and 50 bits is specified (5 chars since 8N1 = 10 bits/char),
+then 50 * 1000 / 9600 = 5.2 which is a delay of 5 milliseconds (value is char or int). This
+means approximately 5 chars will be sent every 5 milliseconds if the baud is 9600.
+
+Ensure that numBits * 1000 / baud is >= 1.0 or serial data will be sent on every iteration.
+
+A value of 0 = no delay (default behavior), results in single byte transfers to the host with
+baud rates below approximately 56k (varies with CPU speed).
+
+```
+0  START_SYSEX           (0xF0)
+1  SERIAL_DATA           (0x67)
+2  SERIAL_MAX_CHAR_DELAY (0x08)
+3  port                  (HW_SERIALn OR SW_SERIALn)
+4  numBits               (0 - 127) // 50 is a good value for baud rates < 56k
+7  END_SYSEX             (0xF7)
+```
