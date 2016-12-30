@@ -85,7 +85,7 @@ Data modes:
 
 ### Transfer
 
-**Read a word for each word written.**
+**Read a bybe for each byte written.**
 
 Send an array of data to transfer to the SPI slave device, expecting a byte
 returned for each byte written. Respond with a `SPI_REPLY` message.
