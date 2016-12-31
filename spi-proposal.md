@@ -35,19 +35,6 @@ There are 3 ways to send and receive data from the SPI slave device:
 
 ## Protocol details
 
-### Begin
-
-Call once to initialize SPI hardware. Can optionally be set internally upon
-receiving first `SPI_CONFIG_DEVICE` message.
-
-```
-0:  START_SYSEX
-1:  SPI_DATA
-2:  SPI_BEGIN
-3:  channel (HW supports multiple SPI ports. range = 0-3, default = 0)
-4:  END_SYSEX
-```
-
 ### Config
 
 Send once for each SPI device, specifying a new deviceId for each device
@@ -67,23 +54,25 @@ Data modes:
 
 ```
 0:  START_SYSEX
-1:  SPI_DATA
-2:  SPI_CONFIG_DEVICE
-3:  deviceId | channel (bits 2-6: deviceId, bits 0-1: channel)
-4:  bitOrder (bit 0) | dataMode (bits 1-2, values 0-3) see mode column in table above
-5:  clockSpeed (bits 0 - 6)
-6:  clockSpeed (bits 7 - 14)
-7:  clockSpeed (bits 15 - 21)
-8:  clockSpeed (bits 22 - 28)
-9:  clockSpeed (bits 29 - 32)
-10: csPin (0-127) [optional] use csPin to identify individual devices
-11: csOptions (used only if csPin is set):
+1:  SPI_DATA             (0x68)
+2:  SPI_CONFIG_DEVICE    (0x00)
+3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
+4:  bitOrder | dataMode  (bit 0: bitOrder, bits 1-2: dataMode (0-3))
+                          see mode column in table above
+5:  clockSpeed           (bits 0 - 6)
+6:  clockSpeed           (bits 7 - 14)
+7:  clockSpeed           (bits 15 - 21)
+8:  clockSpeed           (bits 22 - 28)
+9:  clockSpeed           (bits 29 - 32)
+10: csPin                (0-127) [optional]
+11: csOptions [used only if csPin is set]:
       csActive (bit 1) default = 0 (0 = LOW -> HIGH, 1 = HIGH -> LOW)
-      csToggle (bit 2) default = 0 (0 = toggle after last byte, 1 = toggle between bytes)
+      csToggle (bit 2) default = 0 (0 = toggle after last byte,
+                          1 = toggle between bytes)
 12: END_SYSEX
 ```
 
-### Transfer
+### SPI Transfer
 
 **Read a bybe for each byte written.**
 
@@ -109,45 +98,45 @@ follows:
 
 ```
 0:  START_SYSEX
-1:  SPI_DATA
-2:  SPI_TRANSFER_REQUEST
-3:  deviceId | channel (bits 2-6: deviceId, bits 0-1: channel)
-4:  sequence (see note on sequence above)
+1:  SPI_DATA             (0x68)
+2:  SPI_TRANSFER_REQUEST (0x01)
+3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
+4:  sequence             (see note on sequence above)
 5:  numBytes to read and write
-6:  data 0 (bits 0-6)
-7:  data 1 (bit 7) // or inverted depending on bitOrder setting
+6:  data 0               (bits 0-6)
+7:  data 1               (bit 7) // or inverted depending on bitOrder setting
 ... up to numBytes * (8 / 7)
 N:  END_SYSEX
 ```
 
-### Read only
+### SPI Read only
 
 Use if device has a ready signal or requires a delay after a write command.
 Writes `0x00` for each byte to be read. Respond with a `SPI_REPLY` message.
 
 ```
 0:  START_SYSEX
-1:  SPI_DATA
-2:  SPI_READ_REQUEST
-3:  deviceId | channel (bits 2-6: deviceId, bits 0-1: channel)
-4:  sequence (see note on sequence in Transfer section)
+1:  SPI_DATA             (0x68)
+2:  SPI_READ_REQUEST     (0x02)
+3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
+4:  sequence             (see note on sequence in Transfer section)
 5:  numBytes to read
 6:  END_SYSEX
 ```
 
-### Write only
+### SPI Write only
 
 Use when a transfer does not require a response.
 
 ```
 0:  START_SYSEX
-1:  SPI_DATA
-2:  SPI_WRITE
-3:  deviceId | channel (bits 2-6: deviceId, bits 0-1: channel)
-4:  sequence (see note on sequence in Transfer section)
+1:  SPI_DATA             (0x68)
+2:  SPI_WRITE            (0x03)
+3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
+4:  sequence             (see note on sequence in Transfer section)
 5:  numBytes to write
-6:  data 0 (bits 0-6)
-7:  data 1 (bit 7) // or inverted depending on bitOrder setting
+6:  data 0               (bits 0-6)
+7:  data 1               (bit 7) // or inverted depending on bitOrder setting
 ... up to numBytes * (8 / 7)
 N: END_SYSEX
 ```
@@ -175,15 +164,28 @@ Helps ensure reply matches request.
 
 ```
 0:  START_SYSEX
-1:  SPI_DATA
-2:  SPI_REPLY
-3:  deviceId | channel (bits 2-6: deviceId, bits 0-1: channel)
-4:  sequence (see note on sequence above)
+1:  SPI_DATA             (0x68)
+2:  SPI_REPLY            (0x04)
+3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
+4:  sequence             (see note on sequence above)
 5:  numBytes in reply
-6:  data 0 (bits 0-6)
-7:  data 1 (bit 7) // or inverted depending on bitOrder setting
+6:  data 0               (bits 0-6)
+7:  data 1               (bit 7) // or inverted depending on bitOrder setting
 ... up to numBytes * (8 / 7)
 N: END_SYSEX
+```
+
+### Begin
+
+Call once to initialize SPI hardware. Can optionally be set internally upon
+receiving first `SPI_CONFIG_DEVICE` message.
+
+```
+0:  START_SYSEX
+1:  SPI_DATA             (0x68)
+2:  SPI_BEGIN            (0x05)
+3:  channel              (HW supports multiple SPI ports. range = 0-3, default = 0)
+4:  END_SYSEX
 ```
 
 ### End
@@ -193,8 +195,136 @@ application.
 
 ```
 0:  START_SYSEX
-1:  SPI_DATA
-2:  SPI_END
-3:  channel (HW supports multiple SPI ports. range = 0-3, default = 0)
+1:  SPI_DATA             (0x68)
+2:  SPI_END              (0x06)
+3:  channel              (HW supports multiple SPI ports. range = 0-3, default = 0)
+4:  END_SYSEX
+```
+
+# Addendum
+
+The following commands are more tightly coupled to the Arduino SPI library
+implemenation and could be considered to add finer control at the expense
+of having to send and receive a lot more messages. There are a couple of
+different ways to structure it, one that requres the use of SPI_CONFIG_DEVICE
+(**Option A**) and one that does not (**Option B**).
+
+## Option A: Config required
+
+### SPI_BEGIN_TRANSACTION
+
+Wraps `SPI.beginTransaction(settings)` and uses the `SPISettings` object that
+would be created from the `SPI_CONFIG_DEVICE` command (that is stored and looked
+up by the deviceId).
+
+In Option A, `SPI_CONFIG_DEVICE` needs to be sent before sending
+`SPI_BEGIN_TRANSACTION`.
+
+```
+0:  START_SYSEX
+1:  SPI_DATA              (0x68)
+2:  SPI_BEGIN_TRANSACTION (0x07)
+3:  deviceId | channel    (bits 2-6: deviceId, bits 0-1: channel)
+4:  END_SYSEX
+```
+
+### SPI_SINGLE_BYTE_TRANSFER
+
+Write, read or read and write a single byte at a time. CS pin (or any other pins
+if required) must be toggled separately using a `DIGITAL_MESSAGE`. This provides
+the most flexibility but requires a lot more traffic on the transport since
+separate messages must be sent to start the transaction, clear the CS pin, send
+the data, set the CS pin and end the transaction. That's 5 separate messages
+that can be accomplished in a single message using `SPI_TRANSFER_REQUEST`,
+`SPI_READ_REQUEST` or `SPI_WRITE`.
+
+The user can continue sending as many transfer messages as neceesary, one byte
+at a time, handling each return byte individually (if applicable).
+
+SPI_REPLY will have the sequence byte set to 0 and numBytes set to 1.
+
+```
+0:  START_SYSEX
+1:  SPI_DATA                 (0x68)
+2:  SPI_SINGLE_BYTE_TRANSFER (0x08)
+3:  deviceId | channel       (bits 2-6: deviceId, bits 0-1: channel)
+4:  transferOptions          (0 = read & write, 1 = read only, 2 = write only)
+                             if read only, a value of 0x00 will be written.
+                             if read & write or read only, respond with SPI_REPLY
+5:  data 0                   (bits 0-6)
+6:  data 1                   (bit 7) // or inverted depending on bitOrder setting
+7:  END_SYSEX
+```
+
+### SPI_END_TRANSACTION
+
+Wraps SPI.endTransaction().
+
+```
+0:  START_SYSEX
+1:  SPI_DATA              (0x68)
+2:  SPI_END_TRANSACTION   (0x09)
+3:  channel               (bits 0-1: channel)
+4:  END_SYSEX
+```
+
+
+## Option B: No config required
+
+### SPI_BEGIN_TRANSACTION
+
+Wraps `SPI.beginTransaction(SPISettings(clockSpeed, dataOrder, dataMode))`.
+
+```
+0:  START_SYSEX
+1:  SPI_DATA              (0x68)
+2:  SPI_BEGIN_TRANSACTION (0x07)
+3:  channel               (HW supports multiple SPI ports. range = 0-3, default = 0)
+4:  bitOrder | dataMode   (bit 0: bitOrder, bits 1-2: dataMode (0-3))
+5:  clockSpeed            (bits 0 - 6)
+6:  clockSpeed            (bits 7 - 14)
+7:  clockSpeed            (bits 15 - 21)
+8:  clockSpeed            (bits 22 - 28)
+9:  clockSpeed            (bits 29 - 32)
+10: END_SYSEX
+```
+
+### SPI_SINGLE_BYTE_TRANSFER
+
+Write, read or read and write a single byte at a time. CS pin (if required)
+must be toggled using DIGITAL_MESSAGE. This provides the most flexibility but
+requires a lot more traffic on the transport since separate messages must be
+sent to start the transaction, clear the CS pin, send the data, set the
+CS pin and end the transaction. That's 5 separate messages that can be
+accomplished in a single message using SPI_TRANSFER_REQUEST, SPI_READ_REQUEST
+or SPI_WRITE.
+
+The user can continue sending as many transfer messages as neceesary, one byte
+at a time, handling each return byte (if applicable).
+
+SPI_REPLY will have the sequence byte set to 0 and numBytes set to 1.
+
+```
+0:  START_SYSEX
+1:  SPI_DATA                 (0x68)
+2:  SPI_SINGLE_BYTE_TRANSFER (0x08)
+3:  channel                  (HW supports multiple SPI ports. range = 0-3, default = 0)
+4:  transferOptions          (0 = read & write, 1 = read only, 2 = write only)
+                             if read only, a value of 0x00 will be written.
+                             if read & write or read only, respond with SPI_REPLY
+5:  data 0                   (bits 0-6)
+6:  data 1                   (bit 7) // or inverted depending on bitOrder setting
+7: END_SYSEX
+```
+
+### SPI_END_TRANSACTION
+
+Wraps SPI.endTransaction().
+
+```
+0:  START_SYSEX
+1:  SPI_DATA              (0x68)
+2:  SPI_END_TRANSACTION   (0x09)
+3:  channel               (HW supports multiple SPI ports. range = 0-3, default = 0)
 4:  END_SYSEX
 ```
