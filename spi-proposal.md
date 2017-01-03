@@ -251,11 +251,10 @@ parameters would be required to track the options.
 
 ### SPI_CONFIG
 
-This is more like SPI_BEGIN in Option A in that it initializes the SPI port
-rather than a specific SPI device.
+This is more like `SPI_BEGIN` in [Option A](#option-a) in that it initializes
+the SPI port rather than a specific SPI device.
 
-Call once to initialize SPI hardware. Can optionally be set internally upon
-receiving first `SPI_CONFIG_DEVICE` message.
+Call once to initialize SPI hardware.
 
 `channel` is used to identify which SPI port is used in the case that a board
 has multiple ports (SPI, SPI1, SPI2, etc). Many only have one port so the
@@ -280,7 +279,7 @@ will be returned with each `SPI_REPLY` message so it is clear which device the
 data corresponds to.
 
 A chip select pin (`csPin`) can optionally be specified. This pin will be
-controlled per the rules specified in S`PI_TRANSACTION`. For uncommon use cases
+controlled per the rules specified in `SPI_TRANSACTION`. For uncommon use cases
 of CS or other required HW pins per certain SPI devices, it is better to control
 them separately using Firmata `DIGITAL_MESSAGE`.
 
@@ -338,8 +337,8 @@ specify whether or the CS pin should be toggled at the end of the message
 *Note: It may be useful to separate pinOptions and transferOptions to handling
 additional use cases as they arise.*
 
-*Note: TBD if a single SPI_TRANSFER message is sufficient or if we need
-additional transfer messages such as SPI_TRANSFER_16.*
+*Note: TBD if a single `SPI_TRANSFER` message is sufficient or if we need
+additional transfer messages such as `SPI_TRANSFER_16`.*
 
 
 ```
