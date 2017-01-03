@@ -384,3 +384,16 @@ A byte array of data received from the SPI slave device in response to a
 ... up to numBytes * (8 / 7)
 N:  END_SYSEX
 ```
+
+### SPI_END
+
+Call once to release SPI hardware send before quitting a Firmata client
+application.
+
+```
+0:  START_SYSEX
+1:  SPI_DATA             (0x68)
+2:  SPI_END              (0x05)
+3:  channel              (HW supports multiple SPI ports. range = 0-3, default = 0)
+4:  END_SYSEX
+```
