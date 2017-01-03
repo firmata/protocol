@@ -13,7 +13,8 @@ accommodate uses cases beyond the common:
 3. set cs Pin HIGH
 4. return data if read
 
-This document includes two different proposals: **Option A** and **Options B**.
+This document includes two different proposals: [Option A](#option-a) and
+[Options B](#option-b).
 
 
 # Option A
