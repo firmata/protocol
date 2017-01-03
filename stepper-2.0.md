@@ -104,13 +104,7 @@ Position is specified as a 32-bit signed long.
 9  speed, bits 0-6                         (steps per second * 1000)
 10 speed, bits 7-13
 11 speed, bits 14-16
-12 [optional] accel, bits 0-6              (acceleration in steps/sec^2 * 1000)
-13 [optional] accel, bits 7-13
-14 [optional] accel, bits 14-16
-15 [optional] decel, bits 0-6              (deceleration in steps/sec^2 * 1000)
-16 [optional] decel, bits 7-13
-17 [optional] decel, bits 14-16
-18 END_SYSEX                               (0xF7)
+12 END_SYSEX                               (0xF7)
 ```
 
 **Stepper enable**
