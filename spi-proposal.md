@@ -13,250 +13,40 @@ accommodate uses cases beyond the common:
 3. set cs Pin HIGH
 4. return data if read
 
-This document includes two different proposals: [Option A](#option-a) and
-[Options B](#option-b).
+### Overview
 
+A `SPI_CONFIG` command is used to initialize the SPI bus. Up to 4 SPI ports
+are supported using the `channel` parameter.
 
-# Option A
+In the same spirit as the Arduino SPI library, a `SPI_BEGIN_TRANSACTION` command
+and a `SPI_END_TRANSACTON` command are used to frame data transfers related to a
+specific SPI device. This is useful in reinforcing that arbitrary reads and writes
+can't occur between 2 or more SPI devices without being part of a transaction
+(since each device may have a different clock speed, data mode, bit order, csPin,
+etc).
 
-**The intent of Option A is to enable the user to send and receive the most data
-using the least number of messages.**
-
-In Option A, each SPI device is initialized via a config message. This message
-sets the bit order, data mode, clock speed, and optional CS pin for the device.
-Arrays of bytes can be transferred to and received from the slave device. If a
-CS pin is specified, it is pulled low at the beginning of a transfer and
-released after the last byte sent. However, the user can change the active CS
-pin state (HIGH to LOW rather than the default LOW to HIGH behavior) or even
-specify if the pin should be toggled between every byte vs the beginning and end
-of every sequence of bytes.
-
-A **sequence** byte is provide to allow breaking up a transfer into multiple
-packets or even enabling a continuous data stream (provided HW doesn't have
-tight timing requirements).
-
+A `SPI_TRANSFER` command enables data to be written to and read from a SPI device.
 There are 3 ways to send and receive data from the SPI slave device:
 
-1. Transfer - for each byte sent a byte is received
-2. Write - only write data (ignore any data returned by the slave device)
-3. Read - only read data, writing 0 for each byte to be read
+1. **Read/Write** For each byte written a byte is read simultaneously.
+2. **Write** Only write data (ignore any data returned by the slave device).
+3. **Read** Only read data, writing `0x00` for each byte to be read.
 
-### SPI_CONFIG_DEVICE
+A `SPI_REPLY` is used to send requested data back to the client application when
+either **Read/write** mode or **Read-only** mode is used for the `SPI_TRANSFER`.
 
-Send once for each SPI device, specifying a new deviceId for each device
-(beginning from 0).
-
-#### bitOrder
-```
-LSBFIRST = 0
-MSBFIRST = 1
-```
-
-#### dataModes
-
-| mode    | clock polarity (CPOL) | clock phase (CPHA) |
-| --------|-----------------------|--------------------|
-| 0       | 0                     | 0                  |
-| 1       | 0                     | 1                  |
-| 2       | 1                     | 0                  |
-| 3       | 1                     | 1                  |
-
-
-#### optionalPins
-
-The `optionalPins` byte allows HW pins such as chip select, data ready, and
-other common (or perhaps even uncommon) actions related to SPI HW that are
-not directly handled by SPI libraries. Optional pins are identified as bits of
-the `optionalPins` byte.
-
-```
-bit 0 = chip select
-bit 1 = data ready
-... additional bits TBD as needed
-```
-If one or more bits are set, then the pin number and an options byte are
-defined for each pin (so 2 bytes per pin) in order beginning with bit 0.
-
-The optional pins are described below:
-
-```
-Chip select (CS):
-0:  csPin                (0-127)
-1:  csOptions:
-      csActive (bit 0)   (0 = LOW -> HIGH, 1 = HIGH -> LOW, default = 0)
-      csToggle (bit 1)   (0 = toggle after last byte,
-                          1 = toggle between bytes, default = 0)
-
-Data ready:
-0:  dataReadyPin         (0-127)
-1:  dataReadyOptions:
-      dataReadyActive (bit 0) (0 = LOW, 1 = HIGH, default = 1)
-```
-
-```
-0:  START_SYSEX
-1:  SPI_DATA             (0x68)
-2:  SPI_CONFIG_DEVICE    (0x00)
-3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel (0-3))
-4:  bitOrder | dataMode  (bit 2: bitOrder, bits 0-1: dataMode (0-3))
-                          see mode column in table above
-5:  clockSpeed           (bits 0 - 6)
-6:  clockSpeed           (bits 7 - 14)
-7:  clockSpeed           (bits 15 - 21)
-8:  clockSpeed           (bits 22 - 28)
-9:  clockSpeed           (bits 29 - 32)
-10: optionalPins         (see description above)
-... defined optional pins (2 bytes each)
-N:  END_SYSEX (N = 10 + (num optional pins * 2))
-```
-
-### SPI_TRANSFER_REQUEST
-
-**Read a byte for each byte written.**
-
-Send an array of data to transfer to the SPI slave device, expecting a byte
-returned for each byte written. Respond with a `SPI_REPLY` message.
-
-Use the **sequence** byte to specify if this is a one time transfer or if it is part
-of a sequence of transfers, or an ongoing stream of transfers. Define as
-follows:
-
-```
-0 = single transfer (no sequence)
-1 = start sequence (1st part of sequence)
-2 = 2nd part of sequence
-3 = 3rd part of sequence, etc...
-... up to 100, after 100, wrap back to 1
-127 = end sequence
-```
-
-```
-0:  START_SYSEX
-1:  SPI_DATA             (0x68)
-2:  SPI_TRANSFER_REQUEST (0x01)
-3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
-4:  sequence             (see note on sequence above)
-5:  numBytes to read and write
-6:  data 0               (bits 0-6)
-7:  data 1               (bit 7) // or inverted depending on bitOrder setting
-... up to numBytes * (8 / 7)
-N:  END_SYSEX
-```
-
-### SPI_READ
-
-Use if device has a ready signal or requires a delay after a write command.
-Writes `0x00` for each byte to be read. Respond with a `SPI_REPLY` message.
-
-```
-0:  START_SYSEX
-1:  SPI_DATA             (0x68)
-2:  SPI_READ_REQUEST     (0x02)
-3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
-4:  sequence             (see note on sequence in Transfer section)
-5:  numBytes to read
-6:  END_SYSEX
-```
-
-### SPI_WRITE
-
-Use when a transfer does not require a response.
-
-```
-0:  START_SYSEX
-1:  SPI_DATA             (0x68)
-2:  SPI_WRITE            (0x03)
-3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
-4:  sequence             (see note on sequence in Transfer section)
-5:  numBytes to write
-6:  data 0               (bits 0-6)
-7:  data 1               (bit 7) // or inverted depending on bitOrder setting
-... up to numBytes * (8 / 7)
-N:  END_SYSEX
-```
-
-### SPI_REPLY
-
-A byte array of data received from the SPI slave device in response to the
-transfer. Used for both `SPI_TRANSFER_REQUEST` AND `SPI_READ_REQUEST`.
-
-The **sequence** byte specifies which part of a sequence the reply corresponds to.
-Helps ensure reply matches request.
-
-```
-0 = single transfer (no sequence)
-1 = start sequence (1st part of sequence)
-2 = 2nd part of sequence
-3 = 3rd part of sequence, etc...
-... up to 100, after 100, wrap back to 1
-127 = end sequence
-```
-
-```
-0:  START_SYSEX
-1:  SPI_DATA             (0x68)
-2:  SPI_REPLY            (0x04)
-3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
-4:  sequence             (see note on sequence above)
-5:  numBytes in reply
-6:  data 0               (bits 0-6)
-7:  data 1               (bit 7) // or inverted depending on bitOrder setting
-... up to numBytes * (8 / 7)
-N:  END_SYSEX
-```
-
-### SPI_BEGIN
-
-Call once to initialize SPI hardware. Can optionally be set internally upon
-receiving first `SPI_CONFIG_DEVICE` message.
-
-```
-0:  START_SYSEX
-1:  SPI_DATA             (0x68)
-2:  SPI_BEGIN            (0x05)
-3:  channel              (HW supports multiple SPI ports. range = 0-3, default = 0)
-4:  END_SYSEX
-```
-
-### SPI_END
-
-Call once to release SPI hardware send before quitting a Firmata client
-application.
-
-```
-0:  START_SYSEX
-1:  SPI_DATA             (0x68)
-2:  SPI_END              (0x06)
-3:  channel              (HW supports multiple SPI ports. range = 0-3, default = 0)
-4:  END_SYSEX
-```
-
-
-# Option B
-
-**The intent of Option B is to provide more flexibility at the expense of having
-to send more messages.**
-
-Option B relies on a `SPI_BEGIN_TRANSACTION` message and a `SPI_END_TRANSACTON`
-message to frame data transfers related to a specific SPI device. This is useful
-in reinforcing that arbitrary reads and writes can't occur between 2 or more
-SPI devices without being part of a transaction (since each device may have a
-different clock speed, data mode, bit order, csPin, etc).
-
-An advantage of Option B over Option A is that it would require less memory
-on the firmware side options are passed during each transaction, they don't
-need to be retained across devices. Whereas in Option A an array of device
-parameters would be required to track the options.
+A `SPI_END` command disables the SPI bus for the specified channel.
 
 
 ### SPI_CONFIG
 
-This is more like `SPI_BEGIN` in [Option A](#option-a) in that it initializes
-the SPI port rather than a specific SPI device.
+Use `SPI_CONFIG` to initialize the SPI bus. Up to 4 SPI ports are supported,
+where each port is identified by a `channel` number (0-3).
 
-Call once to initialize SPI hardware.
+`SPI_CONFIG` must be called at least once before sending any of the other
+commands.
 
-`channel` is used to identify which SPI port is used in the case that a board
+`channel` is used to identify which SPI bus is used in the case that a board
 has multiple ports (SPI, SPI1, SPI2, etc). Many only have one port so the
 `channel` value will most often be `0`.
 
@@ -270,7 +60,8 @@ has multiple ports (SPI, SPI1, SPI2, etc). Many only have one port so the
 
 ### SPI_BEGIN_TRANSACTION
 
-Initialize a SPI device. Call once before reading from or writing to a separate
+Initialize a SPI device or switch focus to a SPI device (if more than one device
+is on the SPI bus). Call once before reading from or writing to a separate
 SPI device.
 
 The `deviceId` is any value between 0 and 31 and is chosen by the user. The
@@ -281,7 +72,8 @@ data corresponds to.
 A chip select pin (`csPin`) can optionally be specified. This pin will be
 controlled per the rules specified in `pinOptions` byte of the `SPI_TRANSACTION`
 command. For uncommon use cases of CS or other required HW pins per certain SPI
-devices, it is better to control them separately using Firmata `DIGITAL_MESSAGE`.
+devices, it is better to control them separately by not specifying a CS pin and
+instead using Firmata `DIGITAL_MESSAGE` to control the CS pin state.
 
 ```
 0:  START_SYSEX
@@ -295,7 +87,7 @@ devices, it is better to control them separately using Firmata `DIGITAL_MESSAGE`
 8:  maxSpeed              (bits 22 - 28)
 9:  maxSpeed              (bits 29 - 32)
 10  csPin                 [optional] (0-127) The chip select pin number
-11: END_SYSEX
+10|11: END_SYSEX
 ```
 
 #### bitOrder
@@ -335,23 +127,24 @@ with another SPI device.
 
 ### SPI_TRANSFER
 
-Write, read or read and write one or more bytes.
+Write to and read from a SPI device. There are 3 ways to send and receive data
+from the SPI slave device:
+
+1. **Read/Write** For each byte written a byte is read simultaneously.
+2. **Write** Only write data (ignore any data returned by the slave device).
+3. **Read** Only read data, writing `0x00` for each byte to be read.
 
 The user can continue sending as many transfer messages as necessary, even
-alternating between read-only, write-only and read-write as necessary within
+alternating between read-only, write-only and read/write as necessary within
 a single SPI transaction.
 
-When setting `0` (read/write) as the `transferOption`, a byte must be written for
-every byte received. The user must then extract data from the array of bytes returned
-in the `SPI_REPLY` message.
-
-If a CS pin is specified in the `SPI_BEGIN_TRANSACTION` message, it will be used
-according to the behavior specified by `pinOptions` (byte 4). This only covers
-common cases, with the default being set CS to active LOW. Using the `pinOptions`
-bits, it also enables the user to set the CS pin value only on start (bit 3) or
-only on end (bit 4) or ignore entirely (bit 2) in order to send data that requires
-multiple `SPI_TRANSFER` messages. Another option (bit 6) allows the user to
-specify whether or the CS pin should be toggled at the end of the message
+If a chip select (CS) pin is specified in the `SPI_BEGIN_TRANSACTION` message, it
+will be used according to the behavior specified by `pinOptions` parameter (byte 4).
+This only covers common cases, with the default being set CS to active LOW. Using the
+`pinOptions` bits, it also enables the user to set the CS pin value only on start
+(bit 3) or only on end (bit 4) or ignore entirely (bit 2) in order to send data that
+spans multiple `SPI_TRANSFER` messages. Another option (bit 6) allows the user to
+specify whether or not the CS pin should be toggled at the end of the message
 (typical SPI behavior) or between each byte sent (edge case).
 
 
@@ -360,12 +153,12 @@ specify whether or the CS pin should be toggled at the end of the message
 1:  SPI_DATA              (0x68)
 2:  SPI_TRANSFER          (0x03)
 3:  channel               (HW supports multiple SPI ports. range = 0-3, default = 0)
-4:  pinOptions | transferOptions
-                          bits 0-1: transferOptions
+4:  pinOptions | transferMode
+                          bits 0-1: transferMode
                             0 = read/write,
                             1 = read-only,
                             2 = write-only
-                            (see details in transferOptions section below)
+                            (see details in transferMode section below)
                           bits 2-4 : pinOptions
                             bit 2: CS_DISABLE
                             bit 3: CS_START_ONLY
@@ -381,24 +174,28 @@ specify whether or the CS pin should be toggled at the end of the message
 6|N:  END_SYSEX
 ```
 
-#### transferOptions
+#### transferMode
 
-|B6-B2       |B1-B0          |
-|------------|---------------|
-|pinOptions  |transferOptions|
+|B6-B2       |B1-B0       |
+|------------|------------|
+|pinOptions  |transferMode|
 
-|B1-B0|Function                                                              |
-|-----|----------------------------------------------------------------------|
-|00   |**Read/Write** Read a byte for every byte written.                    |
-|01   |**Read only** A value of 0x00 will be written for each requested byte.|
-|10   |**Write only** No data is returned.                                   |
+|B1-B0|Function                                                                        |
+|-----|--------------------------------------------------------------------------------|
+|00   |**Read/Write** Read a byte for every byte written.                              |
+|01   |**Read only** Read the requested number of bytes, writing `0x00` for each requested byte.|
+|10   |**Write only** Write to the slave device, but don't send a reply to the client. |
+
+*When setting `00` (read/write) as the `transferMode`, a byte must be written for
+every byte received. The user must then extract data from the array of bytes returned
+in the `SPI_REPLY` message.*
 
 
 #### pinOptions
 
-|B6       |B5            |B4         |B3           |B2        |B1-B0          |
-|---------|--------------|-----------|-------------|----------|---------------|
-|CS_TOGGLE|CS_ACTIVE_EDGE|CS_END_ONLY|CS_START_ONLY|CS_DISABLE|transferOptions|
+|B6       |B5            |B4         |B3           |B2        |B1-B0       |
+|---------|--------------|-----------|-------------|----------|------------|
+|CS_TOGGLE|CS_ACTIVE_EDGE|CS_END_ONLY|CS_START_ONLY|CS_DISABLE|transferMode|
 
 
 **CS_DISABLE bit (2)** If set, disable CS pin control (even if a CS pin was specified in
@@ -417,7 +214,7 @@ set to LOW at the beginning of the transfer and set to HIGH at the end of the tr
 **CS_TOGGLE bit (6)** If set, toggle CS pin between every byte transfered rather than at
 end of transfer.
 
-*Note: It may be useful to separate pinOptions and transferOptions to better scale to
+*Note: It may be useful to separate pinOptions and transferMode to better scale to
 handle additional use cases as they arise.*
 
 
