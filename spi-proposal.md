@@ -73,7 +73,11 @@ A chip select pin (`csPin`) can optionally be specified. This pin will be
 controlled per the rules specified in `pinOptions` byte of the `SPI_TRANSACTION`
 command. For uncommon use cases of CS or other required HW pins per certain SPI
 devices, it is better to control them separately by not specifying a CS pin and
-instead using Firmata `DIGITAL_MESSAGE` to control the CS pin state.
+instead using Firmata `DIGITAL_MESSAGE` to control the CS pin state. If a CS pin
+is specified, the `csActiveState` for that pin must also be specified. The most
+common active state is *Active LOW* where the CS pin is pulled LOW at the start
+of the transfer and then set to HIGH at the end of the transfer.
+
 
 ```
 0:  START_SYSEX
@@ -87,7 +91,8 @@ instead using Firmata `DIGITAL_MESSAGE` to control the CS pin state.
 8:  maxSpeed              (bits 22 - 28)
 9:  maxSpeed              (bits 29 - 32)
 10  csPin                 [optional] (0-127) The chip select pin number
-10|11: END_SYSEX
+11  csActiveState         (required if csPin specified) 0: Active LOW, 1: Active HIGH
+10|12: END_SYSEX
 ```
 
 #### bitOrder
@@ -140,12 +145,11 @@ a single SPI transaction.
 
 If a chip select (CS) pin is specified in the `SPI_BEGIN_TRANSACTION` message, it
 will be used according to the behavior specified by `pinOptions` parameter (byte 4).
-This only covers common cases, with the default being set CS to active LOW. Using the
-`pinOptions` bits, it also enables the user to set the CS pin value only on start
-(bit 3) or only on end (bit 4) or ignore entirely (bit 2) in order to send data that
-spans multiple `SPI_TRANSFER` messages. Another option (bit 6) allows the user to
-specify whether or not the CS pin should be toggled at the end of the message
-(typical SPI behavior) or between each byte sent (edge case).
+Use bits 2, 3 and 4 for reading or writing data over multiple spi transfers. Set
+bit 3 (CS_START_ONLY) for the first transfer, bit 2 (CS_DISABLE) for any middle transfers
+and finally bit 4 (CS_END_ONLY) for the last transfer. Another option, `CS_TOGGLE`
+(bit 5) allows the user to specify whether or not the CS pin should be toggled at the
+end of the message (typical SPI behavior) or between each byte sent (edge case).
 
 
 ```
@@ -163,8 +167,7 @@ specify whether or not the CS pin should be toggled at the end of the message
                             bit 2: CS_DISABLE
                             bit 3: CS_START_ONLY
                             bit 4: CS_END_ONLY
-                            bit 5: CS_ACTIVE_EDGE
-                            bit 6: CS_TOGGLE
+                            bit 5: CS_TOGGLE
                             (see details in pinOptions section below)
 5.  numBytes              (number of bytes to read, write or read & write)
 // if read-only, then no bytes sent, else write numBytes
@@ -193,9 +196,9 @@ in the `SPI_REPLY` message.*
 
 #### pinOptions
 
-|B6       |B5            |B4         |B3           |B2        |B1-B0       |
-|---------|--------------|-----------|-------------|----------|------------|
-|CS_TOGGLE|CS_ACTIVE_EDGE|CS_END_ONLY|CS_START_ONLY|CS_DISABLE|transferMode|
+|B6   |B5       |B4         |B3           |B2        |B1-B0       |
+|-----|---------|-----------|-------------|----------|------------|
+|0    |CS_TOGGLE|CS_END_ONLY|CS_START_ONLY|CS_DISABLE|transferMode|
 
 
 **CS_DISABLE bit (2)** If set, disable CS pin control (even if a CS pin was specified in
@@ -207,11 +210,7 @@ if breaking up a transfer across multiple packets.
 **CS_END_ONLY bit (4)** If set, toggle active state only at end of transfer. Useful
 if breaking up a transfer across multiple packets.
 
-**CS_ACTIVE_EDGE bit (5)** If set, the CS pin will be set to HIGH before a transfer and
-then to LOW at the end of the transfer. If not set (default), the CS pin will be
-set to LOW at the beginning of the transfer and set to HIGH at the end of the transfer.
-
-**CS_TOGGLE bit (6)** If set, toggle CS pin between every byte transfered rather than at
+**CS_TOGGLE bit (5)** If set, toggle CS pin between every byte transfered rather than at
 end of transfer.
 
 *Note: It may be useful to separate pinOptions and transferMode to better scale to
