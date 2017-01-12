@@ -66,30 +66,46 @@ Protocol
 
 **Stepper step (relative move)**
 
-Position is specified as a 32-bit unsigned long. Speed is specified as a
-16-bit unsigned int.
+Position is specified as a 32-bit signed long.
+
+The speed value is a float composed of a 23-bit significand (mantissa) and a 4-bit exponent
+(biased -18 with an explicit 1's bit) and a sign bit.
+
+|27   |26-23   |22-0       |
+|-----|--------|-----------|
+|sign |exponent|significant|
+|1 bit|4 bits  |23 bits    |
+
 
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
 2  step command                            (0x02)
 3  device number                           (0-9)
-4  direction                               (0-1) (0x00 = CW, 0x01 = CCW)
-5  num steps, bits 0-6
-6  num steps, bits 7-13
-7  num steps, bits 14-20
-8  num steps, bits 21-27
-9  num steps, bits 28-32
-10 speed, bits 0-6                         (steps per second * 1000)
-11 speed, bits 7-13
-12 speed, bits 14-16
-12 END_SYSEX                               (0xF7)
+4  num steps, bits 0-6
+5  num steps, bits 7-13
+6  num steps, bits 14-20
+7  num steps, bits 21-27
+8  num steps, bits 28-32
+9  speed, bits 0-6                         (steps per second)
+10 speed, bits 7-13
+11 speed, bits 14-20
+12 speed, bits 21-28
+13 END_SYSEX                               (0xF7)
 ```
 
 **Stepper to (absolute move)**
 
 Sets a stepper to a desired position based on the number of steps from the zero position.
 Position is specified as a 32-bit signed long.
+
+The speed value is float composed of a 23-bit significand (mantissa) and a 4-bit exponent
+(biased -18 with an explicit 1's bit) and a sign bit.
+
+|27   |26-23   |22-0       |
+|-----|--------|-----------|
+|sign |exponent|significant|
+|1 bit|4 bits  |23 bits    |
 
 ```
 0  START_SYSEX                             (0xF0)
@@ -101,10 +117,11 @@ Position is specified as a 32-bit signed long.
 6  num steps, bits 14-20
 7  num steps, bits 21-27
 8  num steps, bits 28-32
-9  speed, bits 0-6                         (steps per second * 1000)
+9  speed, bits 0-6                         (steps per second)
 10 speed, bits 7-13
-11 speed, bits 14-16
-12 END_SYSEX                               (0xF7)
+11 speed, bits 14-20
+12 speed, bits 21-27
+13 END_SYSEX                               (0xF7)
 ```
 
 **Stepper enable**
@@ -114,7 +131,7 @@ Position is specified as a 32-bit signed long.
 2  enable command                          (0x04)
 3  device number                           (0-9)
 4  device state                            (HIGH : enabled | LOW : disabled)
-4  END_SYSEX                               (0xF7)
+5  END_SYSEX                               (0xF7)
 ```
 
 **Stepper stop**
@@ -161,17 +178,25 @@ When a limit pin (digital) is set to its limit state, movement in that direction
 
 **Stepper set acceleration**
 
-Sets the acceleration/deceleration in steps/sec^2. Value is specified as step/sec^2 * 1000 since Firmata doesn't support sending and receiving floats.
+Sets the acceleration/deceleration in steps/sec^2. The accel value is composed of a 23-bit
+significand (mantissa) and a 4-bit exponent (biased -18 with an explicit 1's bit) and a sign bit.
+
+|27   |26-23   |22-0       |
+|-----|--------|-----------|
+|sign |exponent|significant|
+|1 bit|4 bits  |23 bits    |
+
 
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
 2  set acceleration command                (0x08)
 3  device number                           (0-9) (Supports up to 10 motors)
-4  accel, bits 0-6                         (acceleration in steps/sec^2 * 1000)
+4  accel, bits 0-6                         (acceleration in steps/sec^2)
 5  accel, bits 7-13
-6  accel, bits 14-16
-7  END_SYSEX                               (0xF7)
+6  accel, bits 14-20
+7  accel, bits 21-28
+8  END_SYSEX                               (0xF7)
 ```
 
 **MultiStepper configuration**
