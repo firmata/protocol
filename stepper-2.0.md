@@ -66,16 +66,15 @@ Protocol
 
 **Stepper step (relative move)**
 
-Position is specified as a 32-bit signed long.
+Steps to move is specified as a 32-bit signed long.
 
 The speed value is a float composed of a 23-bit significand (mantissa) and a 4-bit exponent
-(biased -18 with an explicit 1's bit) and a sign bit.
+(biased -17 with an explicit 1's bit) and a sign bit.
 
 |27   |26-23   |22-0       |
 |-----|--------|-----------|
 |sign |exponent|significant|
 |1 bit|4 bits  |23 bits    |
-
 
 ```
 0  START_SYSEX                             (0xF0)
@@ -100,7 +99,7 @@ Sets a stepper to a desired position based on the number of steps from the zero 
 Position is specified as a 32-bit signed long.
 
 The speed value is float composed of a 23-bit significand (mantissa) and a 4-bit exponent
-(biased -18 with an explicit 1's bit) and a sign bit.
+(biased -17 with an explicit 1's bit) and a sign bit.
 
 |27   |26-23   |22-0       |
 |-----|--------|-----------|
@@ -112,11 +111,11 @@ The speed value is float composed of a 23-bit significand (mantissa) and a 4-bit
 1  Stepper Command                         (0x62)
 2  to command                              (0x03)
 3  device number                           (0-9)
-4  num steps, bits 0-6
-5  num steps, bits 7-13
-6  num steps, bits 14-20
-7  num steps, bits 21-27
-8  num steps, bits 28-32
+4  position, bits 0-6
+5  position, bits 7-13
+6  position, bits 14-20
+7  position, bits 21-27
+8  position, bits 28-32
 9  speed, bits 0-6                         (steps per second)
 10 speed, bits 7-13
 11 speed, bits 14-20
@@ -179,7 +178,7 @@ When a limit pin (digital) is set to its limit state, movement in that direction
 **Stepper set acceleration**
 
 Sets the acceleration/deceleration in steps/sec^2. The accel value is composed of a 23-bit
-significand (mantissa) and a 4-bit exponent (biased -18 with an explicit 1's bit) and a sign bit.
+significand (mantissa) and a 4-bit exponent (biased -17 with an explicit 1's bit) and a sign bit.
 
 |27   |26-23   |22-0       |
 |-----|--------|-----------|
@@ -223,21 +222,27 @@ Stepper instances that have been created with the stepper configuration command 
 
 **MultiStepper to**
 
+Sets each stepper in a group to a desired position based on the number of
+steps from its zero position. Positions are specified as a 32-bit signed long.
+
+Stepper movements will be coordinated so that all arrive at their desired
+position simultaneously. The duration of this move is based on which stepper
+will take the longest given the change in position and the stepper's max speed.
+
 ```
 0  START_SYSEX                              (0xF0)
 1  Stepper Command                          (0x62)
 2  multi to command                         (0x21)
 3  group number                             (0-127)
-4  member number                            (0-9)
-5  num steps, bits 0-6
-6  num steps, bits 7-13
-7  num steps, bits 14-20
-8  num steps, bits 21-27
-9  num steps, bits 28-32
+4  position, bits 0-6
+5  position, bits 7-13
+6  position, bits 14-20
+7  position, bits 21-27
+8  position, bits 28-32
 
-*Optionally repeat 4 through 9 for each device in group*
+*Repeat 4 through 8 for each device in group*
 
-63 END_SYSEX                                (0xF7)
+53 END_SYSEX                                (0xF7)
 ```
 
 **MultiStepper stop**
@@ -258,14 +263,13 @@ Sent when a move completes or stop is called.
 1  Stepper Command                         (0x62)
 2  multi stop reply command                (0x24)
 3  group  number                           (0-127)
-4  member number                           (0-9)
-5  position, bits 0-6
-6  position, bits 7-13
-7  position, bits 14-20
-8  position, bits 21-27
-9  position, bits 28-32
+4  position, bits 0-6
+5  position, bits 7-13
+6  position, bits 14-20
+7  position, bits 21-27
+8  position, bits 28-32
 
-*Optionally repeat 4 through 9 for each device in group*
+*Repeat 4 through 8 for each device in group*
 
-63 END_SYSEX                               (0xF7)
+53 END_SYSEX                               (0xF7)
 ```
