@@ -63,8 +63,8 @@ Each feature should be documented in a markdown file and versioned independently
 | 60H         | SERIAL_DATA (1.0)                  | [serial-1.0.md](https://github.com/firmata/protocol/blob/master/serial.md) | current |
 | 61H         | ENCODER_DATA                       | [encoder.md](https://github.com/firmata/protocol/blob/master/encoder.md) | current |
 | 62H         | STEPPER_DATA (2.0)                 | [stepper-2.0.md](https://github.com/firmata/protocol/blob/master/stepper-2.0.md) | current |
-| 67H         | SERIAL_DATA (2.0)                  | [proposal](https://github.com/firmata/protocol/pull/71) | proposed |
-| 68H         | SPI_DATA                           | [proposal](https://github.com/firmata/protocol/blob/36b9d43130d6f7e89bf307cfb8c8e25749e1ffb2/spi-proposal.md) | proposed |
+| 67H         | SERIAL_DATA (2.0)                  | [proposal](https://github.com/firmata/protocol/blob/master/proposals/serial-2.0-proposal.md) | proposed |
+| 68H         | SPI_DATA                           | [proposal](https://github.com/firmata/protocol/blob/master/proposals/spi-proposal.md) | proposed |
 | 70H         | SERVO_CONFIG                       | [servos.md](https://github.com/firmata/protocol/blob/master/servos.md) | current |
 | 72H         | STEPPER_DATA (1.0)                 | [stepper-1.0.md](https://github.com/firmata/protocol/blob/master/stepper-1.0.md) | deprecated |
 | 73H         | ONEWIRE_DATA                       | [onewire.md](https://github.com/firmata/protocol/blob/master/onewire.md) | current |
