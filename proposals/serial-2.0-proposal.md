@@ -1,4 +1,4 @@
-#Serial 2.0
+#Serial 2.0 (Proposal)
 
 Current version: 2.0.0
 

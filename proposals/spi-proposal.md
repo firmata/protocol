@@ -1,4 +1,4 @@
-SPI
+SPI (Proposal)
 ===
 
 A proposal for a SPI protocol for Firmata.
