@@ -1,4 +1,4 @@
-#Serial
+#Serial 1.0
 
 Enables control of up to 4 software and 4 hardware (UART) serial ports. Multiple ports can be
 used simultaneously (depending on restrictions of a given microcontroller board's capabilities).
