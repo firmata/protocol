@@ -6,7 +6,10 @@ Current implementation supports 10 stepper motors at the same time (#[0-9]).
 
 Includes optional support for acceleration and deceleration of the motor.
 
-Also includes multiStepper support which allows groups of steppers to be simultaneously passed different ```to``` values and the duration of their movements will match. Up to five multiStepper groups can be created. The total number of steppers is still limited to 10.
+Also includes multiStepper support which allows groups of steppers to be simultaneously controlled. Up to five multiStepper groups can be created. The total number of steppers is still limited to 10.
+
+Stepper 2.0 sends and receives floats in a custom format described at the end
+of this document.
 
 Example files:
  * Version 2.0 of the stepper protocol has not yet been implemented.
@@ -68,13 +71,7 @@ Protocol
 
 Steps to move is specified as a 32-bit signed long.
 
-The speed value is a float composed of a 23-bit significand (mantissa) and a 4-bit exponent
-(biased -17 with an explicit 1's bit) and a sign bit.
-
-|27   |26-23   |22-0       |
-|-----|--------|-----------|
-|sign |exponent|significant|
-|1 bit|4 bits  |23 bits    |
+The speed value is a float passed using Stepper 2.0's custom float format described below.
 
 ```
 0  START_SYSEX                             (0xF0)
@@ -98,13 +95,7 @@ The speed value is a float composed of a 23-bit significand (mantissa) and a 4-b
 Sets a stepper to a desired position based on the number of steps from the zero position.
 Position is specified as a 32-bit signed long.
 
-The speed value is float composed of a 23-bit significand (mantissa) and a 4-bit exponent
-(biased -17 with an explicit 1's bit) and a sign bit.
-
-|27   |26-23   |22-0       |
-|-----|--------|-----------|
-|sign |exponent|significant|
-|1 bit|4 bits  |23 bits    |
+The speed value is a float passed using Stepper 2.0's custom float format described below.
 
 ```
 0  START_SYSEX                             (0xF0)
@@ -177,13 +168,8 @@ When a limit pin (digital) is set to its limit state, movement in that direction
 
 **Stepper set acceleration**
 
-Sets the acceleration/deceleration in steps/sec^2. The accel value is composed of a 23-bit
-significand (mantissa) and a 4-bit exponent (biased -17 with an explicit 1's bit) and a sign bit.
-
-|27   |26-23   |22-0       |
-|-----|--------|-----------|
-|sign |exponent|significant|
-|1 bit|4 bits  |23 bits    |
+Sets the acceleration/deceleration in steps/sec^2. The accel value is passed
+using Stepper 2.0's custom float format described below.
 
 
 ```
@@ -273,3 +259,67 @@ Sent when a move completes or stop is called.
 
 53 END_SYSEX                               (0xF7)
 ```
+
+Stepper 2 Custom Float Format
+---
+
+Floats sent and received by Stepper 2 are composed of a 23-bit significand (mantissa)
+and a 4-bit, base 10 exponent (biased -17 with an explicit 1's bit) and a sign bit.
+
+|27   |26-23   |22-0       |
+|-----|--------|-----------|
+|sign |exponent|significant|
+|1 bit|4 bits  |23 bits    |
+
+Those values allow a range from 8.388608*10^-11 to 83886.08.
+
+**Example 1: 1 step per hour**
+
+1 step per hour = 1 step / 60 minutes / 60 seconds = 0.000277... steps per second
+
+The largest integer that can be represented in 23 bits is 8388608 so the
+significand will be limited to 6 or 7 digits. In this case 2777778.
+
+The exponent is 4 bits which limits the range to 0-15, but we subtract
+17 from that value on the receiving end to give us a range from -17 to -2. In
+this example we pass 7 to give us a -10 value in the exponent.
+
+|                       | Decimal| Binary                 |
+|-----------------------|--------|------------------------|
+|Sign (bit 27)          |       0|                       0|
+|Exponent (bits 26-23)  |       7|                    0110|
+|Significand (bits 22-0)| 2777778| 01010100110001010110010|
+
+Values in firmata are passed in the 7 least significant bits of each message byte
+so we will be passing in 4 bytes:
+
+|                                           | Binary  | Hex |
+|-------------------------------------------|---------|-----|
+| Sign, Exponent and 2 most significant bits| 00011001| 0x19|
+| Next most significant bits                | 00101001| 0x29|
+| Next most significant bits                | 01000101| 0x45|
+| Least most significant bits               | 00110010| 0x32|
+
+
+**Example 2: 100 steps per second**
+
+We have to pad our significand on the right with four zeros to get our full
+precision. That makes the significand 1000000 and our exponent value will be -4.
+Since the value we send will be biased -17 on the receiving end, we send 13 in
+the exponent.
+
+|                       | Decimal| Binary                 |
+|-----------------------|--------|------------------------|
+|Sign (bit 27)          |       0|                       0|
+|Exponent (bits 26-23)  |      13|                    1101|
+|Significand (bits 22-0)| 1000000| 00011110100001001000000|
+
+Values in firmata are passed in the 7 least significant bits of each message byte
+so we would be passing in 4 bytes:
+
+|                                           | Binary  | Hex |
+|-------------------------------------------|---------|-----|
+| Sign, Exponent and 2 most significant bits| 00110100| 0x29|
+| Next most significant bits                | 00111101| 0x29|
+| Next most significant bits                | 00000100| 0x45|
+| Least most significant bits               | 01000000| 0x32|
