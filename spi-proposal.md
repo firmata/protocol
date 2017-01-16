@@ -9,7 +9,7 @@ pin is used (if at all), use of other pins, etc. This proposal attempts to
 accommodate uses cases beyond the common:
 
 1. set cs pin LOW
-2. write (and optionally read) 1 or more bytes
+2. write (and optionally read) 1 or more words
 3. set cs Pin HIGH
 4. return data if read
 
@@ -28,9 +28,9 @@ etc).
 A `SPI_TRANSFER` command enables data to be written to and read from a SPI device.
 There are 3 ways to send and receive data from the SPI slave device:
 
-1. **Read/Write** For each byte written a byte is read simultaneously.
+1. **Read/Write** For each word written a word is read simultaneously.
 2. **Write** Only write data (ignore any data returned by the slave device).
-3. **Read** Only read data, writing `0x00` for each byte to be read.
+3. **Read** Only read data, writing `0x00` for each word to be read.
 
 A `SPI_REPLY` is used to send requested data back to the client application when
 either **Read/write** mode or **Read-only** mode is used for the `SPI_TRANSFER`.
@@ -70,7 +70,7 @@ will be returned with each `SPI_REPLY` message so it is clear which device the
 data corresponds to.
 
 A chip select pin (`csPin`) can optionally be specified. This pin will be
-controlled per the rules specified in `pinOptions` byte of the `SPI_TRANSACTION`
+controlled per the rules specified in `pinOptions` parameter of the `SPI_TRANSACTION`
 command. For uncommon use cases of CS or other required HW pins per certain SPI
 devices, it is better to control them separately by not specifying a CS pin and
 instead using Firmata `DIGITAL_MESSAGE` to control the CS pin state. If a CS pin
@@ -90,9 +90,10 @@ of the transfer and then set to HIGH at the end of the transfer.
 7:  maxSpeed              (bits 15 - 21)
 8:  maxSpeed              (bits 22 - 28)
 9:  maxSpeed              (bits 29 - 32)
-10  csPin                 [optional] (0-127) The chip select pin number
-11  csActiveState         (required if csPin specified) 0: Active LOW, 1: Active HIGH
-10|12: END_SYSEX
+10: wordSize              (0 = DEFAULT = 8-bits, 1 = 1-bit, 2 = 2 bits, etc)
+11: csPin                 [optional] (0-127) The chip select pin number
+12: csActiveState         (required if csPin specified) 0 = Active LOW, 1 = Active HIGH
+11|13: END_SYSEX
 ```
 
 #### bitOrder
@@ -116,6 +117,11 @@ MSBFIRST = 1
 The maximum speed of communication with the SPI device. For a SPI device rated up to
 5 MHz, use 5000000.
 
+#### wordSize
+
+The size of a `word` in bits. Typically 8-bits (default). 0 = DEFAULT = 8-bits, 1 = 1 bit,
+2 = 2 bits, etc (limit is TBD).
+
 
 ### SPI_END_TRANSACTION
 
@@ -135,9 +141,9 @@ with another SPI device.
 Write to and read from a SPI device. There are 3 ways to send and receive data
 from the SPI slave device:
 
-1. **Read/Write** For each byte written a byte is read simultaneously.
+1. **Read/Write** For each word written a word is read simultaneously.
 2. **Write** Only write data (ignore any data returned by the slave device).
-3. **Read** Only read data, writing `0x00` for each byte to be read.
+3. **Read** Only read data, writing `0x00` for each word to be read.
 
 The user can continue sending as many transfer messages as necessary, even
 alternating between read-only, write-only and read/write as necessary within
@@ -149,7 +155,7 @@ Use bits 2, 3 and 4 for reading or writing data over multiple spi transfers. Set
 bit 3 (CS_START_ONLY) for the first transfer, bit 2 (CS_DISABLE) for any middle transfers
 and finally bit 4 (CS_END_ONLY) for the last transfer. Another option, `CS_TOGGLE`
 (bit 5) allows the user to specify whether or not the CS pin should be toggled at the
-end of the message (typical SPI behavior) or between each byte sent (edge case).
+end of the message (typical SPI behavior) or between each word sent (edge case).
 
 
 ```
@@ -169,11 +175,11 @@ end of the message (typical SPI behavior) or between each byte sent (edge case).
                             bit 4: CS_END_ONLY
                             bit 5: CS_TOGGLE
                             (see details in pinOptions section below)
-5.  numBytes              (number of bytes to read, write or read & write)
-// if read-only, then no bytes sent, else write numBytes
+5.  numWords              (number of words to read, write or read & write)
+// if read-only, then no words sent, else write numWords
 6:  data 0                (bits 0-6)
 7:  data 1                (bit 7) // or inverted depending on bitOrder setting
-...                       up to numBytes * (8 / 7)
+...                       up to numWords * (wordSize / 7)
 6|N:  END_SYSEX
 ```
 
@@ -185,12 +191,12 @@ end of the message (typical SPI behavior) or between each byte sent (edge case).
 
 |B1-B0|Function                                                                        |
 |-----|--------------------------------------------------------------------------------|
-|00   |**Read/Write** Read a byte for every byte written.                              |
-|01   |**Read only** Read the requested number of bytes, writing `0x00` for each requested byte.|
+|00   |**Read/Write** Read a word for every word written.                              |
+|01   |**Read only** Read the requested number of words, writing `0x00` for each requested word.|
 |10   |**Write only** Write to the slave device, but don't send a reply to the client. |
 
-*When setting `00` (read/write) as the `transferMode`, a byte must be written for
-every byte received. The user must then extract data from the array of bytes returned
+*When setting `00` (read/write) as the `transferMode`, a word must be written for
+every word received. The user must then extract data from the array of words returned
 in the `SPI_REPLY` message.*
 
 
@@ -210,7 +216,7 @@ if breaking up a transfer across multiple packets.
 **CS_END_ONLY bit (4)** If set, toggle active state only at end of transfer. Useful
 if breaking up a transfer across multiple packets.
 
-**CS_TOGGLE bit (5)** If set, toggle CS pin between every byte transfered rather than at
+**CS_TOGGLE bit (5)** If set, toggle CS pin between every word transfered rather than at
 end of transfer.
 
 *Note: It may be useful to separate pinOptions and transferMode to better scale to
@@ -219,7 +225,7 @@ handle additional use cases as they arise.*
 
 ### SPI_REPLY
 
-A byte array of data received from the SPI slave device in response to a
+An array of data received from the SPI slave device in response to a
 `SPI_TRANSFER` read/write or read-only message.
 
 ```
@@ -227,10 +233,10 @@ A byte array of data received from the SPI slave device in response to a
 1:  SPI_DATA             (0x68)
 2:  SPI_REPLY            (0x04)
 3:  deviceId | channel   (bits 2-6: deviceId, bits 0-1: channel)
-4:  numBytes
+4:  numWords
 5:  data 0               (bits 0-6)
 6:  data 1               (bit 7) // or inverted depending on bitOrder setting
-...                      up to numBytes * (8 / 7)
+...                      up to numWords * (wordSize / 7)
 N:  END_SYSEX
 ```
 
