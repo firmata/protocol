@@ -39,23 +39,20 @@ Protocol
                                                 XXXXXX0 = no enable pin
                                                 XXXXXX1 = has enable pin)
 
-5  minPulseWidth                              (0-127 measured in us)
-6  num steps-per-revolution LSB
-7  num steps-per-revolution MSB
-8  maxSpeed LSB
-9  maxSpeed MSB
-10 motorPin1 or directionPin number           (0-127)
-11 motorPin2 or stepPin number                (0-127)
-12 [when interface >= 0x0110000] motorPin3    (0-127)
-13 [when interface >= 0x1000000] motorPin4    (0-127)
-14 [when interface && 0x0000001] enablePin    (0-127)
-15 [optional] pins to invert                  (lower 5 bits = pins:
+5  num steps-per-revolution LSB
+6  num steps-per-revolution MSB
+7  motorPin1 or directionPin number           (0-127)
+8  motorPin2 or stepPin number                (0-127)
+9  [when interface >= 0x0110000] motorPin3    (0-127)
+10 [when interface >= 0x1000000] motorPin4    (0-127)
+11 [when interface && 0x0000001] enablePin    (0-127)
+12 [optional] pins to invert                  (lower 5 bits = pins:
                                                 XXXXXX1 = invert motorPin1
                                                 XXXXX1X = invert motorPin2
                                                 XXXX1XX = invert motorPin3
                                                 XXX1XXX = invert motorPin4
                                                 XX1XXXX = invert enablePin)
-16 END_SYSEX                                  (0xF7)
+13 END_SYSEX                                  (0xF7)
 ```
 
 **Stepper zero**
@@ -182,6 +179,36 @@ using Stepper 2.0's custom float format described below.
 6  accel, bits 14-20
 7  accel, bits 21-28
 8  END_SYSEX                               (0xF7)
+```
+
+**Stepper set maxSpeed**
+
+Sets the maximum speed in steps per second. . The speed value is passed
+using Stepper 2.0's custom float format described below.
+
+```
+0  START_SYSEX                             (0xF0)
+1  Stepper Command                         (0x62)
+2  set acceleration command                (0x09)
+3  device number                           (0-9) (Supports up to 10 motors)
+4  maxSpeed, bits 0-6                      (maxSpeed in steps per sec)
+5  maxSpeed, bits 7-13
+6  maxSpeed, bits 14-20
+7  maxSpeed, bits 21-28
+8  END_SYSEX                               (0xF7)
+```
+
+**Stepper set pulse width**
+
+Adds a delay for each step in microseconds
+
+```
+0  START_SYSEX                             (0xF0)
+1  Stepper Command                         (0x62)
+2  set minPulseWidth command               (0x0A)
+3  device number                           (0-9) (Supports up to 10 motors)
+4  minPulseWidth                           (minimum pulse width in microseconds)
+5  END_SYSEX                               (0xF7)
 ```
 
 **MultiStepper configuration**
