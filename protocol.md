@@ -127,7 +127,7 @@ PIN_STATE_RESPONSE          0x6E // reply with a pin's current mode and state (d
 EXTENDED_ANALOG             0x6F // analog write (PWM, Servo, etc) to any pin
 STRING_DATA                 0x71 // a string message with 14-bits per char
 REPORT_FIRMWARE             0x79 // report name and version of the firmware
-SAMPLEING_INTERVAL          0x7A // the interval at which analog input is sampled (default = 19ms)
+SAMPLING_INTERVAL           0x7A // the interval at which analog input is sampled (default = 19ms)
 SYSEX_NON_REALTIME          0x7E // MIDI Reserved for non-realtime messages
 SYSEX_REALTIME              0X7F // MIDI Reserved for realtime messages
 ```
