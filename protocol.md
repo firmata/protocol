@@ -154,8 +154,10 @@ Receive Firmware Name and Version (after query)
 1  queryFirmware     (0x79)
 2  major version     (0-127)
 3  minor version     (0-127)
-4  first 7-bits of firmware name
-5  second 7-bits of firmware name
+4  first char of firmware name (LSB)
+5  first char of firmware name (MSB)
+6  second char of firmware name (LSB)
+7  second char of firmware name (MSB)
 ... for as many bytes as it needs
 N  END_SYSEX         (0xF7)
 ```
@@ -326,10 +328,10 @@ error messages to the client.
 1  STRING_DATA        (0x71)
 2  first char LSB
 3  first char MSB
-3  second char LSB
-4  second char MSB
+4  second char LSB
+5  second char MSB
 ... additional bytes up to half the buffer size - 3 (START_SYSEX, STRING_DATA, END_SYSEX)
-N  END_SYSEX (0xF7)
+N  END_SYSEX          (0xF7)
 ```
 
 Sampling Interval
@@ -344,5 +346,5 @@ will be read.
 1  SAMPLING_INTERVAL  (0x7A)
 2  sampling interval on the millisecond time scale (LSB)
 3  sampling interval on the millisecond time scale (MSB)
-4  END_SYSEX (0xF7)
+4  END_SYSEX          (0xF7)
 ```
