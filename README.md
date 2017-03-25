@@ -84,8 +84,8 @@ To make a change to an existing protocol, submit a pull request with your propos
 Some hints for drafting a new proposal:
 
 * See [feature-registry.md](https://github.com/firmata/protocol/blob/master/feature-registry.md) for information on proposing a new feature and requesting a feature ID.
-* Use sub-commands (3rd byte) as necessary if you have more than one message. See the [stepper-2.0.md](stepper-2.0.md) file for an example. Note the use of `0x62` for the feature ID and how each section has an enumerated set of subcommands (0x00 = config, 0x01 = stop, 02 = step, etc).
-* It's okay to have optional values in a sysex message as long as those values are all at the end of the message. See the bytes 8 - 11 of the Stepper `to` message in [stepper-2.0.md](stepper-2.0.md)
+* Use sub-commands (3rd byte) as necessary if you have more than one message. See the [stepper-2.0.md](proposals/stepper-2.0.md) file for an example. Note the use of `0x62` for the feature ID and how each section has an enumerated set of subcommands (0x00 = config, 0x01 = stop, 02 = step, etc).
+* It's okay to have optional values in a sysex message as long as those values are all at the end of the message. See the bytes 8 - 11 of the Stepper `to` message in [stepper-2.0.md](proposals/stepper-2.0.md)
 * Try to keep your sysex messages as short as possible.
 * Pack bits if necessary. See the Response message for **Report encoder's position** in [encoder.md](encoder.md) for an example (also note how this was documented following the response message... please include similar documentation if you use bit packing in your proposal).
 * If your proposal uses any of the available non-sysex midi messages, the number of bytes in the message must correspond to the number of bytes in the midi message. The meaning however does not need to be the same. However if the midi message uses channels (such as Note Off (0x80)) then the Firmata message must also use channels since a midi parser may expect this.
