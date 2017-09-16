@@ -11,7 +11,7 @@ The order of execution of bus commands is: 'reset'->'skip'->'select'->'write'->'
 
 Some OneWire-devices require some time to carry out e.g. a a/d-conversion after receiving the appropriate command. Including a delay into a OneWire-message saves some bytes in the taskdata (in comparism to the inclusion of a 'delay_task' scheduler message). OneWire Read- and ReadReply messages are correlated using a correlationid (16bits). The reply contains the correlationid-value that was sent with the original request.
 
-Added in version 2.4.0.
+Added in Firmata protocol version 2.4.0.
 
 
 ### Example files: 

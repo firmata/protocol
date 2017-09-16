@@ -8,7 +8,7 @@ Current implementation supports 5 encoders at the same time (#[0-4]) and you can
 
 For best Performances, connect only interrupt pins.
 
-Added in version 2.4.0.
+Added in Firmata protocol version 2.4.0.
 
 Example files : 
  * EncoderFeature is a contributed feature for [ConfigurableFirmata.ino](https://github.com/firmata/arduino/blob/configurable/examples/ConfigurableFirmata/ConfigurableFirmata.ino). 

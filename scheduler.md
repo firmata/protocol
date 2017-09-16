@@ -3,7 +3,7 @@ Scheduler
 
 The idea is to store a stream of messages on a microcontroller which is replayed later (either once or repeated). A task is created by sending a create_task message. The time-to-run is initialized with 0 (which means the task is not yet ready to run). After filling up the taskdata with messages (using add_to_task command messages) a final schedule_task request is sent, that sets the time-to-run (in milliseconds after 'now'). If a task itself contains delay_task or schedule_task-messages these cause the execution of the task to pause and resume after the amount of time given in such message has elapsed. If the last message in a task is a delay_task message the task is scheduled for reexecution after the amount of time specified. If there's no delay_task message at the end of the task (so the time-to-run is not updated during the run) the task gets deleted after execution.
 
-Added in version 2.4.0.
+Added in Firmata protocol version 2.4.0.
 
 
 ### Example files: 

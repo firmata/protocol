@@ -1,14 +1,15 @@
 Stepper Motor
 ===
 
-*Note: This legacy version is no longer supported not recommended for new implementations. Use the new, more full-featured [AccelStepper version](https://github.com/firmata/protocol/blob/master/accelStepperFirmata.md) instead.*
+*Note: This legacy version is deprecated as of Firmata protocol v2.6.0 and therefore is not recommended for new implementations. Please use the new, more full-featured [AccelStepper version](https://github.com/firmata/protocol/blob/master/accelStepperFirmata.md) instead.*
 
 Provides support for 4 wire and 2 wire stepper motor drivers (H-bridge, darlington array, etc) as well as step + direction drivers such as the [EasyDriver](http://www.schmalzhaus.com/EasyDriver/).
 Current implementation supports 6 stepper motors at the same time (#[0-5]).
 
 Also includes optional support for acceleration and deceleration of the motor.
 
-Added in version 2.4.0.
+Added in Firmata protocol version 2.4.0.
+Deprecated in Firmata protocol version 2.6.0.
 
 Example files:
  * The Stepper feature is include by default in [ConfigurableFirmata.ino](https://github.com/firmata/ConfigurableFirmata/blob/master/examples/ConfigurableFirmata/ConfigurableFirmata.ino).

@@ -1,3 +1,8 @@
+## Version 2.6.0 - September 16th, 2017
+
+- Added AccelStepperFirmata (Stepper 2.0) for improved and more scalable stepper motor support.
+- Deprecated the old Stepper protocol, now renamed to "stepper-legacy.md".
+
 ## Version 2.5.1 - December 21st, 2015
 
 - Enable I2C auto-restart by setting [bit 6 of byte 3](https://github.com/firmata/protocol/commit/22cc239b5a527556d82707fe0c540b16ed42f0bc#diff-ab7ff1e563b418ee1e557d6ece901dc7R17) of the `I2C_REQUEST` message.
