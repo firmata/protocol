@@ -1,4 +1,4 @@
-Stepper Motor 2.0
+accelStepperFirmata
 ===
 
 Provides support for full 2 wire, full 3 wire, full 4 wire, half 3 wire, and half 4 wire stepper motor drivers (H-bridge, darlington array, etc) as well as step + direction drivers such as the [EasyDriver](http://www.schmalzhaus.com/EasyDriver/).
@@ -8,54 +8,61 @@ Includes optional support for acceleration and deceleration of the motor.
 
 Also includes multiStepper support which allows groups of steppers to be simultaneously controlled. Up to five multiStepper groups can be created. The total number of steppers is still limited to 10.
 
-Stepper 2.0 sends and receives floats in a custom format described at the end
+AccelStepperFirmata sends and receives floats in a custom format described at the end
 of this document.
 
 Example files:
- * Version 2.0 of the stepper protocol has not yet been implemented.
+ * accelStepperFirmata has not yet been implemented.
 
 Protocol
 ---
 
 **Stepper configuration**
+
+This message is required and must be sent prior to any other message. The device number is arbitrary, but must be unique.
+
 ```
 0  START_SYSEX                                (0xF0)
-1  Stepper Command                            (0x62)
+1  accelStepper Command                       (0x62)
 2  config command                             (0x00 = config)
 3  device number                              (0-9) (Supports up to 10 motors)
 
 4  interface                                  (upper 3 bits = wire count:
-                                                000XXXX = driver
+                                                001XXXX = driver
                                                 010XXXX = two wire
                                                 011XXXX = three wire
                                                 100XXXX = four wire)
 
                                               (4th - 6th bits = step type
+                                                step size = 1/2^0bXXX 
+                                                Examples: 
                                                 XXX000X = whole step
                                                 XXX001X = half step
-                                                XXX010X = micro step)
+                                                XXX010X = quarter step 
+                                                etc...)
 
                                               (lower 1 bit = has enable pin:
                                                 XXXXXX0 = no enable pin
                                                 XXXXXX1 = has enable pin)
 
-5  num steps-per-revolution LSB
-6  num steps-per-revolution MSB
-7  motorPin1 or directionPin number           (0-127)
-8  motorPin2 or stepPin number                (0-127)
-9  [when interface >= 0x0110000] motorPin3    (0-127)
-10 [when interface >= 0x1000000] motorPin4    (0-127)
-11 [when interface && 0x0000001] enablePin    (0-127)
-12 [optional] pins to invert                  (lower 5 bits = pins:
+5  motorPin1 or stepPin number                (0-127)
+6  motorPin2 or directionPin number           (0-127)
+7  [when interface >= 0x011] motorPin3        (0-127)
+8  [when interface >= 0x100] motorPin4        (0-127)
+9  [when interface && 0x0000001] enablePin    (0-127)
+10 [optional] pins to invert                  (lower 5 bits = pins:
                                                 XXXXXX1 = invert motorPin1
                                                 XXXXX1X = invert motorPin2
                                                 XXXX1XX = invert motorPin3
                                                 XXX1XXX = invert motorPin4
                                                 XX1XXXX = invert enablePin)
-13 END_SYSEX                                  (0xF7)
+11 END_SYSEX                                  (0xF7)
 ```
 
 **Stepper zero**
+
+accelStepper will store the current absolute position of the stepper motor (in steps). Sending the zero command will reset the position value to zero without moving the stepper. 
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
@@ -65,10 +72,8 @@ Protocol
 ```
 
 **Stepper step (relative move)**
-
+ 
 Steps to move is specified as a 32-bit signed long.
-
-The speed value is a float passed using Stepper 2.0's custom float format described below.
 
 ```
 0  START_SYSEX                             (0xF0)
@@ -80,19 +85,13 @@ The speed value is a float passed using Stepper 2.0's custom float format descri
 6  num steps, bits 14-20
 7  num steps, bits 21-27
 8  num steps, bits 28-32
-9  speed, bits 0-6                         (steps per second)
-10 speed, bits 7-13
-11 speed, bits 14-20
-12 speed, bits 21-28
-13 END_SYSEX                               (0xF7)
+9  END_SYSEX                               (0xF7)
 ```
 
 **Stepper to (absolute move)**
 
-Sets a stepper to a desired position based on the number of steps from the zero position.
+Moves a stepper to a desired position based on the number of steps from the zero position.
 Position is specified as a 32-bit signed long.
-
-The speed value is a float passed using Stepper 2.0's custom float format described below.
 
 ```
 0  START_SYSEX                             (0xF0)
@@ -104,14 +103,13 @@ The speed value is a float passed using Stepper 2.0's custom float format descri
 6  position, bits 14-20
 7  position, bits 21-27
 8  position, bits 28-32
-9  speed, bits 0-6                         (steps per second)
-10 speed, bits 7-13
-11 speed, bits 14-20
-12 speed, bits 21-27
-13 END_SYSEX                               (0xF7)
+9 END_SYSEX                               (0xF7)
 ```
 
 **Stepper enable**
+
+For stepper motor controllers that are configured with an enable pin, the enable command manages whether the controller passes voltage through to the motor. When a stepper motor is idle, voltage is still being consumed so if the stepper motor does not need to hold its position use enable to save power.
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
@@ -122,6 +120,9 @@ The speed value is a float passed using Stepper 2.0's custom float format descri
 ```
 
 **Stepper stop**
+
+Stops a stepper motor. Results in ```STEPPER_MOVE_COMPLETE``` being sent to the client with the position of the motor when stop is completed note: If an acceleration is set, stop will not be immediate.
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
@@ -130,14 +131,43 @@ The speed value is a float passed using Stepper 2.0's custom float format descri
 4  END_SYSEX                               (0xF7)
 ```
 
-**Stepper report position**
+**Stepper report position (request)**
 
-Sent when a move completes or stop is called. Position is reported as a 32-bit signed long.
+Request a position report.
 
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
-2  stop reply command                      (0x06)
+2  report position command                 (0x06)
+3  device number                           (0-9)
+4  END_SYSEX                               (0xF7)
+```
+
+**Stepper report position (reply)**
+
+Sent when a report position is requested. Position is reported as a 32-bit signed long.
+
+```
+0  START_SYSEX                             (0xF0)
+1  Stepper Command                         (0x62)
+2  report position command                 (0x06)
+3  device number                           (0-9)
+4  position, bits 0-6
+5  position, bits 7-13
+6  position, bits 14-20
+7  position, bits 21-27
+8  position, bits 28-32
+9  END_SYSEX                               (0xF7)
+```
+
+**Stepper move complete**
+
+Sent when a move completes. Position is reported as a 32-bit signed long.
+
+```
+0  START_SYSEX                             (0xF0)
+1  Stepper Command                         (0x62)
+2  move complete command                   (0x0b)
 3  device number                           (0-9)
 4  position, bits 0-6
 5  position, bits 7-13
@@ -148,6 +178,8 @@ Sent when a move completes or stop is called. Position is reported as a 32-bit s
 ```
 
 **Stepper limit**
+
+*Not yet implemented*
 
 When a limit pin (digital) is set to its limit state, movement in that direction is disabled.
 
@@ -166,7 +198,7 @@ When a limit pin (digital) is set to its limit state, movement in that direction
 **Stepper set acceleration**
 
 Sets the acceleration/deceleration in steps/sec^2. The accel value is passed
-using Stepper 2.0's custom float format described below.
+using accelStepperFirmata's custom float format described below.
 
 
 ```
@@ -181,34 +213,22 @@ using Stepper 2.0's custom float format described below.
 8  END_SYSEX                               (0xF7)
 ```
 
-**Stepper set maxSpeed**
+**Stepper set speed**
 
-Sets the maximum speed in steps per second. . The speed value is passed
-using Stepper 2.0's custom float format described below.
+If acceleration is off (equal to zero) sets the speed in steps per second. 
+If acceleration is on (non-zero) sets the maximum speed in steps per second. 
+The speed value is passed using accelStepperFirmata's custom float format described below.
 
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
-2  set acceleration command                (0x09)
+2  set speed command                       (0x09)
 3  device number                           (0-9) (Supports up to 10 motors)
 4  maxSpeed, bits 0-6                      (maxSpeed in steps per sec)
 5  maxSpeed, bits 7-13
 6  maxSpeed, bits 14-20
 7  maxSpeed, bits 21-28
 8  END_SYSEX                               (0xF7)
-```
-
-**Stepper set pulse width**
-
-Adds a delay for each step in microseconds
-
-```
-0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
-2  set minPulseWidth command               (0x0A)
-3  device number                           (0-9) (Supports up to 10 motors)
-4  minPulseWidth                           (minimum pulse width in microseconds)
-5  END_SYSEX                               (0xF7)
 ```
 
 **MultiStepper configuration**
@@ -218,8 +238,8 @@ Stepper instances that have been created with the stepper configuration command 
 ```
 0  START_SYSEX                              (0xF0)
 1  Stepper Command                          (0x62)
-2  config command                           (0x20)
-3  group number                             (0-127)
+2  multiConfig command                      (0x20)
+3  group number                             (0-4)
 4  member 0x00 device number                (0-9)
 5  member 0x01 device number                (0-9)
 6  [optional] member 0x02 device number     (0-9)
@@ -246,7 +266,7 @@ will take the longest given the change in position and the stepper's max speed.
 0  START_SYSEX                              (0xF0)
 1  Stepper Command                          (0x62)
 2  multi to command                         (0x21)
-3  group number                             (0-127)
+3  group number                             (0-4)
 4  position, bits 0-6
 5  position, bits 7-13
 6  position, bits 14-20
@@ -259,94 +279,90 @@ will take the longest given the change in position and the stepper's max speed.
 ```
 
 **MultiStepper stop**
+
+Immediately stops all steppers in the group.
+
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
 2  multi stop command                      (0x23)
-3  group number                            (0-127)
+3  group number                            (0-4)
 4  END_SYSEX                               (0xF7)
 ```
 
-**MultiStepper report positions**
+**MultiStepper move compelte**
 
-Sent when a move completes or stop is called.
+Sent when a multiStepper move completes.
 
 ```
 0  START_SYSEX                             (0xF0)
 1  Stepper Command                         (0x62)
-2  multi stop reply command                (0x24)
-3  group  number                           (0-127)
-4  position, bits 0-6
-5  position, bits 7-13
-6  position, bits 14-20
-7  position, bits 21-27
-8  position, bits 28-32
-
-*Repeat 4 through 8 for each device in group*
-
-53 END_SYSEX                               (0xF7)
+2  multi stepper move complete command     (0x24)
+3  group  number                           (0-4)
+4  END_SYSEX                               (0xF7)
 ```
 
-Stepper 2 Custom Float Format
+AccelStepperFirmata's Custom Float Format
 ---
 
-Floats sent and received by Stepper 2 are composed of a 23-bit significand (mantissa)
-and a 4-bit, base 10 exponent (biased -17 with an explicit 1's bit) and a sign bit.
+Floats sent and received by accelStepperFirmata are composed of a 23-bit significand (mantissa)
+and a 4-bit, base 10 exponent (biased -11 with an explicit 1's bit) and a sign bit.
 
-|27   |26-23   |22-0       |
-|-----|--------|-----------|
-|sign |exponent|significant|
-|1 bit|4 bits  |23 bits    |
+|0-20                  |21   |22-25   |26-27   
+|----------------------|-----|--------|---------------------
+|least significant bits|sign |exponent|most significant bits 
+|21 bits               |1 bit|4 bits  |2 bits
 
-Those values allow a range from 8.388608*10^-11 to 83886.08.
+These values allow a range from 8.388608*10^-11 to 83886.08. Small enough to represent one step per year and large enough to exceed our max achievable stepper speed.
 
 **Example 1: 1 step per hour**
 
 1 step per hour = 1 step / 60 minutes / 60 seconds = 0.000277... steps per second
 
 The largest integer that can be represented in 23 bits is 8388608 so the
-significand will be limited to 6 or 7 digits. In this case 2777778.
+significand will be limited to 6 or 7 digits. In this case 2777777 (note the value truncates).
 
 The exponent is 4 bits which limits the range to 0-15, but we subtract
-17 from that value on the receiving end to give us a range from -17 to -2. In
-this example we pass 7 to give us a -10 value in the exponent.
+11 from that value on the receiving end to give us a range from -11 to 4. In
+this example we are passing 1 to give us a -10 value in the exponent.
 
-|                       | Decimal| Binary                 |
-|-----------------------|--------|------------------------|
-|Sign (bit 27)          |       0|                       0|
-|Exponent (bits 26-23)  |       7|                    0110|
-|Significand (bits 22-0)| 2777778| 01010100110001010110010|
+|            | Decimal| Binary                 |
+|------------|--------|------------------------|
+|Significand | 2777777| 01010100110001010110010|
+|Exponent    |       1|                    0001|
+|Sign        |       0|                       0|
+
+
 
 Values in firmata are passed in the 7 least significant bits of each message byte
-so we will be passing in 4 bytes:
+so we will be passing in 4 bytes in this order:
 
 |                                           | Binary  | Hex |
 |-------------------------------------------|---------|-----|
-| Sign, Exponent and 2 most significant bits| 00011001| 0x19|
-| Next most significant bits                | 00101001| 0x29|
-| Next most significant bits                | 01000101| 0x45|
-| Least most significant bits               | 00110010| 0x32|
-
+| Least most significant bits               |  0110001| 0x31|
+| Next most significant bits                |  1000101| 0x45|
+| Next most significant bits                |  0101001| 0x29|
+| Sign, Exponent and 2 most significant bits|  0000101| 0x05|
 
 **Example 2: 100 steps per second**
 
 We have to pad our significand on the right with four zeros to get our full
-precision. That makes the significand 1000000 and our exponent value will be -4.
-Since the value we send will be biased -17 on the receiving end, we send 13 in
+precision. That makes the significand 100000000 and our exponent value will be 2.
+Since the value we send will be biased -11 on the receiving end, we send 13 in
 the exponent.
 
-|                       | Decimal| Binary                 |
-|-----------------------|--------|------------------------|
-|Sign (bit 27)          |       0|                       0|
-|Exponent (bits 26-23)  |      13|                    1101|
-|Significand (bits 22-0)| 1000000| 00011110100001001000000|
+|            | Decimal| Binary                 |
+|------------|--------|------------------------|
+|Significand |       1| 00000000000000000000001|
+|Exponent    |      13|                    1101|
+|Sign        |       0|                       0|
 
 Values in firmata are passed in the 7 least significant bits of each message byte
-so we would be passing in 4 bytes:
+so we would be passing in 4 bytes in this order:
 
 |                                           | Binary  | Hex |
 |-------------------------------------------|---------|-----|
-| Sign, Exponent and 2 most significant bits| 00110100| 0x29|
-| Next most significant bits                | 00111101| 0x29|
-| Next most significant bits                | 00000100| 0x45|
-| Least most significant bits               | 01000000| 0x32|
+| Least most significant bits               |  0000001| 0x01|
+| Next most significant bits                |  0000000| 0x00|
+| Next most significant bits                |  0000000| 0x00|
+| Sign, Exponent and 2 most significant bits|  0110100| 0x34|
