@@ -1,4 +1,4 @@
-accelStepperFirmata
+AccelStepperFirmata (Stepper 2.0)
 ===
 
 Provides support for full 2 wire, full 3 wire, full 4 wire, half 3 wire, and half 4 wire stepper motor drivers (H-bridge, darlington array, etc) as well as step + direction drivers such as the [EasyDriver](http://www.schmalzhaus.com/EasyDriver/).
@@ -12,7 +12,9 @@ AccelStepperFirmata sends and receives floats in a custom format described at th
 of this document.
 
 Example files:
- * accelStepperFirmata has not yet been implemented.
+ * ConfigurableFirmata [AccelStepperFirmata.cpp](https://github.com/firmata/ConfigurableFirmata/blob/master/src/AccelStepperFirmata.cpp).
+
+Added in Firmata protocol version 2.6.0.
 
 Protocol
 ---
@@ -23,7 +25,7 @@ This message is required and must be sent prior to any other message. The device
 
 ```
 0  START_SYSEX                                (0xF0)
-1  accelStepper Command                       (0x62)
+1  ACCELSTEPPER_DATA                          (0x62)
 2  config command                             (0x00 = config)
 3  device number                              (0-9) (Supports up to 10 motors)
 
@@ -65,7 +67,7 @@ accelStepper will store the current absolute position of the stepper motor (in s
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  zero command                            (0x01)
 3  device number                           (0-9)
 4  END_SYSEX                               (0xF7)
@@ -77,7 +79,7 @@ Steps to move is specified as a 32-bit signed long.
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  step command                            (0x02)
 3  device number                           (0-9)
 4  num steps, bits 0-6
@@ -95,7 +97,7 @@ Position is specified as a 32-bit signed long.
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  to command                              (0x03)
 3  device number                           (0-9)
 4  position, bits 0-6
@@ -112,7 +114,7 @@ For stepper motor controllers that are configured with an enable pin, the enable
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  enable command                          (0x04)
 3  device number                           (0-9)
 4  device state                            (HIGH : enabled | LOW : disabled)
@@ -125,7 +127,7 @@ Stops a stepper motor. Results in ```STEPPER_MOVE_COMPLETE``` being sent to the 
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  stop command                            (0x05)
 3  device number                           (0-9)
 4  END_SYSEX                               (0xF7)
@@ -137,7 +139,7 @@ Request a position report.
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  report position command                 (0x06)
 3  device number                           (0-9)
 4  END_SYSEX                               (0xF7)
@@ -149,7 +151,7 @@ Sent when a report position is requested. Position is reported as a 32-bit signe
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  report position command                 (0x06)
 3  device number                           (0-9)
 4  position, bits 0-6
@@ -166,7 +168,7 @@ Sent when a move completes. Position is reported as a 32-bit signed long.
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  move complete command                   (0x0b)
 3  device number                           (0-9)
 4  position, bits 0-6
@@ -185,7 +187,7 @@ When a limit pin (digital) is set to its limit state, movement in that direction
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  stop limit command                      (0x07)
 3  device number                           (0-9)
 4  lower limit pin number                  (0-127)
@@ -203,7 +205,7 @@ using accelStepperFirmata's custom float format described below.
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  set acceleration command                (0x08)
 3  device number                           (0-9) (Supports up to 10 motors)
 4  accel, bits 0-6                         (acceleration in steps/sec^2)
@@ -221,7 +223,7 @@ The speed value is passed using accelStepperFirmata's custom float format descri
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  set speed command                       (0x09)
 3  device number                           (0-9) (Supports up to 10 motors)
 4  maxSpeed, bits 0-6                      (maxSpeed in steps per sec)
@@ -237,7 +239,7 @@ Stepper instances that have been created with the stepper configuration command 
 
 ```
 0  START_SYSEX                              (0xF0)
-1  Stepper Command                          (0x62)
+1  ACCELSTEPPER_DATA                        (0x62)
 2  multiConfig command                      (0x20)
 3  group number                             (0-4)
 4  member 0x00 device number                (0-9)
@@ -264,7 +266,7 @@ will take the longest given the change in position and the stepper's max speed.
 
 ```
 0  START_SYSEX                              (0xF0)
-1  Stepper Command                          (0x62)
+1  ACCELSTEPPER_DATA                        (0x62)
 2  multi to command                         (0x21)
 3  group number                             (0-4)
 4  position, bits 0-6
@@ -284,7 +286,7 @@ Immediately stops all steppers in the group.
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  multi stop command                      (0x23)
 3  group number                            (0-4)
 4  END_SYSEX                               (0xF7)
@@ -296,7 +298,7 @@ Sent when a multiStepper move completes.
 
 ```
 0  START_SYSEX                             (0xF0)
-1  Stepper Command                         (0x62)
+1  ACCELSTEPPER_DATA                       (0x62)
 2  multi stepper move complete command     (0x24)
 3  group  number                           (0-4)
 4  END_SYSEX                               (0xF7)
