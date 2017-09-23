@@ -15,7 +15,7 @@ accommodate uses cases beyond the common:
 
 ### Overview
 
-A `SPI_CONFIG` command is used to initialize the SPI bus. Up to 4 SPI ports
+A `SPI_BEGIN` command is used to initialize the SPI bus. Up to 4 SPI ports
 are supported using the `channel` parameter.
 
 In the same spirit as the Arduino SPI library, a `SPI_BEGIN_TRANSACTION` command
@@ -37,12 +37,12 @@ either a `SPI_TRANSFER` mode or `SPI_READ` message is sent.
 A `SPI_END` command disables the SPI bus for the specified channel.
 
 
-### SPI_CONFIG
+### SPI_BEGIN
 
-Use `SPI_CONFIG` to initialize the SPI bus. Up to 4 SPI ports are supported,
+Use `SPI_BEGIN` to initialize the SPI bus. Up to 4 SPI ports are supported,
 where each port is identified by a `channel` number (0-3).
 
-`SPI_CONFIG` must be called at least once before sending any of the other
+`SPI_BEGIN` must be called at least once before sending any of the other
 commands.
 
 `channel` is used to identify which SPI bus is used in the case that a board
@@ -52,7 +52,7 @@ has multiple ports (SPI, SPI1, SPI2, etc). Many only have one port so the
 ```
 0:  START_SYSEX
 1:  SPI_DATA              (0x68)
-2:  SPI_CONFIG            (0x00)
+2:  SPI_BEGIN             (0x00)
 3:  channel               (HW supports multiple SPI ports. range = 0-3, default = 0)
 4:  END_SYSEX
 ```
