@@ -17,7 +17,7 @@ Servo config
 1  SERVO_CONFIG         (0x70)
 2  pin number           (0-127)
 3  minPulse LSB         (0-6)
-4  minPulse MSB         (0-13)
+4  minPulse MSB         (7-13)
 5  maxPulse LSB         (0-6)
 6  maxPulse MSB         (7-13)
 7  END_SYSEX            (0xF7)
