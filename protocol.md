@@ -254,7 +254,7 @@ Analog Mapping Query
 ---
 
 Analog messages are numbered 0 to 15, which traditionally refer to the Arduino
-pins labeled A0, A1, A2, etc. However, these pis are actually configured using
+pins labeled A0, A1, A2, etc. However, these pins are actually configured using
 "normal" pin numbers in the pin mode message, and when those pins are used for
 non-analog functions. The analog mapping query provides the information about
 which pins (as used with Firmata's pin mode message) correspond to the analog
