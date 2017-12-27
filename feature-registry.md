@@ -73,6 +73,8 @@ Each feature should be documented in a markdown file and versioned independently
 | 77H         | I2C_REPLY                          | [i2c.md](https://github.com/firmata/protocol/blob/master/i2c.md) | current |
 | 78H         | I2C_CONFIG                         | [i2c.md](https://github.com/firmata/protocol/blob/master/i2c.md) | current |
 | 7BH         | SCHEDULER_DATA                     | [scheduler.md](https://github.com/firmata/protocol/blob/master/scheduler.md) | current |
+| 7CH         | RCOUTPUT_DATA                      | [rcswitch-proposal.md](https://github.com/firmata/protocol/blob/master/proposals/rcswitch-proposal.md) | proposed |
+| 7DH         | RCINPUT_DATA                       | [rcswitch-proposal.md](https://github.com/firmata/protocol/blob/master/proposals/rcswitch-proposal.md) | proposed |
 |             |                                    |                        |            |
 | 00H nnH nnH | (start of extended feature ID set) |                        |            |
 
