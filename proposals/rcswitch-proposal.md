@@ -26,7 +26,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCOUTPUT_DATA              (0x5C)
-  * 2 SETUP_ATTACH               (0x01)
+  * 2 RCOUTPUT_ATTACH            (0x01)
   * 3 pin                        (pin number)
   * 4 END_SYSEX                  (0xF7)
   * -----------------------------------------------------
@@ -42,7 +42,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCOUTPUT_DATA              (0x5C)
-  * 2 SETUP_DETACH               (0x02)
+  * 2 RCOUTPUT_DETACH            (0x02)
   * 3 pin                        (pin number)
   * 4 END_SYSEX                  (0xF7)
   * -----------------------------------------------------
@@ -58,7 +58,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCOUTPUT_DATA              (0x5C)
-  * 2 CONFIG_PROTOCOL            (0x11)
+  * 2 RCOUTPUT_PROTOCOL          (0x11)
   * 3 pin                        (pin number)
   * 4 protocol (int), bits 0-6
   * 5 protocol (int), bits 7-13
@@ -77,7 +77,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCOUTPUT_DATA              (0x5C)
-  * 2 CONFIG_PULSE_LENGTH        (0x12)
+  * 2 RCOUTPUT_PULSE_LENGTH      (0x12)
   * 3 pin                        (pin number)
   * 4 pulse length (int), bits 0-6
   * 5 pulse length (int), bits 7-13
@@ -96,7 +96,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCOUTPUT_DATA              (0x5C)
-  * 2 CONFIG_PULSE_LENGTH        (0x14)
+  * 2 RCOUTPUT_PULSE_LENGTH      (0x14)
   * 3 pin                        (pin number)
   * 4 repeat transmit (int), bits 0-6
   * 5 repeat transmit (int), bits 7-13
@@ -115,7 +115,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCOUTPUT_DATA              (0x5C)
-  * 2 CODE_TRISTATE              (0x21)
+  * 2 RCOUTPUT_TRISTATE          (0x21)
   * 3 pin                        (pin number)
   * 4..n-1 RC data (packed as 7-bit): char array with tristate bits ('0', '1', 'F')
   * n END_SYSEX                  (0xF7)
@@ -132,7 +132,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCOUTPUT_DATA              (0x5C)
-  * 2 CODE_LONG                  (0x22)
+  * 2 RCOUTPUT_CODE_LONG         (0x22)
   * 3 pin                        (pin number)
   * 4..n-1 RC data (packed as 7-bit): 2 bytes (int) with the number of bits to send, 4 bytes (long) data bits
   * n END_SYSEX                  (0xF7)
@@ -149,7 +149,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCOUTPUT_DATA              (0x5C)
-  * 2 CODE_CHAR                  (0x24)
+  * 2 RCOUTPUT_CODE_CHAR         (0x24)
   * 3 pin                        (pin number)
   * 4..n-1 RC data (packed as 7-bit): char array with characters to send
   * n END_SYSEX                  (0xF7)
@@ -164,12 +164,12 @@ Query:
 ```c
  /*
   * -----------------------------------------------------
-  * 0 START_SYSEX                (0xF0)
-  * 1 RCOUTPUT_DATA              (0x5C)
-  * 2 CODE_TRISTATE_PACKED       (0x28)
-  * 3 pin                        (pin number)
+  * 0 START_SYSEX                   (0xF0)
+  * 1 RCOUTPUT_DATA                 (0x5C)
+  * 2 RCOUTPUT_CODE_TRISTATE_PACKED (0x28)
+  * 3 pin                           (pin number)
   * 4..n-1 RC data (packed as 7-bit): byte array with 4 tristate bits per byte
-  * n END_SYSEX                  (0xF7)
+  * n END_SYSEX                     (0xF7)
   * -----------------------------------------------------
   */
 ```
@@ -184,7 +184,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCINPUT_DATA               (0x5D)
-  * 2 SETUP_ATTACH               (0x01)
+  * 2 RCINPUT_ATTACH             (0x01)
   * 3 pin                        (pin number)
   * 4 END_SYSEX                  (0xF7)
   * -----------------------------------------------------
@@ -200,7 +200,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCINPUT_DATA               (0x5D)
-  * 2 SETUP_DETACH               (0x02)
+  * 2 RCINPUT_DETACH             (0x02)
   * 3 pin                        (pin number)
   * 4 END_SYSEX                  (0xF7)
   * -----------------------------------------------------
@@ -216,7 +216,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCINPUT_DATA               (0x5D)
-  * 2 CONFIG_TOLERANCE           (0x31)
+  * 2 RCINPUT_TOLERANCE          (0x31)
   * 3 pin                        (pin number)
   * 4 tolerance                  (percent)
   * 5 END_SYSEX                  (0xF7)
@@ -233,7 +233,7 @@ Query:
   * -----------------------------------------------------
   * 0 START_SYSEX                (0xF0)
   * 1 RCINPUT_DATA               (0x5D)
-  * 2 CONFIG_ENABLE_RAW_DATA     (0x32)
+  * 2 RCINPUT_ENABLE_RAW_DATA    (0x32)
   * 3 pin                        (pin number)
   * 4 rawdataEnabled             (0 for disabled, 1 for enabled)
   * 5 END_SYSEX                  (0xF7)
@@ -250,7 +250,7 @@ Response:
   * -----------------------------------------------------
   *  0 START_SYSEX                (0xF0)
   *  1 RCINPUT_DATA               (0x5D)
-  *  2 MESSAGE                    (0x41)
+  *  2 RCINPUT_MESSAGE            (0x41)
   *  3 pin                        (pin number)
   *  4 message value (long), bits 0-6
   *  5 message value (long), bits 7-13
