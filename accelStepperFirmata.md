@@ -158,7 +158,7 @@ Sent when a report position is requested. Position is reported as a 32-bit signe
 5  position, bits 7-13
 6  position, bits 14-20
 7  position, bits 21-27
-8  position, bits 28-32
+8  position, bits 28-31
 9  END_SYSEX                               (0xF7)
 ```
 
@@ -175,7 +175,7 @@ Sent when a move completes. Position is reported as a 32-bit signed long.
 5  position, bits 7-13
 6  position, bits 14-20
 7  position, bits 21-27
-8  position, bits 28-32
+8  position, bits 28-31
 9  END_SYSEX                               (0xF7)
 ```
 
@@ -211,7 +211,7 @@ using accelStepperFirmata's custom float format described below.
 4  accel, bits 0-6                         (acceleration in steps/sec^2)
 5  accel, bits 7-13
 6  accel, bits 14-20
-7  accel, bits 21-28
+7  accel, bits 21-27
 8  END_SYSEX                               (0xF7)
 ```
 
@@ -229,7 +229,7 @@ The speed value is passed using accelStepperFirmata's custom float format descri
 4  maxSpeed, bits 0-6                      (maxSpeed in steps per sec)
 5  maxSpeed, bits 7-13
 6  maxSpeed, bits 14-20
-7  maxSpeed, bits 21-28
+7  maxSpeed, bits 21-27
 8  END_SYSEX                               (0xF7)
 ```
 
@@ -273,7 +273,7 @@ will take the longest given the change in position and the stepper's max speed.
 5  position, bits 7-13
 6  position, bits 14-20
 7  position, bits 21-27
-8  position, bits 28-32
+8  position, bits 28-31
 
 *Repeat 4 through 8 for each device in group*
 
