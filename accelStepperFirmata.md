@@ -330,7 +330,7 @@ this example we are passing 1 to give us a -10 value in the exponent.
 
 |            | Decimal| Binary                 |
 |------------|--------|------------------------|
-|Significand | 2777777| 01010100110001010110010|
+|Significand | 2777777| 01010100110001010110001|
 |Exponent    |       1|                    0001|
 |Sign        |       0|                       0|
 
