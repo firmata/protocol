@@ -49,12 +49,12 @@ OneWire SEARCH reply
                                     0x45 reply to a SEARCH_ALARMS request
 3  pin              (0-127)
 4  bit 0-6   [optional] address bytes encoded using 8 times 7 bit for 7 bytes of 8 bit
-5  bit 7-13  [optional] 1.address[0] = byte[0]    + byte[1]<<7 & 0x7F
-6  bit 14-20 [optional] 1.address[1] = byte[1]>>1 + byte[2]<<6 & 0x7F
+5  bit 7-13  [optional] 1.address[0] = byte[0]    + byte[1]<<7 & 0xFF
+6  bit 14-20 [optional] 1.address[1] = byte[1]>>1 + byte[2]<<6 & 0xFF
 7  ....                 ...
-11 bit 49-55            1.address[6] = byte[6]>>6 + byte[7]<<1 & 0x7F
-12 bit 56-63            1.address[7] = byte[8]    + byte[9]<<7 & 0x7F
-13 bit 64-69            2.address[0] = byte[9]>>1 + byte[10]<<6 &0x7F
+11 bit 49-55            1.address[6] = byte[6]>>6 + byte[7]<<1 & 0xFF
+12 bit 56-63            1.address[7] = byte[8]    + byte[9]<<7 & 0xFF
+13 bit 64-69            2.address[0] = byte[9]>>1 + byte[10]<<6 &0xFF
 n  ... as many bytes as needed (don't exceed MAX_DATA_BYTES though)
 n+1  END_SYSEX      (0xF7)
 ```
