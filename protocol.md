@@ -118,7 +118,7 @@ Following are SysEx commands used for core features defined in this version of t
 ```
 EXTENDED_ID                 0x00 // A value of 0x00 indicates the next 2 bytes define the extended ID
 RESERVED               0x01-0x0F // IDs 0x01 - 0x0F are reserved for user defined commands
-EXTENDED_ANALOG_READ        0x66 // analog read commands from any pin
+ANALOG_READ                 0x66 // analog read commands from any pin
 ANALOG_MAPPING_QUERY        0x69 // ask for mapping of analog to pin numbers
 ANALOG_MAPPING_RESPONSE     0x6A // reply with mapping info
 CAPABILITY_QUERY            0x6B // ask for supported modes and resolution of all pins
@@ -173,25 +173,25 @@ bits. The number of data bits is inferred by the length of the message.
 Query analog pin
 ```
 // The client must request an analog read, then the client will respond
-0  START_SYSEX              (0xF0)
-1  EXTENDED_ANALOG_READ     (0x66)
-2  QUERY                    (0x00)
-3  pin                      (0-127)
-4  enable reporting         (0 | 1) [optional] combines reporting and QUERY. default = 0 (OFF)
-5  END_SYSEX                (0xF7)
+0  START_SYSEX         (0xF0)
+1  ANALOG_READ         (0x66)
+2  QUERY               (0x00)
+3  pin                 (0-127)
+4  enable reporting    (0 | 1) [optional] combines reporting and QUERY. default = 0 (OFF)
+5  END_SYSEX           (0xF7)
 ```
 
 Receive analog pin value (after query)
 ```
 // In order to report analog values for pin number > 15 and/or values > 14 bits
-0  START_SYSEX              (0xF0)
-1  EXTENDED_ANALOG_READ     (0x66)
-2  RESPONSE                 (0x01)
-3  pin                      (0-127)
-4  bits 0-6                 (least significant byte) [optional - not sent if value is 0]
-5  bits 7-13                (most significant byte) [optional - not sent if value fits in the first 7 bits]
+0  START_SYSEX         (0xF0)
+1  ANALOG_READ         (0x66)
+2  RESPONSE            (0x01)
+3  pin                 (0-127)
+4  bits 0-6            (least significant byte) [optional - not sent if value is 0]
+5  bits 7-13           (most significant byte) [optional - not sent if value fits in the first 7 bits]
 ... additional bytes may be sent if more bits are needed
-N  END_SYSEX                (0xF7)
+N  END_SYSEX           (0xF7)
 ```
 
 Extended Analog Write
