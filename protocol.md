@@ -163,7 +163,7 @@ Receive Firmware Name and Version (after query)
 N  END_SYSEX         (0xF7)
 ```
 
-Extended Analog Read
+Analog Read
 ---
 
 As an alternative to the normal analog message, this extended version allows
@@ -193,6 +193,8 @@ Receive analog pin value (after query)
 ... additional bytes may be sent if more bits are needed
 N  END_SYSEX           (0xF7)
 ```
+
+Note: returned value is an unsigned integer
 
 Extended Analog Write
 ---
