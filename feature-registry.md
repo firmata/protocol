@@ -70,6 +70,7 @@ Each feature should be documented in a markdown file and versioned independently
 | 70H         | SERVO_CONFIG                       | [servos.md](https://github.com/firmata/protocol/blob/master/servos.md) | current |
 | 72H         | STEPPER_DATA                       | [stepper-legacy.md](https://github.com/firmata/protocol/blob/master/stepper-legacy.md) | deprecated |
 | 73H         | ONEWIRE_DATA                       | [onewire.md](https://github.com/firmata/protocol/blob/master/onewire.md) | current |
+| 74H         | DHTSENSOR_DATA                     | [proposal](https://github.com/firmata/protocol/blob/master/dhtsensor.md) | proposed |
 | 75H         | SHIFT_DATA                         | [shift-proposal.md](https://github.com/firmata/protocol/blob/master/proposals/shift-proposal.md) | proposed |
 | 76H         | I2C_REQUEST                        | [i2c.md](https://github.com/firmata/protocol/blob/master/i2c.md) | current |
 | 77H         | I2C_REPLY                          | [i2c.md](https://github.com/firmata/protocol/blob/master/i2c.md) | current |
