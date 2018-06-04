@@ -72,6 +72,8 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/kraman/go-firmata]
 * Qt/QML
   * [https://github.com/callaa/qfirmata]
+* Android/Kotlin
+  * [https://github.com/xujiaao/android-firmata]
 
 *Each client library may not support the most recent version of the Firmata protocol and all features described in this reposity.*
 
