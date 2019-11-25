@@ -169,7 +169,7 @@ Sent when a move completes. Position is reported as a 32-bit signed long.
 ```
 0  START_SYSEX                             (0xF0)
 1  ACCELSTEPPER_DATA                       (0x62)
-2  move complete command                   (0x0b)
+2  move complete command                   (0x0A)
 3  device number                           (0-9)
 4  position, bits 0-6
 5  position, bits 7-13
