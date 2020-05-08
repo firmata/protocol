@@ -23,11 +23,11 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/firmata/processing]
   * [http://funnel.cc]
 * python
+  * [https://github.com/MrYsLab/pymata4]
+  * [https://github.com/MrYsLab/pymata-express]
   * [https://github.com/firmata/pyduino]
   * [https://github.com/lupeke/python-firmata]
   * [https://github.com/tino/pyFirmata]
-  * [https://github.com/MrYsLab/PyMata]
-  * [https://github.com/MrYsLab/pymata-aio]
 * perl
   * [https://github.com/ntruchsess/perl-firmata]
   * [https://github.com/rcaputo/rx-firmata]
