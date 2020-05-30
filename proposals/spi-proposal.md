@@ -31,6 +31,8 @@ either a `SPI_TRANSFER` mode or `SPI_READ` command is sent.
 
 A `SPI_END` command disables the SPI bus for the specified channel.
 
+The `CAPABILITY_RESPONSE` will return a value of 0x0C for SPI capable pins. 
+
 ### SPI_BEGIN
 
 Required for platforms that require SPI bus initialization, such as Arduino.
@@ -216,7 +218,7 @@ read if `deselectCsPin` is set to 1.
 ```
 0:  START_SYSEX
 1:  SPI_DATA              (0x68)
-2:  SPI_WRITE             (0x04)
+2:  SPI_READ              (0x04)
 3:  deviceId | channel    (bits 3-6: deviceId, bits 0-2: channel)
 4:  requestId             (0-127)  // increment for each call
 5:  deselectCsPin         (0 = don't deselect csPin
