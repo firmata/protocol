@@ -1,4 +1,5 @@
 #Pulsecounter Feature
+
 Provides pulse counting with a total number of four counters for each pin:
 * cnt_pulse: Number of valid pulses detected
 * cnt_longPulse: Number of too long pulses
