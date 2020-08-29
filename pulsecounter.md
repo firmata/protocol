@@ -26,7 +26,7 @@ This feature has been tested on :
 ## Protocol details
 The protocol below use exclusively SysEx queries and SysEx responses.
 
-### Attach encoder query
+### Attach pulse counter query
 Query :
 ```c
  /* -----------------------------------------------------
