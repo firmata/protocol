@@ -58,7 +58,8 @@ Each feature should be documented in a markdown file and versioned independently
 
 | Feature ID  | Feature name                       | Link to documentation  | Status     |
 | ----------- | ---------------------------------- | ---------------------- | ---------- |
-| 5CH         | RCOUTPUT_DATA                      | [rcswitch-proposal.md](https://github.com/firmata/protocol/blob/master/proposals/rcswitch-proposal.md) | proposed |
+| 5BH         | PULSECOUNTER_DATA                  | [pulsecounter.md](https://github.com/tedeler/protocol/blob/proposal_pulsecounter/pulsecounter.md) | proposed | 
+|5CH         | RCOUTPUT_DATA                      | [rcswitch-proposal.md](https://github.com/firmata/protocol/blob/master/proposals/rcswitch-proposal.md) | proposed |
 | 5DH         | RCINPUT_DATA                       | [rcswitch-proposal.md](https://github.com/firmata/protocol/blob/master/proposals/rcswitch-proposal.md) | proposed |
 | 5EH         | DEVICE_QUERY                       | [proposal](https://github.com/finson-release/Luni/blob/master/extras/v0.9/v0.8-device-driver-C-firmata-messages.md) | proposed |
 | 5FH         | DEVICE_RESPONSE                    | [proposal](https://github.com/finson-release/Luni/blob/master/extras/v0.9/v0.8-device-driver-C-firmata-messages.md) | proposed |
