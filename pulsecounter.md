@@ -1,22 +1,22 @@
-#Pulsecounter Feature
+# Pulsecounter Feature
 
 Provides pulse counting with a total number of four counters for each pin:
-* cnt_pulse: Number of valid pulses detected
-* cnt_longPulse: Number of too long pulses
-* cnt_shortPulse: Number of too short pulses
-* cnt_shortPause: Number of too short pauses before a pulse
+* `cnt_pulse`: Number of valid pulses detected
+* `cnt_longPulse`: Number of too long pulses
+* `cnt_shortPulse`: Number of too short pulses
+* `cnt_shortPause`: Number of too short pauses before a pulse
 
 A valid pulse length is defined by two times:
-* minPulseLength_us: Minimal pulse length in micro seconds
-* maxPulseLength_us: Maximal pulse length in micro seconds
+* `minPulseLength_us`: Minimal pulse length in micro seconds
+* `maxPulseLength_us`: Maximal pulse length in micro seconds
 
 A third time defines the minmal pause length before a pulse. This is
-* minPauseBefore_us
+* `minPauseBefore_us`
 
-A pulse is valid if it's length is within the min/max boundaries and the state of the pin was stable for at least minPauseBefore_us before the beginning of the pulse.
+A pulse is valid if it's length is within the min/max boundaries and the state of the pin was stable for at least `minPauseBefore_us` before the beginning of the pulse.
 
 Example implementation : 
- * Pulsecounter Feature is available [here](https://github.com/tedeler/FirmataPulseCounter) 
+ * Pulsecounter feature is available [here](https://github.com/tedeler/FirmataPulseCounter) 
  * A dedicated example is available. See [here](https://github.com/tedeler/FirmataPulseCounter/blob/master/example/main.cpp). 
 
 ## Tested boards
