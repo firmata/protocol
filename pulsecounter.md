@@ -31,7 +31,7 @@ Query :
 ```c
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
- * 1 PULSECOUNTER_DATA          (0x63)
+ * 1 PULSECOUNTER_DATA          (0x5B)
  * 2 PULSECOUNTER_ATTACH        (0x00)
  * 3 pulsecntID                 ([0 - MAXPULSECOUNTER-1])
  * 4 pin                        (pin) 
@@ -63,7 +63,7 @@ Format :
 ```c
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
- * 1 PULSECOUNTER_DATA          (0x63)
+ * 1 PULSECOUNTER_DATA          (0x5B)
  * 2 pulsecntID                 ([0 - MAXPULSECOUNTER-1])
 
  * 3 cnt_shortPause             (Bit 27-21)
@@ -97,7 +97,7 @@ Query :
 ```c
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
- * 1 PULSECOUNTER_DATA          (0x63)
+ * 1 PULSECOUNTER_DATA          (0x5B)
  * 2 PULSECOUNTER_RESET_COUNTER (0x02)
  * 3 pulsecntID                 ([0 - MAXPULSECOUNTER-1])
  * 4 END_SYSEX                  (0xF7)
@@ -111,7 +111,7 @@ Query :
 ```c
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
- * 1 PULSECOUNTER_DATA          (0x63)
+ * 1 PULSECOUNTER_DATA          (0x5B)
  * 2 PULSECOUNTER_REPORT        (0x01)
  * 3 pulsecntID                 ([0 - MAXPULSECOUNTER-1])
  * 4 END_SYSEX                  (0xF7)
@@ -125,7 +125,7 @@ Query :
 ```c
  /* -----------------------------------------------------
  * 0 START_SYSEX                (0xF0)
- * 1 PULSECOUNTER_DATA          (0x63)
+ * 1 PULSECOUNTER_DATA          (0x5B)
  * 2 PULSECOUNTER_RESET_COUNTER (0x02)
  * 3 pulsecntID                 ([0 - MAXPULSECOUNTER-1])
  * 4 END_SYSEX                  (0xF7)
