@@ -5,7 +5,7 @@ used simultaneously (depending on restrictions of a given microcontroller board'
 
 Sample implementation code for Arduino is available [here](https://github.com/firmata/arduino/blob/master/examples/StandardFirmataPlus/StandardFirmataPlus.ino).
 
-A client implementation can be found [here](https://github.com/jgautier/firmata/blob/master/lib/firmata.js).
+A client implementation can be found [here](https://github.com/firmata/firmata.js).
 
 Added in Firmata protocol version 2.5.0
 

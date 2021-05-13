@@ -229,7 +229,7 @@ INPUT_PULLUP       (0x0B)
 The resolution byte serves a couple of different purpose:
 
 1. The original purpose was to define the resolution for analog input, pwm, servo and other modes that define a specific resolution (such as 10-bit for analog).
-2. The resolution byte has been adapted for another purpose for Serial/UART pins, it defines if the pin is RX or TX and which UART it belongs to. [RX0](https://github.com/firmata/protocol/blob/master/serial.md#serial-pin-capability-response) is the RX pin of UART0 (Serial on an Arduino for example), TX1 if the TX pin of UART1 (Serial1 on an Arduino).
+2. The resolution byte has been adapted for another purpose for Serial/UART pins, it defines if the pin is RX or TX and which UART it belongs to. [RX0](https://github.com/firmata/protocol/blob/master/serial-1.0.md#serial-pin-capability-response) is the RX pin of UART0 (Serial on an Arduino for example), TX1 if the TX pin of UART1 (Serial1 on an Arduino).
 
 Modes utilizing the resolution byte as resolution data:
 ```
@@ -244,7 +244,7 @@ INPUT_PULLUP       (0x0B) // resolution is 1 (binary)
 
 Modes utilizing the resolution byte to define type of pin:
 ```
-SERIAL             (0x0A) // See description in [serial.md](https://github.com/firmata/protocol/blob/master/serial.md#serial-pin-capability-response)
+SERIAL             (0x0A) // See description in [serial.md](https://github.com/firmata/protocol/blob/master/serial-1.0.md#serial-pin-capability-response)
 // also to be added to I2C in the future to define SCL and SDA pins
 ```
 
