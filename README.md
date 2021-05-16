@@ -48,7 +48,6 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/reapzor/FiloFirmata]
 * .NET
   * [https://github.com/SolidSoils/Arduino]
-  * [http://www.imagitronics.org/projects/firmatanet/]
   * [https://github.com/wbadry/FirmataCSharpClientClass]
 * Flash/AS3
   * [http://funnel.cc]

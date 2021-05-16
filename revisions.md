@@ -9,7 +9,7 @@
 
 ## Version 2.5.0 - November 7th, 2015
 
-- Added [Serial feature](https://github.com/firmata/protocol/blob/master/serial.md) for interfacing with serial devices via hardware or software serial.
+- Added [Serial feature](https://github.com/firmata/protocol/blob/master/serial-1.0.md) for interfacing with serial devices via hardware or software serial.
 - Added ability to set the value of a pin by sending a single pin value instead of a port value. See 'set digital pin value' in [protocol.md](https://github.com/firmata/protocol/blob/master/protocol.md#message-types) for details.
 
 ## Version 2.4.0 - December 2014

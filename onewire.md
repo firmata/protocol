@@ -25,7 +25,7 @@ Added in Firmata protocol version 2.4.0.
 
 ### Compatible client librairies
 * [perl-firmata](https://github.com/ntruchsess/perl-firmata)
-* [node-firmata](https://github.com/jgautier/firmata/blob/master/lib/firmata.js)
+* [node-firmata](https://github.com/firmata/firmata.js)
 
 
 ### Protocol details
