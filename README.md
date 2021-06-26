@@ -21,7 +21,6 @@ There are several client libraries. These are libraries that implement the Firma
 
 * processing
   * [https://github.com/firmata/processing]
-  * [http://funnel.cc]
 * python
   * [https://github.com/MrYsLab/pymata4]
   * [https://github.com/MrYsLab/pymata-express]
@@ -34,7 +33,6 @@ There are several client libraries. These are libraries that implement the Firma
 * ruby
   * [https://github.com/hardbap/firmata]
   * [https://github.com/PlasticLizard/rufinol]
-  * [http://funnel.cc]
 * clojure
   * [https://github.com/nakkaya/clodiuno]
   * [https://github.com/peterschwarz/clj-firmata]
@@ -48,10 +46,7 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/reapzor/FiloFirmata]
 * .NET
   * [https://github.com/SolidSoils/Arduino]
-  * [https://github.com/wbadry/FirmataCSharpClientClass]
-* Flash/AS3
-  * [http://funnel.cc]
-  * [http://code.google.com/p/as3glue/]
+  * [https://github.com/dotnet/iot]
 * PHP
   * [https://bitbucket.org/ThomasWeinert/carica-firmata]
   * [https://github.com/oasynnoum/phpmake_firmata]
