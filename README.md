@@ -46,10 +46,7 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/reapzor/FiloFirmata]
 * .NET
   * [https://github.com/SolidSoils/Arduino]
-  * [https://github.com/wbadry/FirmataCSharpClientClass]
   * [https://github.com/dotnet/iot]
-* Flash/AS3
-  * [http://code.google.com/p/as3glue/]
 * PHP
   * [https://bitbucket.org/ThomasWeinert/carica-firmata]
   * [https://github.com/oasynnoum/phpmake_firmata]
