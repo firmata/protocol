@@ -221,9 +221,16 @@ STEPPER            (0x08)
 ENCODER            (0x09)
 SERIAL             (0x0A)
 INPUT_PULLUP       (0x0B)
+// Extended modes 
+SPI                (0x0C)
+SONAR              (0x0D)
+TONE               (0x0E)
+DHT                (0x0F)
 ```
 
 *If no modes are defined for a pin, no values are returned (other than the separator value `0x7F`) and it should be assumed that pin is unsupported by Firmata.*
+
+*A client implementation shall ignore any modes it does not support*
 
 #### Mode Resolution
 The resolution byte serves a couple of different purpose:
