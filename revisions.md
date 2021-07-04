@@ -1,3 +1,11 @@
+## Version 2.6.1 - July 4th, 2021
+
+- Moved SPI from proposed to beta
+- Added DHT as beta
+- A few link fixes
+
+New features are likely only going to be implemented in ConfigurableFirmata.
+
 ## Version 2.6.0 - September 16th, 2017
 
 - Added AccelStepperFirmata (Stepper 2.0) for improved and more scalable stepper motor support.

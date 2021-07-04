@@ -1,7 +1,7 @@
 SPI (Proposal)
 ===
 
-A proposal for a SPI protocol for Firmata.
+SPI protocol for Firmata.
 
 SPI is tricky to add to Firmata in a generic way since it is a fairly loose
 standard. There are variations in number of bits written and read, how the CS
@@ -12,6 +12,9 @@ accommodate uses cases beyond the common sequence of:
 2. write/read 1 or more words
 3. set cs Pin HIGH
 4. return data read
+
+[Implementation Note: ConfigurableFirmata has a basic implementation for SPI, but not all 
+features are implemented]
 
 ### Overview
 
@@ -31,13 +34,10 @@ either a `SPI_TRANSFER` mode or `SPI_READ` command is sent.
 
 A `SPI_END` command disables the SPI bus for the specified channel.
 
-The `CAPABILITY_RESPONSE` will return a value of 0x0C for SPI capable pins. 
+The `CAPABILITY_RESPONSE` will return a value of 0x0C for SPI capable pins. Most
+microcontrollers have only one set of pins for SPI. 
 
 ### SPI_BEGIN
-
-Required for platforms that require SPI bus initialization, such as Arduino.
-Optional if initialization is automatic (some Linux-based platforms for
-example).
 
 Use `SPI_BEGIN` to initialize the SPI bus. Up to 8 SPI ports are supported,
 where each port is identified by a `channel` number (0-7).

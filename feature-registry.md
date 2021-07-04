@@ -66,7 +66,7 @@ Each feature should be documented in a markdown file and versioned independently
 | 61H         | ENCODER_DATA                       | [encoder.md](https://github.com/firmata/protocol/blob/master/encoder.md) | current |
 | 62H         | ACCELSTEPPER_DATA                  | [accelStepperFirmata.md](https://github.com/firmata/protocol/blob/master/accelStepperFirmata.md) | current |
 | 67H         | SERIAL_DATA (2.0)                  | [proposal](https://github.com/firmata/protocol/blob/master/proposals/serial-2.0-proposal.md) | proposed |
-| 68H         | SPI_DATA                           | [proposal](https://github.com/firmata/protocol/blob/master/proposals/spi-proposal.md) | proposed |
+| 68H         | SPI_DATA                           | [beta](https://github.com/firmata/protocol/blob/master/spi.md) | beta |
 | 70H         | SERVO_CONFIG                       | [servos.md](https://github.com/firmata/protocol/blob/master/servos.md) | current |
 | 72H         | STEPPER_DATA                       | [stepper-legacy.md](https://github.com/firmata/protocol/blob/master/stepper-legacy.md) | deprecated |
 | 73H         | ONEWIRE_DATA                       | [onewire.md](https://github.com/firmata/protocol/blob/master/onewire.md) | current |
