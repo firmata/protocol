@@ -320,9 +320,11 @@ N  END_SYSEX                (0xF7)
 String
 ---
 
-Send short string messages between the board and the client application. String length is limited
-to half the buffer size - 3 (for Arduino this limits strings to 30 chars). Commonly used to report
-error messages to the client.
+Send short string messages between the board and the client application. String length is basically unlimited
+for messages sent from the board to the client (string messages from the client to the board are meaningless), 
+since it is not expected that the client has a critical memory limit. String messages from the board are typically
+used for error messages or debugging purposes. 
+
 ```
 0  START_SYSEX        (0xF0)
 1  STRING_DATA        (0x71)
@@ -330,7 +332,7 @@ error messages to the client.
 3  first char MSB
 4  second char LSB
 5  second char MSB
-... additional bytes up to half the buffer size - 3 (START_SYSEX, STRING_DATA, END_SYSEX)
+... additional bytes
 N  END_SYSEX          (0xF7)
 ```
 
