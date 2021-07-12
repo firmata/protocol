@@ -1,13 +1,10 @@
 # DHT Sensor Feature
 
-Provide support for connecting a DHT sensor like [this one](https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf) (also works with DHT11).
+Provide support for connecting a DHT sensor like [this one](https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf) (also works with DHT11). These sensors require a special driver on the board, because the communication protocol is very timing critical, so that reading the sensor from the host using GPIO commands will not work.
 
-This feature is based on based on @niesteszeck's [interrupt driven DHT library](https://github.com/niesteszeck/idDHTLib), so the sensor has to be connected to an interrupt pin.
+Current [implementation](https://github.com/firmata/ConfigurableFirmata/src/DhtFirmata.h) supports only one DHT sensor, but the protocol supports more.
 
-Current [implementation](https://github.com/mdlima/FirmataDHT) supports only one DHT sensor, but the protocol supports more.
-
-Reporting is not done using Firmata's main reporting cycle. Instead, it's done at its own sampling interval of 2 seconds minimum, as these sensors are very slow.
-
+[Implementation Note: Currently, the sampling interval is ignored and a single reply sent. Since the minimum cycle time for these sensors is in the order of 2.5s, polling is not an issue]
 
 Example files: 
  * See [SimpleFirmataDHT.ino](https://github.com/mdlima/FirmataDHT/blob/master/examples/SimpleFirmataDHT/SimpleFirmataDHT.ino).
@@ -15,11 +12,12 @@ Example files:
 ## Compatible client libraries
 
 - [firmata.js](https://github.com/mdlima/firmata.js/tree/dht-sensor)
+- [dotnet/iot](https://github.com/dotnet/iot)
 
 ## Tested boards
 
-This feature has been with a DHT22 sensor on:
- * Arduino Duemilanove
+This feature has been tested with a DHT11 sensor on:
+ * Arduino Uno
  * Arduino Nano
 
 ## Protocol details
@@ -40,7 +38,7 @@ Query :
 N END_SYSEX                  (0xF7)
 ```
 
-No response.
+At least one response is sent.
 
 ### Report sensor data
 No Query, report is done automatically on the requested interval
