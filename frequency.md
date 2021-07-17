@@ -26,7 +26,7 @@ The protocol below use exclusively SysEx queries and SysEx responses.
 Query :
 ```
 0 START_SYSEX                (0xF0)
-1 FREQUENCY_COMMAND          (0x63)
+1 FREQUENCY_COMMAND          (0x7D)
 2 FREQUENCY_SUBCOMMAND_QUERY (0x01)
 3 pin                        (0-127)
 4 interrupt mode             See below
@@ -53,7 +53,7 @@ The report is sent each time the sampling interval elapses.
 Response 
 ```
 0 START_SYSEX                (0xF0)
-1 FREQUENCY_COMMAND          (0x63)
+1 FREQUENCY_COMMAND          (0x7D)
 2 FREQUENCY_SUBCOMMAND_REPORT (0x02)
 3 pin                        (0-127)
 4 Time of measurement        (32 bits as 5 bytes) in milliseconds
@@ -67,7 +67,7 @@ Both 32 bit values are encoded as "packed". 5 bytes are used to send bits 0-6, 7
 Query :
 ```
 0 START_SYSEX                (0xF0)
-1 FREQUENCY_COMMAND          (0x63)
+1 FREQUENCY_COMMAND          (0x7D)
 2 FREQUENCY_SUBCOMMAND_CLEAR (0x00)
 3 pin                        (0-127) Use 0x7F to clear all pin interrupts.
 N END_SYSEX                  (0xF7)
