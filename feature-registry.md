@@ -66,15 +66,17 @@ Each feature should be documented in a markdown file and versioned independently
 | 61H         | ENCODER_DATA                       | [encoder.md](https://github.com/firmata/protocol/blob/master/encoder.md) | current |
 | 62H         | ACCELSTEPPER_DATA                  | [accelStepperFirmata.md](https://github.com/firmata/protocol/blob/master/accelStepperFirmata.md) | current |
 | 67H         | SERIAL_DATA (2.0)                  | [proposal](https://github.com/firmata/protocol/blob/master/proposals/serial-2.0-proposal.md) | proposed |
-| 68H         | SPI_DATA                           | [proposal](https://github.com/firmata/protocol/blob/master/proposals/spi-proposal.md) | proposed |
+| 68H         | SPI_DATA                           | [spi.md](https://github.com/firmata/protocol/blob/master/spi.md) | beta |
 | 70H         | SERVO_CONFIG                       | [servos.md](https://github.com/firmata/protocol/blob/master/servos.md) | current |
 | 72H         | STEPPER_DATA                       | [stepper-legacy.md](https://github.com/firmata/protocol/blob/master/stepper-legacy.md) | deprecated |
 | 73H         | ONEWIRE_DATA                       | [onewire.md](https://github.com/firmata/protocol/blob/master/onewire.md) | current |
+| 74H         | DHTSENSOR_DATA                     | [dhtsensor.md](https://github.com/firmata/protocol/blob/master/dhtsensor.md) | beta |
 | 75H         | SHIFT_DATA                         | [shift-proposal.md](https://github.com/firmata/protocol/blob/master/proposals/shift-proposal.md) | proposed |
 | 76H         | I2C_REQUEST                        | [i2c.md](https://github.com/firmata/protocol/blob/master/i2c.md) | current |
 | 77H         | I2C_REPLY                          | [i2c.md](https://github.com/firmata/protocol/blob/master/i2c.md) | current |
 | 78H         | I2C_CONFIG                         | [i2c.md](https://github.com/firmata/protocol/blob/master/i2c.md) | current |
 | 7BH         | SCHEDULER_DATA                     | [scheduler.md](https://github.com/firmata/protocol/blob/master/scheduler.md) | current |
+| 7DH         | FREQUENCY_COMMAND                  | [frequency.md](https://github.com/firmata/protocol/blob/master/frequency.md) | beta |
 |             |                                    |                        |            |
 | 00H nnH nnH | (start of extended feature ID set) |                        |            |
 
