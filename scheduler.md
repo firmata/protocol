@@ -17,6 +17,7 @@ Added in Firmata protocol version 2.4.0.
 
 ### Compatible client librairies
 * [perl-firmata](https://github.com/ntruchsess/perl-firmata)
+* [diozero-provider-firmata](https://github.com/mattjlewis/diozero/tree/main/diozero-provider-firmata)
 
 
 ### Protocol details

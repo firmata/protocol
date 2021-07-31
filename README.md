@@ -44,6 +44,7 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/4ntoine/Firmata]
   * [https://github.com/kurbatov/firmata4j]
   * [https://github.com/reapzor/FiloFirmata]
+  * [https://github.com/mattjlewis/diozero/tree/main/diozero-provider-firmata]
 * .NET
   * [https://github.com/SolidSoils/Arduino]
   * [https://github.com/dotnet/iot]
