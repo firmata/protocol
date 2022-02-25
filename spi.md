@@ -67,7 +67,7 @@ See parameter descriptions below.
 1:  SPI_DATA              (0x68)
 2:  SPI_DEVICE_CONFIG     (0x01)
 3:  deviceId | channel    (bits 3-6: deviceId, bits 0-2: channel)
-4:  dataMode | bitOrder   (bit3: use 7 bit encoding, bits 1-2: dataMode (0-3), bit 0: bitOrder)
+4:  dataMode | bitOrder   (bit 3: use 7 bit encoding, bits 1-2: dataMode (0-3), bit 0: bitOrder)
 5:  maxSpeed              (bits 0 - 6)
 6:  maxSpeed              (bits 7 - 14)
 7:  maxSpeed              (bits 15 - 21)
@@ -163,6 +163,11 @@ If `CS_PIN_CONTROL` is enabled, then the CS pin active state will be set when
 the `SPI_TRANSFER` command is received. It will only be deselected at the end of
 the transfer if `deselectCsPin` is set to 1.
 
+If bit 3 of the `dataMode | bitOrder` byte in the `SPI_DEVICE_CONFIG` command was
+set, the data transmitted is packed using "7-bit" encoding. This means the first byte
+(byte 7) gets bits 0-6 of the first input byte, the second byte gets bit 7 of the 
+first and bits 1-5 of the second input byte, and so on.
+
 ```
 0:  START_SYSEX
 1:  SPI_DATA              (0x68)
@@ -245,6 +250,11 @@ read if `deselectCsPin` is set to 1.
 An array of data received from the SPI slave device in response to a
 `SPI_TRANSFER` or `SPI_READ` command. The `requestId` should match the ID
 from the transfer, read or write command.
+
+If bit 3 of the `dataMode | bitOrder` byte in the `SPI_DEVICE_CONFIG` command was
+set, the data transmitted is packed using "7-bit" encoding. This means the first byte
+(byte 7) gets bits 0-6 of the first input byte, the second byte gets bit 7 of the 
+first and bits 1-5 of the second input byte, and so on.
 
 ```
 0:  START_SYSEX
