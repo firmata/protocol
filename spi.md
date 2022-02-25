@@ -67,7 +67,7 @@ See parameter descriptions below.
 1:  SPI_DATA              (0x68)
 2:  SPI_DEVICE_CONFIG     (0x01)
 3:  deviceId | channel    (bits 3-6: deviceId, bits 0-2: channel)
-4:  dataMode | bitOrder   (bits 1-2: dataMode (0-3), bit 0: bitOrder)
+4:  dataMode | bitOrder   (bit3: use 7 bit encoding, bits 1-2: dataMode (0-3), bit 0: bitOrder)
 5:  maxSpeed              (bits 0 - 6)
 6:  maxSpeed              (bits 7 - 14)
 7:  maxSpeed              (bits 15 - 21)
@@ -106,6 +106,12 @@ MSBFIRST = 1 (default)
 | 1       | 0                     | 1                  |
 | 2       | 1                     | 0                  |
 | 3       | 1                     | 1                  |
+
+#### use 7 bit encoding
+
+If this bit is set, the SPI_TRANSFER command expects the data in "7-bit" mode. Instead of
+using 2 bytes for bits 0-6 and 7 of each byte, 7 data bytes are packed into 8 transmitted bytes.
+This mode is only supported for the default wordSize of 8 bits.
 
 #### maxSpeed
 
