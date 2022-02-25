@@ -190,8 +190,7 @@ If `CS_PIN_CONTROL` is enabled, then the CS pin active state will be set when
 the `SPI_WRITE` command is received. It will only be deselected at the end of
 the write if `deselectCsPin` is set to 1.
 
-A `SPI_WRITE` command should return a `SPI_REPLY` with a value of `1` if the
-write was successful or a value of `0` if the write failed.
+A `SPI_WRITE` command does not return any data.
 
 ```
 0:  START_SYSEX
@@ -208,6 +207,14 @@ write was successful or a value of `0` if the write failed.
 ...                       up to numWords * (wordSize / 7)
 N:  END_SYSEX
 ```
+
+### SPI_WRITE_ACK
+
+`SPI_WRITE_ACK (0x07)` is almost identical to `SPI_WRITE`, except that the
+command should return a `SPI_REPLY` with a data length of zero. The other
+fields in the reply will be filled. This is for scenarios where no 
+hardware flow control is available and writing large blocks of data would
+result in a transmission buffer overflow.
 
 ### SPI_READ
 
