@@ -67,7 +67,7 @@ See parameter descriptions below.
 1:  SPI_DATA              (0x68)
 2:  SPI_DEVICE_CONFIG     (0x01)
 3:  deviceId | channel    (bits 3-6: deviceId, bits 0-2: channel)
-4:  dataMode | bitOrder   (bits 1-2: dataMode (0-3), bit 0: bitOrder)
+4:  dataMode | bitOrder   (bit 3: use 7 bit encoding, bits 1-2: dataMode (0-3), bit 0: bitOrder)
 5:  maxSpeed              (bits 0 - 6)
 6:  maxSpeed              (bits 7 - 14)
 7:  maxSpeed              (bits 15 - 21)
@@ -106,6 +106,12 @@ MSBFIRST = 1 (default)
 | 1       | 0                     | 1                  |
 | 2       | 1                     | 0                  |
 | 3       | 1                     | 1                  |
+
+#### use 7 bit encoding
+
+If this bit is set, the SPI_TRANSFER command expects the data in "7-bit" mode. Instead of
+using 2 bytes for bits 0-6 and 7 of each byte, 7 data bytes are packed into 8 transmitted bytes.
+This mode is only supported for the default wordSize of 8 bits.
 
 #### maxSpeed
 
@@ -157,6 +163,11 @@ If `CS_PIN_CONTROL` is enabled, then the CS pin active state will be set when
 the `SPI_TRANSFER` command is received. It will only be deselected at the end of
 the transfer if `deselectCsPin` is set to 1.
 
+If bit 3 of the `dataMode | bitOrder` byte in the `SPI_DEVICE_CONFIG` command was
+set, the data transmitted is packed using "7-bit" encoding. This means the first byte
+(byte 7) gets bits 0-6 of the first input byte, the second byte gets bit 7 of the 
+first and bits 1-5 of the second input byte, and so on.
+
 ```
 0:  START_SYSEX
 1:  SPI_DATA              (0x68)
@@ -184,8 +195,7 @@ If `CS_PIN_CONTROL` is enabled, then the CS pin active state will be set when
 the `SPI_WRITE` command is received. It will only be deselected at the end of
 the write if `deselectCsPin` is set to 1.
 
-A `SPI_WRITE` command should return a `SPI_REPLY` with a value of `1` if the
-write was successful or a value of `0` if the write failed.
+A `SPI_WRITE` command does not return any data.
 
 ```
 0:  START_SYSEX
@@ -202,6 +212,14 @@ write was successful or a value of `0` if the write failed.
 ...                       up to numWords * (wordSize / 7)
 N:  END_SYSEX
 ```
+
+### SPI_WRITE_ACK
+
+`SPI_WRITE_ACK (0x07)` is almost identical to `SPI_WRITE`, except that the
+command should return a `SPI_REPLY` with a data length of zero. The other
+fields in the reply will be filled. This is for scenarios where no 
+hardware flow control is available and writing large blocks of data would
+result in a transmission buffer overflow.
 
 ### SPI_READ
 
@@ -232,6 +250,11 @@ read if `deselectCsPin` is set to 1.
 An array of data received from the SPI slave device in response to a
 `SPI_TRANSFER` or `SPI_READ` command. The `requestId` should match the ID
 from the transfer, read or write command.
+
+If bit 3 of the `dataMode | bitOrder` byte in the `SPI_DEVICE_CONFIG` command was
+set, the data transmitted is packed using "7-bit" encoding. This means the first byte
+(byte 7) gets bits 0-6 of the first input byte, the second byte gets bit 7 of the 
+first and bits 1-5 of the second input byte, and so on.
 
 ```
 0:  START_SYSEX
