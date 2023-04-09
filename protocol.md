@@ -20,7 +20,7 @@ differently.
 | --------------------- | ------- | ------------ | ------------------- | --------------- |
 | analog I/O message    | 0xE0    | pin #        | LSB(bits 0-6)       | MSB(bits 7-13)  |
 | digital I/O message   | 0x90    | port         | LSB(bits 0-6)       | MSB(bits 7-13)  |
-| report analog pin     | 0xC0    | pin #        | disable/enable(0/1) | - n/a -         |
+| report analog pin     | 0xC0    | analog Ch#   | disable/enable(0/1) | - n/a -         |
 | report digital port   | 0xD0    | port         | disable/enable(0/1) | - n/a -         |
 |                       |         |              |                     |                 |
 | start sysex           | 0xF0    |              |                     |                 |
@@ -49,7 +49,8 @@ Two byte digital data format, second nibble of byte 0 gives the port number (eg 
 2  digital pin 7 bitmask
 ```
 
-Analog 14-bit data format
+Analog 14-bit data format. For analog input, the Arduino Axx format is used. Therefore argument value 0 means A0, argument value 
+1 means A1, etc. On an Arduino Uno, A0 is equal to physical pin 14. So to enable analog reporting on A1, send `0xF4 0x0E 0x03` (SET_PIN_MODE, 14, ANALOG) followed by `0xC1 0x01` (REPORT_ANALOG, enable). The mapping between physical pins and analog channels is provided by the ANALOG_MAPPING message. There are boards where the numbering is not continuous, so don't expect that if A0 and A5 exist, A1 does as well. Neither can you expect that if A0 = pin 10, A1 is pin 11. 
 ```
 0  analog pin, 0xE0-0xEF, (MIDI Pitch Wheel)
 1  analog least significant 7 bits
@@ -79,7 +80,7 @@ Set digital pin value (added in v2.5)
 2  value (LOW/HIGH, 0/1)
 ```
 
-Toggle analogIn reporting by pin
+Toggle analogIn reporting by analog pin number (see above for numbering scheme)
 ```
 0  toggle analogIn reporting (0xC0-0xCF) (MIDI Program Change)
 1  disable(0) / enable(non-zero)
