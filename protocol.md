@@ -168,7 +168,11 @@ Extended Analog
 
 As an alternative to the normal analog message, this extended version allows
 addressing beyond pin 15 and supports sending analog values with any number of
-bits. The number of data bits is inferred by the length of the message.
+bits. The number of data bits is inferred by the length of the message. 
+
+This message is originally intend for configuring PWM outputs. When the 
+EXTENDED_REPORT_ANALOG message is used, this message is also used in
+reporting changes to analog inputs for analog channels > 15.
 
 ```
 0  START_SYSEX              (0xF0)
