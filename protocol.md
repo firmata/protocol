@@ -168,7 +168,9 @@ Extended Analog
 
 As an alternative to the normal analog message, this extended version allows
 addressing beyond pin 15 and supports sending analog values with any number of
-bits. The number of data bits is inferred by the length of the message. 
+bits. The number of data bits is inferred by the length of the message. Starting
+with protocol version 2.7, the maximum number of bits for the value is 32 (encoded
+in 5 octets). 
 
 This message is originally intend for configuring PWM outputs. When the 
 EXTENDED_REPORT_ANALOG message is used, this message is also used in

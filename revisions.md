@@ -1,3 +1,9 @@
+## Version 2.7 - April 10th, 2023
+
+- EXTENDED_REPORT_ANALOG moved from proposed to beta, to support analog channels A16 and up
+- EXTENDED_ANALOG message is used to report changes for analog channels A16 and up
+- Clarified documentation with respect to the definition of "Analog Pin"
+
 ## Version 2.6.1 - July 4th, 2021
 
 - Moved SPI from proposed to beta
