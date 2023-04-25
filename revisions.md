@@ -1,3 +1,5 @@
+This document lists relevant changes to the protocol versions.
+
 ## Version 2.7 - April 10th, 2023
 
 - EXTENDED_REPORT_ANALOG moved from proposed to beta, to support analog channels A16 and up
