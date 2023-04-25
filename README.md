@@ -73,6 +73,8 @@ There are several client libraries. These are libraries that implement the Firma
   * [https://github.com/pharo-iot/Firmata] 
 * LabVIEW
   * [https://github.com/KMurphs/labview-client-for-firmata] 
+* vvvv/VL
+  * [https://github.com/vvvv/VL.IO.Firmata]
 
 *Each client library may not support the most recent version of the Firmata protocol and all features described in this reposity.*
 
