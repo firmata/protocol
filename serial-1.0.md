@@ -69,6 +69,9 @@ only be specified if the platform requires them to be set.
 5  baud             (bits 14 - 20) // need to send 3 bytes for baud even if value is < 14 bits
 6  rxPin            (0-127) [optional] // only set if platform requires RX pin number
 7  txPin            (0-127) [optional] // only set if platform requires TX pin number
+8  mode             (bits 0-6 => 0-6)   [optional] //Mode (second parameter of Serial.begin(...)
+9  mode             (bits 0-6 => 7-13)  [optional]
+10  mode            (bits 0-3 => 13-16) [optional]
 6|8 END_SYSEX      (0xF7)
 ```
 
