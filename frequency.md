@@ -23,7 +23,9 @@ The protocol below uses SysEx queries and SysEx responses.
 
 ### Attach sensor
 
-Query :
+Enable with this command (note: The current implementation only supports one pin being monitored at a time).
+The pin to use must support interrupts.
+The firmware will send one FREQUENCY_SUBCOMMAND_REPORT every sampling interval.
 ```
 0 START_SYSEX                (0xF0)
 1 FREQUENCY_COMMAND          (0x7D)
@@ -89,4 +91,7 @@ Query:
 5 Debouncing period, in us   (32 bits as 5 bytes)
 N END_SYSEX                  (0xF7)
 ```
+
+No response.
+
 
