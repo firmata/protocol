@@ -19,11 +19,13 @@ Frequency measuremnt is only possible on pins that identify as "Frequency capabl
 
 ## Protocol details
 
-The protocol below use exclusively SysEx queries and SysEx responses.
+The protocol below uses SysEx queries and SysEx responses.
 
 ### Attach sensor
 
-Query :
+Enable with this command (note: The current implementation only supports one pin being monitored at a time).
+The pin to use must support interrupts.
+The firmware will send one FREQUENCY_SUBCOMMAND_REPORT every sampling interval.
 ```
 0 START_SYSEX                (0xF0)
 1 FREQUENCY_COMMAND          (0x7D)
@@ -74,3 +76,22 @@ N END_SYSEX                  (0xF7)
 ```
 
 No response.
+
+### Set debouncing period
+This message is supported from ConfigurableFirmata Version 3.4.0 / Protocol Version 2.8.
+It can be used to set a debouncing period on a frequency pin. Any events that are within the given
+timespan to a previous event will be ignored. 
+
+Query:
+```
+0 START_SYSEX                (0xF0)
+1 FREQUENCY_COMMAND          (0x7D)
+2 FREQUENCY_SUBCOMMAND_FILTER (0x03)
+3 pin                        (0-127)
+5 Debouncing period, in us   (32 bits as 5 bytes)
+N END_SYSEX                  (0xF7)
+```
+
+No response.
+
+
