@@ -119,6 +119,7 @@ Following are SysEx commands used for core features defined in this version of t
 ```
 EXTENDED_ID                 0x00 // A value of 0x00 indicates the next 2 bytes define the extended ID
 RESERVED               0x01-0x0F // IDs 0x01 - 0x0F are reserved for user defined commands
+REPORT_FEATURES             0x65 // report which optional Firmata features are supported by the firmware
 ANALOG_MAPPING_QUERY        0x69 // ask for mapping of analog to pin numbers
 ANALOG_MAPPING_RESPONSE     0x6A // reply with mapping info
 CAPABILITY_QUERY            0x6B // ask for supported modes and resolution of all pins
@@ -162,6 +163,67 @@ Receive Firmware Name and Version (after query)
 7  second char of firmware name (MSB)
 ... for as many bytes as it needs
 N  END_SYSEX         (0xF7)
+```
+
+Report supported Firmata features
+---
+
+Report which optional Firmata features are supported by the firmware and the version of each feature. 
+
+As described in the [Feature registry documentation](https://github.com/firmata/protocol/blob/master/feature-registry.md),
+Firmata features are split into 2 categories: *Core features* and *Optional features*. The feature
+query reports the optional features that are supported by the firmware as well as the version
+of each supported optional feature.
+
+The feature query reduces the need to define a new pin mode for every introduced feature. Going
+forward pin modes will only be defined and maintained for microcontroller specific features such as 
+digital and analog I/O, PWM, I2C, UART, SPI, DAC, etc. The use of pin modes for non microcontroller
+specific features such as Servo, Stepper, OneWire and Encoder will be phased out over time. Reducing
+the number of unnecessary pin modes also reduces the size of the Capability Query Response which has
+grown to exceed 500 bytes for boards with a large number of pins.
+
+Another function of the feature query is to move establish a versioning scheme for optional features.
+The query will return a major and minor version for each optional feature supported by the firmware.
+For features that existed prior to protocol version 2.6, the feature version begins at v1.0. New
+features should begin at v0.1. The bugfix version should also be tracked for each optional feature
+protocol revision (each optional feature has its own markdown file). All core features on the other
+hand are not individually versioned, but are covered under the protocol version (at the top of this
+file).
+
+### Query supported features
+```
+0  START_SYSEX                (0xF0)
+1  REPORT_FEATURES            (0x65)
+2  REPORT_FEATURES_QUERY      (0x00)
+3  END_SYSEX                  (0xF7)
+```
+
+### Supported features query response
+
+The response returns the Feature ID and the major and minor version for each optional feature
+supported by the the firmware. A Firmata [Feature ID](https://github.com/firmata/protocol/blob/master/feature-registry.md#firmata-sysex-feature-registry)
+is either 1 byte ID or a 3 byte Extended ID. If the first byte is zero, this indicates an Extended
+ID so the parsing logic should evaluate the value of the first byte and if it is zero, expect two
+additional ID bytes followed by a major version byte and a minor version byte. If the first byte
+is > 0 then the following 2 bytes are the major and minor version numbers for that feature.
+
+```
+0  START_SYSEX                (0xF0)
+1  REPORT_FEATURES            (0x65)
+2  REPORT_FEATURES_RESPONSE   (0x01)
+3  1st FEATURE_ID             (1-127, eg: Serial = 0x60, Stepper = 0x62)
+4  1st FEATURE_MAJOR_VERSION  (0-127)
+5  1st FEATURE_MINOR_VERSION  (0-127)
+6  2nd FEATURE_ID             (1-127, eg: Serial = 0x60, Stepper = 0x62)
+7  2nd FEATURE_MAJOR_VERSION  (0-127)
+8  2nd FEATURE_MINOR_VERSION  (0-127)
+9  3rd FEATURE_ID             (0x00, Extended ID)
+10 3rd FEATURE_ID             (lsb)
+11 3rd FEATURE_ID             (msb)
+12 3rd FEATURE_MAJOR_VERSION  (0-127)
+13 3rd FEATURE_MINOR_VERSION  (0-127)
+...for all supported features
+n  END_SYSEX                  (0xF7)
 ```
 
 Extended Analog
